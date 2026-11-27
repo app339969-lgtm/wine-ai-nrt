@@ -19,6 +19,41 @@ export interface AggregatedBucket {
   sharePct: number;
 }
 
+export interface CustomerRankItem {
+  cid: string;
+  tier: string;
+  gender: string;
+  age: number;
+  txns: number;
+  units: number;
+  revenue: number;
+}
+
+export interface CustomerProfile {
+  cid: string;
+  tier: string;
+  gender: string;
+  age: number;
+  ageGroup: string;
+  totalRevenue: number;
+  totalTxns: number;
+  totalUnits: number;
+  avgOrderValue: number;
+  favoriteCategory: string;
+  favoriteChannel: string;
+  favoriteRegion: string;
+  recentOrders: {
+    id: string;
+    date: string;
+    category: string;
+    channel: string;
+    units: number;
+    total: number;
+    payment: string;
+    region: string;
+  }[];
+}
+
 export interface ComputedDashboardMetrics {
   totalRevenue: number;
   totalTxns: number;
@@ -26,12 +61,14 @@ export interface ComputedDashboardMetrics {
   avgOrderValue: number;
   uniqueCustomers: number;
   monthly: AggregatedBucket[];
+  quarters: AggregatedBucket[];
   categories: AggregatedBucket[];
   channels: AggregatedBucket[];
   regions: AggregatedBucket[];
   payments: AggregatedBucket[];
   tiers: AggregatedBucket[];
   ageGroups: AggregatedBucket[];
+  topCustomers: CustomerRankItem[];
 }
 
 export function formatTHB(value: number, compact = false, decimals = 0): string {
@@ -129,46 +166,131 @@ export function computeDashboardMetrics(
   const { lookups } = dataset;
   let totalRevenue = 0;
   let totalUnits = 0;
-  const customers = new Set<string>();
 
   const monthMap = new Map<string, { revenue: number; txns: number; units: number }>();
+  const quarterMap = new Map<string, { revenue: number; txns: number; units: number }>();
   const catMap = new Map<string, { revenue: number; txns: number; units: number }>();
   const chanMap = new Map<string, { revenue: number; txns: number; units: number }>();
   const regMap = new Map<string, { revenue: number; txns: number; units: number }>();
   const payMap = new Map<string, { revenue: number; txns: number; units: number }>();
   const tierMap = new Map<string, { revenue: number; txns: number; units: number }>();
   const ageMap = new Map<string, { revenue: number; txns: number; units: number }>();
+  const custMap = new Map<string, CustomerRankItem>();
 
   for (const r of filteredRows) {
+    const cid = r[1];
     const units = r[7];
     const total = r[9];
     totalRevenue += total;
     totalUnits += units;
-    customers.add(r[1]);
 
     addToBucket(monthMap, lookups.Year_Month[r[3]], units, total);
+    addToBucket(quarterMap, lookups.Quarter[r[4]], units, total);
     addToBucket(catMap, lookups.Category[r[5]], units, total);
     addToBucket(chanMap, lookups.Channel[r[6]], units, total);
     addToBucket(regMap, lookups.Region[r[11]], units, total);
     addToBucket(payMap, lookups.Payment_Method[r[10]], units, total);
     addToBucket(tierMap, lookups.Membership_Tier[r[12]], units, total);
     addToBucket(ageMap, lookups.Age_Group[r[14]], units, total);
+
+    const existingCust = custMap.get(cid);
+    if (existingCust) {
+      existingCust.txns += 1;
+      existingCust.units += units;
+      existingCust.revenue += total;
+    } else {
+      custMap.set(cid, {
+        cid,
+        tier: lookups.Membership_Tier[r[12]],
+        gender: lookups.Gender[r[13]],
+        age: r[15],
+        txns: 1,
+        units,
+        revenue: total,
+      });
+    }
   }
 
   const totalTxns = filteredRows.length;
+  const topCustomers = Array.from(custMap.values())
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 8);
+
   return {
     totalRevenue,
     totalTxns,
     totalUnits,
     avgOrderValue: totalTxns > 0 ? totalRevenue / totalTxns : 0,
-    uniqueCustomers: customers.size,
+    uniqueCustomers: custMap.size,
     monthly: finalizeBuckets(monthMap, totalRevenue, false),
+    quarters: finalizeBuckets(quarterMap, totalRevenue, false),
     categories: finalizeBuckets(catMap, totalRevenue, true),
     channels: finalizeBuckets(chanMap, totalRevenue, true),
     regions: finalizeBuckets(regMap, totalRevenue, true),
     payments: finalizeBuckets(payMap, totalRevenue, true),
     tiers: finalizeBuckets(tierMap, totalRevenue, true),
     ageGroups: finalizeBuckets(ageMap, totalRevenue, false),
+    topCustomers,
+  };
+}
+
+export function getCustomerProfile(
+  dataset: CompactDataset,
+  cid: string,
+): CustomerProfile | null {
+  const { lookups, rows } = dataset;
+  const custRows = rows.filter((r) => r[1] === cid);
+  if (custRows.length === 0) return null;
+
+  const first = custRows[0];
+  let totalRevenue = 0;
+  let totalUnits = 0;
+  const catCounts = new Map<string, number>();
+  const chanCounts = new Map<string, number>();
+  const regCounts = new Map<string, number>();
+
+  for (const r of custRows) {
+    totalRevenue += r[9];
+    totalUnits += r[7];
+    const cat = lookups.Category[r[5]];
+    const chan = lookups.Channel[r[6]];
+    const reg = lookups.Region[r[11]];
+    catCounts.set(cat, (catCounts.get(cat) ?? 0) + r[9]);
+    chanCounts.set(chan, (chanCounts.get(chan) ?? 0) + 1);
+    regCounts.set(reg, (regCounts.get(reg) ?? 0) + 1);
+  }
+
+  const pickTop = (m: Map<string, number>) =>
+    Array.from(m.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "-";
+
+  const recentOrders = [...custRows]
+    .sort((a, b) => b[2].localeCompare(a[2]))
+    .slice(0, 15)
+    .map((r) => ({
+      id: r[0],
+      date: r[2],
+      category: lookups.Category[r[5]],
+      channel: lookups.Channel[r[6]],
+      units: r[7],
+      total: r[9],
+      payment: lookups.Payment_Method[r[10]],
+      region: lookups.Region[r[11]],
+    }));
+
+  return {
+    cid,
+    tier: lookups.Membership_Tier[first[12]],
+    gender: lookups.Gender[first[13]],
+    age: first[15],
+    ageGroup: lookups.Age_Group[first[14]],
+    totalRevenue,
+    totalTxns: custRows.length,
+    totalUnits,
+    avgOrderValue: totalRevenue / custRows.length,
+    favoriteCategory: pickTop(catCounts),
+    favoriteChannel: pickTop(chanCounts),
+    favoriteRegion: pickTop(regCounts),
+    recentOrders,
   };
 }
 

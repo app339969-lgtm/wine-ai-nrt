@@ -10,6 +10,8 @@ import {
   FileSearch,
   LayoutDashboard,
   LogOut,
+  Minimize2,
+  Presentation,
   RotateCcw,
   ShieldAlert,
   SlidersHorizontal,
@@ -21,6 +23,7 @@ import {
   exportRowsToCsv,
   filterCompactRows,
   formatNumber,
+  getCustomerProfile,
   INITIAL_FILTERS,
 } from "@/lib/analytics";
 import type {
@@ -32,6 +35,7 @@ import { OverviewView } from "./OverviewView";
 import { EdaInsightsView } from "./EdaInsightsView";
 import { DataAuditView } from "./DataAuditView";
 import { ExplorerArchView } from "./ExplorerArchView";
+import { CustomerDrawer } from "./CustomerDrawer";
 
 type TabId = "overview" | "eda" | "audit" | "explorer";
 
@@ -57,6 +61,8 @@ export function DashboardClient({ summary }: DashboardClientProps) {
   const [dataset, setDataset] = useState<CompactDataset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [presentationMode, setPresentationMode] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
 
   const loadCompactData = async () => {
     setLoading(true);
@@ -89,6 +95,11 @@ export function DashboardClient({ summary }: DashboardClientProps) {
     return computeDashboardMetrics(dataset, filteredRows);
   }, [dataset, filteredRows]);
 
+  const selectedCustomerProfile = useMemo(() => {
+    if (!dataset || !selectedCustomerId) return null;
+    return getCustomerProfile(dataset, selectedCustomerId);
+  }, [dataset, selectedCustomerId]);
+
   const handleFilterChange = (key: keyof DashboardFilters, value: string) => {
     setFilters((prev) => ({
       ...prev,
@@ -119,83 +130,93 @@ export function DashboardClient({ summary }: DashboardClientProps) {
   ];
 
   return (
-    <div className="min-h-screen text-slate-900 pb-12">
-      {/* Floating Glassmorphic Header */}
-      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-emerald-950/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 text-white flex items-center justify-center font-extrabold text-base shadow-md shadow-emerald-600/20">
-              SR
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-                  SmartRetail <span className="text-emerald-700">Analytics</span>
-                </h1>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-[#047857]">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  {loading ? "Syncing..." : "49,200 Verified"}
-                </span>
+    <div className="min-h-screen text-slate-900 pb-20">
+      {/* Floating Glassmorphic Header (hidden in Presentation Mode for full projector clarity) */}
+      {!presentationMode && (
+        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-emerald-950/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 text-white flex items-center justify-center font-extrabold text-base shadow-md shadow-emerald-600/20">
+                SR
               </div>
-              <p className="text-xs text-slate-500">
-                Customer Behavior &amp; Retail Sales Intelligence
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+                    SmartRetail <span className="text-emerald-700">Analytics</span>
+                  </h1>
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-[#047857]">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    {loading ? "Syncing..." : "49,200 Verified"}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500">
+                  Customer Behavior &amp; Retail Sales Intelligence
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Segmented Pill Tabs (Desktop Center/Right) */}
-          <nav
-            aria-label="Dashboard sections"
-            className="order-3 lg:order-2 w-full lg:w-auto flex items-center gap-1 p-1 rounded-full bg-emerald-950/5 overflow-x-auto"
-          >
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const active = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
-                    active
-                      ? "bg-white text-[#065F46] shadow-xs"
-                      : "text-slate-600 hover:text-emerald-800"
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
+            {/* Segmented Pill Tabs */}
+            <nav
+              aria-label="Dashboard sections"
+              className="order-3 lg:order-2 w-full lg:w-auto flex items-center gap-1 p-1 rounded-full bg-emerald-950/5 overflow-x-auto"
+            >
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const active = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                      active
+                        ? "bg-white text-[#065F46] shadow-xs"
+                        : "text-slate-600 hover:text-emerald-800"
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
 
-          <div className="order-2 lg:order-3 flex items-center gap-2">
-            {dataset && (
+            <div className="order-2 lg:order-3 flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => exportRowsToCsv(dataset, filteredRows)}
-                disabled={filteredRows.length === 0}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50"
+                onClick={() => setPresentationMode(true)}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-[#065F46] text-xs font-bold transition-colors"
               >
-                <Download className="w-3.5 h-3.5" />
-                <span>Export ({formatNumber(filteredRows.length)})</span>
+                <Presentation className="w-3.5 h-3.5" />
+                <span>โหมดนำเสนอ</span>
               </button>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-emerald-950/15 bg-white hover:bg-emerald-50/50 text-slate-700 text-xs font-semibold transition-colors"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">ออกจากระบบ</span>
-            </button>
+              {dataset && (
+                <button
+                  type="button"
+                  onClick={() => exportRowsToCsv(dataset, filteredRows)}
+                  disabled={filteredRows.length === 0}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export ({formatNumber(filteredRows.length)})</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-emerald-950/15 bg-white hover:bg-emerald-50/50 text-slate-700 text-xs font-semibold transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">ออก</span>
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
-        {/* Modern Floating Bento Filter Bar */}
-        {dataset && (
+        {/* Modern Floating Bento Filter Bar (collapsed in Presentation Mode) */}
+        {!presentationMode && dataset && (
           <section className="bento-card p-4 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-xs font-bold text-[#065F46]">
@@ -317,7 +338,6 @@ export function DashboardClient({ summary }: DashboardClientProps) {
               </select>
             </div>
 
-            {/* Active Removable Filter Chips */}
             {activeEntries.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 pt-1">
                 {activeEntries.map(([key, val]) => (
@@ -341,6 +361,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
         {/* Loading Skeleton State */}
         {loading && (
           <div className="space-y-4 animate-pulse" aria-label="Loading dashboard">
+            <div className="h-44 rounded-3xl bg-emerald-900/10" />
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-32 rounded-2xl bg-white/80 border border-emerald-950/10" />
@@ -376,22 +397,65 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 metrics={metrics}
                 monthlyRawComparison={summary.monthlySeries}
                 filters={filters}
+                presentationMode={presentationMode}
+                onTogglePresentation={() => setPresentationMode((prev) => !prev)}
                 onSelectFilter={handleFilterChange}
                 onDrillToExplorer={() => setActiveTab("explorer")}
+                onSelectCustomer={setSelectedCustomerId}
               />
             )}
-            {activeTab === "eda" && <EdaInsightsView summary={summary} />}
+            {activeTab === "eda" && (
+              <EdaInsightsView summary={summary} ageGroups={metrics.ageGroups} />
+            )}
             {activeTab === "audit" && <DataAuditView summary={summary} />}
             {activeTab === "explorer" && (
               <ExplorerArchView
                 dataset={dataset}
                 filteredRows={filteredRows}
                 onResetFilters={handleResetFilters}
+                onSelectCustomer={setSelectedCustomerId}
               />
             )}
           </>
         )}
       </main>
+
+      {/* Floating Bottom Quick-Dock in Presentation Mode */}
+      {presentationMode && (
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full bg-emerald-950/90 backdrop-blur-xl text-white shadow-2xl border border-white/15">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  active ? "bg-emerald-500 text-white" : "text-emerald-100 hover:bg-white/10"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => setPresentationMode(false)}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-xs font-bold ml-1"
+          >
+            <Minimize2 className="w-3.5 h-3.5" />
+            <span>Exit</span>
+          </button>
+        </div>
+      )}
+
+      {/* Customer 360 Slide-Over Drawer */}
+      <CustomerDrawer
+        profile={selectedCustomerProfile}
+        onClose={() => setSelectedCustomerId(null)}
+      />
     </div>
   );
 }

@@ -9,18 +9,31 @@ import {
   CartesianGrid,
   Cell,
   Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowUpRight, Banknote, ShoppingBag, Users, Receipt } from "lucide-react";
+import {
+  ArrowUpRight,
+  Banknote,
+  Crown,
+  Presentation,
+  Receipt,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import {
   formatNumber,
   formatTHB,
   type ComputedDashboardMetrics,
 } from "@/lib/analytics";
 import type { DashboardFilters, MonthlyPoint } from "@/types/dashboard";
+import { AnimatedNumber } from "./AnimatedNumber";
 import { InsightCard } from "./InsightCard";
 
 const MODERN_GREENS = ["#047857", "#059669", "#10B981", "#14B8A6", "#34D399"];
@@ -29,8 +42,11 @@ interface OverviewViewProps {
   metrics: ComputedDashboardMetrics;
   monthlyRawComparison: MonthlyPoint[];
   filters: DashboardFilters;
+  presentationMode: boolean;
+  onTogglePresentation: () => void;
   onSelectFilter: (key: keyof DashboardFilters, value: string) => void;
   onDrillToExplorer: () => void;
+  onSelectCustomer: (cid: string) => void;
 }
 
 function MiniSparkline({ values }: { values: number[] }) {
@@ -51,7 +67,7 @@ function MiniSparkline({ values }: { values: number[] }) {
       <polyline
         fill="none"
         stroke="#10B981"
-        strokeWidth="2.2"
+        strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
         points={pts}
@@ -64,8 +80,11 @@ export function OverviewView({
   metrics,
   monthlyRawComparison,
   filters,
+  presentationMode,
+  onTogglePresentation,
   onSelectFilter,
   onDrillToExplorer,
+  onSelectCustomer,
 }: OverviewViewProps) {
   const [showRawCompare, setShowRawCompare] = useState(false);
 
@@ -92,7 +111,8 @@ export function OverviewView({
     {
       label: "Clean Revenue",
       thLabel: "ยอดขายสุทธิ",
-      value: formatTHB(metrics.totalRevenue, true),
+      rawVal: metrics.totalRevenue,
+      format: (v: number) => formatTHB(v, true),
       sub: `${formatTHB(metrics.totalRevenue)} บาท`,
       icon: Banknote,
       spark: revSpark,
@@ -100,7 +120,8 @@ export function OverviewView({
     {
       label: "Clean Orders",
       thLabel: "จำนวนบิลสะอาด",
-      value: formatNumber(metrics.totalTxns),
+      rawVal: metrics.totalTxns,
+      format: (v: number) => formatNumber(Math.round(v)),
       sub: `รวม ${formatNumber(metrics.totalUnits)} ชิ้น`,
       icon: Receipt,
       spark: txnSpark,
@@ -108,7 +129,8 @@ export function OverviewView({
     {
       label: "Avg Order Value",
       thLabel: "มูลค่าเฉลี่ยต่อบิล",
-      value: formatTHB(Math.round(metrics.avgOrderValue)),
+      rawVal: metrics.avgOrderValue,
+      format: (v: number) => formatTHB(v, false, 2),
       sub: `เฉลี่ย ${metrics.totalTxns > 0 ? (metrics.totalUnits / metrics.totalTxns).toFixed(2) : "0"} ชิ้น/บิล`,
       icon: ShoppingBag,
       spark: aovSpark,
@@ -116,7 +138,8 @@ export function OverviewView({
     {
       label: "Active Customers",
       thLabel: "ลูกค้าที่ซื้อจริง",
-      value: formatNumber(metrics.uniqueCustomers),
+      rawVal: metrics.uniqueCustomers,
+      format: (v: number) => formatNumber(Math.round(v)),
       sub: `เฉลี่ย ${metrics.uniqueCustomers > 0 ? (metrics.totalTxns / metrics.uniqueCustomers).toFixed(1) : "0"} บิล/คน`,
       icon: Users,
       spark: unitSpark,
@@ -142,6 +165,109 @@ export function OverviewView({
 
   return (
     <div className="space-y-6 animate-fade-up">
+      {/* Grand Executive Hero Command Banner */}
+      <section className="rounded-3xl bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600 text-white p-6 sm:p-8 shadow-xl shadow-emerald-900/15 relative overflow-hidden">
+        <div className="pointer-events-none absolute -right-16 -top-16 w-72 h-72 rounded-full bg-emerald-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute left-1/3 -bottom-20 w-64 h-64 rounded-full bg-teal-300/20 blur-3xl" />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="lg:col-span-7 space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold text-emerald-50">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+              <span>SmartRetail Thailand · Executive Command Center</span>
+            </div>
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums">
+                <AnimatedNumber value={metrics.totalRevenue} formatter={(v) => formatTHB(v, true)} />
+              </h2>
+              <span className="text-sm text-emerald-100/90 font-medium tabular-nums">
+                ({formatTHB(metrics.totalRevenue)} บาท · {formatNumber(metrics.totalTxns)} บิลสะอาด)
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-emerald-50/90 max-w-2xl leading-relaxed">
+              สรุปภาพรวมประสิทธิภาพยอดขายค้าปลีกออนไลน์และหน้าร้านปี 2025 พร้อมตัวกรองอัจฉริยะ 7 มิติ การเจาะลึก Customer 360° และการส่งออกข้อมูลทันที
+            </p>
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={onDrillToExplorer}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#065F46] hover:bg-emerald-50 text-xs font-bold shadow-sm transition-all"
+              >
+                <span>เจาะลึกรายการบิล</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={onTogglePresentation}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold backdrop-blur-md transition-all"
+              >
+                <Presentation className="w-3.5 h-3.5" />
+                <span>{presentationMode ? "ออกจากโหมดนำเสนอ" : "โหมดนำเสนอกรรมการ"}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Quality Score Ring & Quarterly Strip */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-5 gap-3 items-center">
+            <div className="sm:col-span-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 p-4 flex flex-col items-center text-center">
+              <div className="relative w-20 h-20 flex items-center justify-center">
+                <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.2)" strokeWidth="7" fill="none" />
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="32"
+                    stroke="#A7F3D0"
+                    strokeWidth="7"
+                    strokeLinecap="round"
+                    strokeDasharray="201"
+                    strokeDashoffset="0"
+                    fill="none"
+                  />
+                </svg>
+                <span className="absolute text-sm font-extrabold tabular-nums">100%</span>
+              </div>
+              <p className="text-[11px] font-bold text-emerald-50 mt-1 inline-flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-200" />
+                FK Integrity
+              </p>
+              <p className="text-[10px] text-emerald-100/80">0 Nulls · 50 Audited</p>
+            </div>
+
+            <div className="sm:col-span-3 grid grid-cols-2 gap-2">
+              {metrics.quarters.map((q, idx) => {
+                const prev = idx > 0 ? metrics.quarters[idx - 1].revenue : null;
+                const qoq = prev && prev > 0 ? ((q.revenue - prev) / prev) * 100 : null;
+                return (
+                  <button
+                    key={q.name}
+                    type="button"
+                    onClick={() =>
+                      onSelectFilter("quarter", filters.quarter === q.name ? "ALL" : q.name)
+                    }
+                    className={`text-left rounded-xl p-2.5 border transition-all ${
+                      filters.quarter === q.name
+                        ? "bg-white text-[#065F46] border-white shadow-sm"
+                        : "bg-white/10 hover:bg-white/20 text-white border-white/15"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-[10px] font-bold opacity-85">
+                      <span>{q.name}</span>
+                      {qoq !== null && (
+                        <span>{`${qoq >= 0 ? "+" : ""}${qoq.toFixed(1)}%`}</span>
+                      )}
+                    </div>
+                    <p className="text-sm font-extrabold mt-0.5 tabular-nums">
+                      {formatTHB(q.revenue, true)}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Bento KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {kpis.map((kpi) => {
@@ -163,7 +289,7 @@ export function OverviewView({
               <div className="mt-3 flex items-end justify-between gap-2">
                 <div>
                   <p className="text-2xl font-extrabold text-slate-900 tabular-nums tracking-tight">
-                    {kpi.value}
+                    <AnimatedNumber value={kpi.rawVal} formatter={kpi.format} />
                   </p>
                   <p className="text-xs text-slate-500 mt-0.5 tabular-nums">{kpi.sub}</p>
                 </div>
@@ -355,7 +481,7 @@ export function OverviewView({
         </section>
       </div>
 
-      {/* Bottom Bento Row */}
+      {/* Middle Row: Region + Radial Donut Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <section className="lg:col-span-6 bento-card p-6">
           <h3 className="text-base font-bold text-slate-900">
@@ -424,82 +550,140 @@ export function OverviewView({
           />
         </section>
 
+        {/* Radial Donut Mix */}
         <section className="lg:col-span-6 bento-card p-6 flex flex-col justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-900">
-              ช่องทางการขายและวิธีชำระเงิน
+              สัดส่วนช่องทางการขาย &amp; วิธีชำระเงิน (Radial Donut Mix)
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              คลิกที่การ์ดเพื่อ Filter ข้อมูลทั้งหน้า Dashboard ได้ทันที
+              คลิกที่ชิ้น Donut หรือปุ่มด้านล่างเพื่อ Filter ข้อมูลทั้ง Dashboard
             </p>
 
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs font-bold text-[#047857] mb-2">
-                  Channel Mix
-                </p>
-                <div className="space-y-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Channel Donut */}
+              <div className="rounded-2xl bg-[#F5FBF7] border border-emerald-950/10 p-3">
+                <p className="text-xs font-bold text-[#065F46] text-center mb-1">Channel Mix</p>
+                <div className="h-44 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={metrics.channels}
+                        dataKey="revenue"
+                        nameKey="name"
+                        innerRadius={44}
+                        outerRadius={68}
+                        paddingAngle={4}
+                        cursor="pointer"
+                        onClick={(entry) => {
+                          if (entry?.name) {
+                            onSelectFilter(
+                              "channel",
+                              filters.channel === entry.name ? "ALL" : String(entry.name),
+                            );
+                          }
+                        }}
+                      >
+                        {metrics.channels.map((c, idx) => (
+                          <Cell
+                            key={c.name}
+                            fill={
+                              filters.channel === c.name
+                                ? "#064E3B"
+                                : MODERN_GREENS[idx % MODERN_GREENS.length]
+                            }
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(v) => [formatTHB(Number(v ?? 0)), "ยอดขาย"]} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-[10px] text-slate-500 font-semibold">Online</span>
+                    <span className="text-sm font-extrabold text-[#065F46] tabular-nums">
+                      {onlineShare}%
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap justify-center gap-1.5 mt-1">
                   {metrics.channels.map((ch) => (
                     <button
                       key={ch.name}
                       type="button"
                       onClick={() =>
-                        onSelectFilter(
-                          "channel",
-                          filters.channel === ch.name ? "ALL" : ch.name,
-                        )
+                        onSelectFilter("channel", filters.channel === ch.name ? "ALL" : ch.name)
                       }
-                      className={`w-full text-left p-3.5 rounded-2xl border transition-all ${
+                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
                         filters.channel === ch.name
-                          ? "bg-emerald-50 border-emerald-500 shadow-xs"
-                          : "bg-[#F5FBF7] border-emerald-950/10 hover:border-emerald-400"
+                          ? "bg-emerald-700 text-white border-emerald-700"
+                          : "bg-white text-slate-700 border-emerald-200"
                       }`}
                     >
-                      <div className="flex justify-between text-xs font-semibold text-slate-800 mb-2">
-                        <span>{ch.name}</span>
-                        <span className="tabular-nums">
-                          {formatTHB(ch.revenue)} ({ch.sharePct}%) · {formatNumber(ch.txns)} บิล
-                        </span>
-                      </div>
-                      <div className="w-full h-2.5 rounded-full bg-emerald-950/10 overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-teal-500"
-                          style={{ width: `${ch.sharePct}%` }}
-                        />
-                      </div>
+                      {ch.name} ({ch.sharePct}%)
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div>
-                <p className="text-xs font-bold text-[#047857] mb-2">
-                  Payment Mix
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Payment Donut */}
+              <div className="rounded-2xl bg-[#F5FBF7] border border-emerald-950/10 p-3">
+                <p className="text-xs font-bold text-[#065F46] text-center mb-1">Payment Mix</p>
+                <div className="h-44 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={metrics.payments}
+                        dataKey="revenue"
+                        nameKey="name"
+                        innerRadius={44}
+                        outerRadius={68}
+                        paddingAngle={4}
+                        cursor="pointer"
+                        onClick={(entry) => {
+                          if (entry?.name) {
+                            onSelectFilter(
+                              "payment",
+                              filters.payment === entry.name ? "ALL" : String(entry.name),
+                            );
+                          }
+                        }}
+                      >
+                        {metrics.payments.map((p, idx) => (
+                          <Cell
+                            key={p.name}
+                            fill={
+                              filters.payment === p.name
+                                ? "#064E3B"
+                                : MODERN_GREENS[idx % MODERN_GREENS.length]
+                            }
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(v) => [formatTHB(Number(v ?? 0)), "ยอดขาย"]} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-[10px] text-slate-500 font-semibold">Digital</span>
+                    <span className="text-sm font-extrabold text-[#065F46] tabular-nums">
+                      {digitalPayShare}%
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap justify-center gap-1.5 mt-1">
                   {metrics.payments.map((pm) => (
                     <button
                       key={pm.name}
                       type="button"
                       onClick={() =>
-                        onSelectFilter(
-                          "payment",
-                          filters.payment === pm.name ? "ALL" : pm.name,
-                        )
+                        onSelectFilter("payment", filters.payment === pm.name ? "ALL" : pm.name)
                       }
-                      className={`text-left p-3.5 rounded-2xl border transition-all ${
+                      className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${
                         filters.payment === pm.name
-                          ? "bg-emerald-50 border-emerald-500 shadow-xs"
-                          : "bg-white border-emerald-950/10 hover:border-emerald-400"
+                          ? "bg-emerald-700 text-white border-emerald-700"
+                          : "bg-white text-slate-700 border-emerald-200"
                       }`}
                     >
-                      <p className="text-xs font-semibold text-slate-700">{pm.name}</p>
-                      <p className="text-lg font-extrabold text-[#065F46] mt-0.5 tabular-nums">
-                        {pm.sharePct}%
-                      </p>
-                      <p className="text-[11px] text-slate-500 tabular-nums">
-                        {formatTHB(pm.revenue, true)}
-                      </p>
+                      {pm.name} ({pm.sharePct}%)
                     </button>
                   ))}
                 </div>
@@ -514,6 +698,55 @@ export function OverviewView({
           />
         </section>
       </div>
+
+      {/* Top Customers Leaderboard Bento (Click to open Customer 360 Drawer) */}
+      <section className="bento-card p-6">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 className="text-base font-bold text-slate-900 inline-flex items-center gap-2">
+              <Crown className="w-4 h-4 text-emerald-600" />
+              <span>Top Customers Leaderboard (คลิกที่รหัสลูกค้าเพื่อดู Customer 360°)</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              อันดับลูกค้าที่สร้างยอดขายสูงสุดภายใต้ตัวกรองปัจจุบัน ({metrics.topCustomers.length} อันดับแรก)
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onDrillToExplorer}
+            className="text-xs font-bold text-[#047857] hover:underline inline-flex items-center gap-1"
+          >
+            <span>ดูตารางบิลทั้งหมด</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {metrics.topCustomers.map((c, idx) => (
+            <button
+              key={c.cid}
+              type="button"
+              onClick={() => onSelectCustomer(c.cid)}
+              className="text-left rounded-2xl border border-emerald-950/10 bg-[#F5FBF7] hover:bg-emerald-50 hover:border-emerald-400 p-4 transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-extrabold text-[#065F46] group-hover:underline">
+                  #{idx + 1} · {c.cid}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-white border border-emerald-200 text-[10px] font-bold text-emerald-800">
+                  {c.tier}
+                </span>
+              </div>
+              <p className="text-lg font-extrabold text-slate-900 mt-1.5 tabular-nums">
+                {formatTHB(c.revenue)}
+              </p>
+              <p className="text-[11px] text-slate-500 mt-0.5 tabular-nums">
+                {c.txns} บิล · {formatNumber(c.units)} ชิ้น · {c.gender} ({c.age} ปี)
+              </p>
+            </button>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

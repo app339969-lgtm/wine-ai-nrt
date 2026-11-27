@@ -10,15 +10,16 @@ import {
   YAxis,
 } from "recharts";
 import { Target, UserCheck, Clock } from "lucide-react";
-import { formatNumber, formatTHB } from "@/lib/analytics";
+import { formatNumber, formatTHB, type AggregatedBucket } from "@/lib/analytics";
 import type { SummaryPayload } from "@/types/dashboard";
 import { InsightCard } from "./InsightCard";
 
 interface EdaInsightsViewProps {
   summary: SummaryPayload;
+  ageGroups: AggregatedBucket[];
 }
 
-export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
+export function EdaInsightsView({ summary, ageGroups }: EdaInsightsViewProps) {
   const {
     before_cleaning_total_amount,
     after_cleaning_total_amount,
@@ -40,6 +41,8 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
     if (abs >= 0.3) return "bg-emerald-200 text-emerald-950";
     return "bg-[#F5FBF7] text-slate-700";
   };
+
+  const topAge = [...ageGroups].sort((a, b) => b.revenue - a.revenue)[0];
 
   return (
     <div className="space-y-6 animate-fade-up">
@@ -180,33 +183,76 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
         </section>
       </div>
 
-      {/* Membership Tier Performance */}
-      <section className="bento-card p-6">
-        <h3 className="text-base font-bold text-slate-900 mb-3">
-          เปรียบเทียบประสิทธิภาพตามระดับสมาชิก (Membership Tier Analysis)
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {summary.tierStats.map((t) => (
-            <div
-              key={t.tier}
-              className="rounded-2xl border border-emerald-950/10 bg-gradient-to-br from-[#F5FBF7] to-white p-4 space-y-1.5 hover:border-emerald-400 transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-[#065F46]">{t.tier}</span>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-[#065F46] font-bold">
-                  {t.customers} ลูกค้า
-                </span>
-              </div>
-              <p className="text-xl font-extrabold text-slate-900 tabular-nums">
-                {formatTHB(t.revenue, true)}
-              </p>
-              <p className="text-xs text-slate-600 tabular-nums">
-                เฉลี่ย/คน: <strong>{formatTHB(t.avgRevenuePerCustomer)}</strong> · {t.avgTxnsPerCustomer} บิล/คน
-              </p>
+      {/* Age Group & Membership Tier Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <section className="lg:col-span-5 bento-card p-6">
+          <h3 className="text-base font-bold text-slate-900">
+            ยอดขายแยกตามช่วงอายุลูกค้า (Age Group)
+          </h3>
+          <p className="text-xs text-slate-500 mb-4">
+            อัปเดตตามตัวกรองปัจจุบันของ Dashboard
+          </p>
+          <div className="h-56 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={ageGroups}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" vertical={false} />
+                <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#0F172A" }} axisLine={false} tickLine={false} />
+                <YAxis
+                  tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(0)}M`}
+                  tick={{ fontSize: 11, fill: "#475569" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip formatter={(v) => [formatTHB(Number(v ?? 0)), "ยอดขาย"]} />
+                <Bar dataKey="revenue" fill="#059669" radius={[10, 10, 4, 4]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <InsightCard
+            what={
+              topAge
+                ? `ช่วงอายุที่สร้างยอดขายสูงสุดคือ ${topAge.name} ปี (${formatTHB(topAge.revenue, true)}, ${topAge.sharePct}%)`
+                : "ไม่มีข้อมูลช่วงอายุตามตัวกรอง"
+            }
+            soWhat="ยอดใช้จ่ายต่อบิลไม่ได้แปรผันตามอายุ (Corr = -0.0037) แต่กลุ่ม 50–65 ปีมีฐานลูกค้าใหญ่ที่สุด"
+            nowWhat="สื่อสารโปรโมชันสินค้าราคาสูงอย่างเหมาะสมกับกลุ่มผู้ใหญ่ควบคู่การดึงคนรุ่นใหม่ (18–29)"
+          />
+        </section>
+
+        <section className="lg:col-span-7 bento-card p-6 flex flex-col justify-between">
+          <div>
+            <h3 className="text-base font-bold text-slate-900 mb-3">
+              เปรียบเทียบประสิทธิภาพตามระดับสมาชิก (Membership Tier Analysis)
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {summary.tierStats.map((t) => (
+                <div
+                  key={t.tier}
+                  className="rounded-2xl border border-emerald-950/10 bg-gradient-to-br from-[#F5FBF7] to-white p-4 space-y-1.5 hover:border-emerald-400 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-[#065F46]">{t.tier}</span>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-[#065F46] font-bold">
+                      {t.customers} ลูกค้า
+                    </span>
+                  </div>
+                  <p className="text-xl font-extrabold text-slate-900 tabular-nums">
+                    {formatTHB(t.revenue, true)}
+                  </p>
+                  <p className="text-xs text-slate-600 tabular-nums">
+                    เฉลี่ย/คน: <strong>{formatTHB(t.avgRevenuePerCustomer)}</strong> · {t.avgTxnsPerCustomer} บิล/คน
+                  </p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+          <InsightCard
+            what="ยอดใช้จ่ายต่อคนทุกระดับสมาชิกใกล้เคียงกันมาก (~140.5k–144.2k บาท/คน, ~49.2 บิล/คน)"
+            soWhat="สิทธิประโยชน์ของระดับสมาชิกยังไม่สร้างแรงจูงใจให้กลุ่ม Platinum/Gold ซื้อมากกว่า Basic (499 คน)"
+            nowWhat="ปรับ Loyalty Program แบบ Tiered Rewards และตั้งเกณฑ์อัปเกรดจาก Basic สู่ Silver"
+          />
+        </section>
+      </div>
 
       {/* 5 Strategic Insights Cards */}
       <section className="bento-card p-6">

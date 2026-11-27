@@ -10,6 +10,7 @@ import {
   RotateCcw,
   Search,
   SearchX,
+  UserRoundSearch,
 } from "lucide-react";
 import { exportRowsToCsv, formatNumber, formatTHB } from "@/lib/analytics";
 import type { CompactDataset, CompactTuple } from "@/types/dashboard";
@@ -18,6 +19,7 @@ interface ExplorerArchViewProps {
   dataset: CompactDataset;
   filteredRows: CompactTuple[];
   onResetFilters: () => void;
+  onSelectCustomer: (cid: string) => void;
 }
 
 type SortKey = "date" | "total" | "units";
@@ -26,6 +28,7 @@ export function ExplorerArchView({
   dataset,
   filteredRows,
   onResetFilters,
+  onSelectCustomer,
 }: ExplorerArchViewProps) {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("date");
@@ -71,7 +74,7 @@ export function ExplorerArchView({
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900">
-              ตารางเจาะลึกรายการธุรกรรม (Detail Drill-Down Explorer)
+              ตารางเจาะลึกรายการธุรกรรม (คลิก Customer_ID เพื่อดู Customer 360°)
             </h3>
             <p className="text-xs text-slate-500">
               แสดง {formatNumber(searchedRows.length)} รายการจากชุดข้อมูลที่คลีนแล้ว พร้อม Export CSV ตามตัวกรอง
@@ -174,7 +177,16 @@ export function ExplorerArchView({
                       <td className="py-2.5 px-3 font-mono font-semibold text-slate-900">
                         {r[0]}
                       </td>
-                      <td className="py-2.5 px-3 font-mono text-slate-700">{r[1]}</td>
+                      <td className="py-2.5 px-3 font-mono">
+                        <button
+                          type="button"
+                          onClick={() => onSelectCustomer(r[1])}
+                          className="inline-flex items-center gap-1 text-[#047857] font-bold hover:underline"
+                        >
+                          <UserRoundSearch className="w-3 h-3" />
+                          <span>{r[1]}</span>
+                        </button>
+                      </td>
                       <td className="py-2.5 px-3 text-slate-700">{r[2]}</td>
                       <td className="py-2.5 px-3 text-slate-800">{lookups.Category[r[5]]}</td>
                       <td className="py-2.5 px-3 text-slate-700">{lookups.Channel[r[6]]}</td>
