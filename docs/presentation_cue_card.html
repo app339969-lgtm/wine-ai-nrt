@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cue Card พรีเซนต์ทีละหน้า + คำอ่านศัพท์อังกฤษ + ที่มาข้อมูล | SmartRetail Thailand</title>
+  <style>
+    :root {
+      --bg: #f5fbf7;
+      --card: #ffffff;
+      --dark: #064e3b;
+      --green: #047857;
+      --bright: #10b981;
+      --mint: #ecfdf5;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cde5d8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans Thai", "Noto Sans Thai", "Leelawadee UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 18px 14px 64px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    .hero {
+      background: linear-gradient(125deg, #064e3b, #047857, #0d9488);
+      color: #fff;
+      border-radius: 22px;
+      padding: 22px 26px;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 28px -14px rgba(6, 78, 59, 0.45);
+    }
+    .hero h1 { margin: 0 0 6px; font-size: 22px; }
+    .hero p { margin: 0; font-size: 13.5px; opacity: 0.94; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 8px;
+      z-index: 10;
+      background: rgba(245, 251, 247, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 8px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--dark);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .warn {
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .warn h2 { margin: 0 0 6px; font-size: 15px; color: #92400e; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 20px -14px rgba(15, 23, 42, 0.18);
+      margin-bottom: 12px;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+    .card h3 { margin: 6px 0 8px; font-size: 15.5px; color: var(--dark); }
+    .what-see { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
+    .quote {
+      background: #f8fafc;
+      border-left: 4px solid var(--bright);
+      padding: 10px 12px;
+      border-radius: 0 10px 10px 0;
+      font-size: 13.5px;
+      margin: 8px 0;
+    }
+    .vocab-mini {
+      background: #fdf2f8;
+      border: 1px solid #fbcfe8;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .vocab-mini strong { color: #9d174d; }
+    .src-mini {
+      background: var(--mint);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--dark);
+      margin-top: 8px;
+    }
+    code {
+      background: rgba(6, 78, 59, 0.08);
+      padding: 1px 5px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+      font-size: 11.5px;
+    }
+    .search-box {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      font-family: inherit;
+      font-size: 14px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    .search-box:focus { border-color: var(--bright); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #fff;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: var(--mint); color: var(--dark); font-weight: 800; }
+    .phonetic { color: #047857; font-weight: 700; }
+    @media print {
+      .tabs, .search-box { display: none; }
+      .panel { display: block !important; margin-bottom: 24px; }
+      .card { break-inside: avoid; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>คู่มือพรีเซนต์ทีละหน้า + คำอ่านคำศัพท์ภาษาอังกฤษ + แหล่งข้อมูล (SmartRetail Thailand)</h1>
+      <p>อ่านพูดตามได้ทีละสไลด์ (1–12) และทีละหน้าเว็บ (5 หน้า) พร้อมพจนานุกรมคำศัพท์แบบค้นหาได้ทันที</p>
+      <div class="chips">
+        <span class="chip">Live Web: https://wine-ai-nrt.vercel.app</span>
+        <span class="chip">Login: judge@smartretail.th / SmartRetail2025</span>
+        <span class="chip">49,200 บิลสะอาด · ฿142.16M · 7 Unit Tests</span>
+      </div>
+    </header>
+
+    <div class="warn">
+      <h2>⚠️ เช็ก 5 จุดต่างจาก PDF ตัวอย่าง 12 หน้า (ยึดค่าจริงตามนี้เวลาพูด)</h2>
+      <strong>URL จริง:</strong> <code>https://wine-ai-nrt.vercel.app</code> (ไม่ใช่ ntr-project) ·
+      <strong>Demo:</strong> <code>judge@smartretail.th</code> / <code>SmartRetail2025</code> ·
+      <strong>ขนาดไฟล์เว็บ:</strong> <code>summary.json</code> (38.7 KB) + <code>transactions_compact.json</code> (3.44 MB) ·
+      <strong>Tests:</strong> 7 Tests ·
+      <strong>บิล Household ที่อาจตัดผิด:</strong> 5,250 แถว
+    </div>
+
+    <nav class="tabs" aria-label="หมวดคู่มือพรีเซนต์">
+      <button type="button" class="tab-btn active" onclick="showTab('slides', this)">📽️ สไลด์ 1–12 (พูดทีละหน้า)</button>
+      <button type="button" class="tab-btn" onclick="showTab('web', this)">🌐 หน้าเว็บ 5 หน้า &amp; ที่มาข้อมูล</button>
+      <button type="button" class="tab-btn" onclick="showTab('glossary', this)">📖 ศัพท์อังกฤษ (อ่านว่าอะไร · แปลว่าอะไร)</button>
+    </nav>
+
+    <!-- TAB 1: SLIDES 1-12 -->
+    <section id="tab-slides" class="panel active">
+      <div class="grid">
+        <article class="card">
+          <span class="badge">Slide 1 / 12 · 0:00–0:30</span>
+          <h3>หน้าปก (Cover): SmartRetail Thailand</h3>
+          <p class="what-see">โชว์ 4 การ์ด: 50,000 → 49,200, 100.0% FK, ฿142.16M, 5 Insights</p>
+          <div class="quote">"สวัสดีคณะกรรมการทุกท่านครับ พวกเราทีม<strong>วิทยาลัยเทคนิคนางรอง</strong> วันนี้ขอนำเสนอผลวิเคราะห์พฤติกรรมลูกค้าและยอดขาย Omnichannel ของ SmartRetail Thailand จาก 50,000 รายการ หลังคลีนเหลือ 49,200 บิลสะอาด รายได้สุทธิ 142.16 ล้านบาท เพื่อแก้ปัญหายอดขายชะลอตัวและวางแผนปฏิบัติการครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Omnichannel (ออม-นิ-แชน-เนล = ขายทั้งออนไลน์และหน้าร้าน) · FK Match Rate (เอฟ-เค แมตช์ เรต = อัตราเชื่อมรหัสลูกค้าตรงกัน)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>cleaning_report.json</code> &amp; <code>summary.json</code> → <code>build_presentation.py</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 2 / 12 · 0:30–1:15</span>
+          <h3>Problem: ยอดขายทั้งปีชะลอตัว &amp; สัญญาณรบกวน</h3>
+          <p class="what-see">สรุปโจทย์ 4 ข้อ + กล่อง What / So What / Now What</p>
+          <div class="quote">"บริษัทยอดขายทรงตัวครับ รายได้สะอาดทั้ง 12 เดือนแกว่งตัวแคบแค่ 10.97–12.53 ล้านบาท/เดือน โดย Q4 โตเทียบ Q1 แค่ +0.41% และหดตัว -2.49% จาก Q3 นอกจากนี้ข้อมูลดิบยังมี Outlier 50 บิล (14.54M) และ Missing 750 แถวที่ต้องคลีนก่อนวิเคราะห์ครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> In-Store (อิน-สโตร์ = หน้าร้าน) · Organic Growth (ออร์แกนิก โกรท = โตตามธรรมชาติ) · Basket Size (บาสเก็ต ไซส์ = ขนาดตะกร้าต่อบิล)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> ยอดไตรมาสจาก <code>Quarter</code> &amp; <code>Total_Amount</code> ใน <code>merged_cleaned.parquet</code>; จำนวนสมาชิกจาก <code>customers_data.csv</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 3 / 12 · 1:15–2:15</span>
+          <h3>Method: Data Pipeline &amp; IQR / Z-Score</h3>
+          <p class="what-see">Funnel 4 ขั้น: 50,000 → -750 Missing → -50 Outliers → 49,200 Clean</p>
+          <div class="quote">"เราเขียน Data Pipeline ใน Python ให้รันซ้ำได้ 100% ครับ ตรวจ PK/FK ได้ 100.0% เต็ม จากนั้นตัด Dual-Missing 750 แถวที่หายทั้งจำนวนชิ้นและยอดเงินพร้อมกัน และตรวจ Outliers บน Units_Sold ด้วยทั้ง IQR (>38.5) และ Z-Score (>135.45) จับได้ตรงกัน 50 แถว (999/1200/1500 ชิ้น) จึงแยกเก็บใน Audit Log เพื่อตรวจสอบย้อนกลับครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Pipeline (ไปป์-ไลน์ = สายพานโค้ดอัตโนมัติ) · Dual-Missing (ดู-อัล มิส-ซิ่ง = หายคู่ 2 ช่อง) · Outlier (เอาท์-ไล-เออร์ = ค่าโดดผิดปกติ) · IQR Upper Fence (รั้วบน 38.5 ชิ้น) · Parity (แพ-รี-ตี = ตรงกัน 100%)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>clean_data.py</code> → <code>cleaning_report.json</code> &amp; <code>outliers_audit.csv</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 4 / 12 · 2:15–3:05</span>
+          <h3>Method Impact: Before vs After Cleaning</h3>
+          <p class="what-see">ตารางเทียบ 49,250 vs 49,200 (Mean, Std, Median, Max)</p>
+          <div class="quote">"หน้านี้พิสูจน์ผลหลังคลีนครับ เพียงแยก 50 Outliers (0.10%) ออก รายได้จริงอยู่ที่ 142.16M (ตัดยอดลวง 14.54M ออก) Mean เหลือ 2,889.36 บาท และส่วนเบี่ยงเบนมาตรฐาน (Std. Dev.) ลดฮวบถึง -71.98% ส่วนค่ากลาง Median ยังคงเดิม 1,035 บาท แสดงว่าไม่ได้ทำลายข้อมูลปกติครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Mean (มีน = ค่าเฉลี่ย) · Std. Dev. (เอส-ที-ดี เดฟ = ส่วนเบี่ยงเบนมาตรฐาน) · Median (มี-เดียน = ค่าตรงกลาง) · Quantile (ควอน-ไทล์ = ค่าแบ่งช่วง Q1/Q3)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>summarize_numeric()</code> ใน <code>clean_data.py</code> → <code>cleaning_report.json</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 5 / 12 · 3:05–3:55</span>
+          <h3>Finding #1: กฎ 80/20 (Pareto) &amp; Correlation +0.8123</h3>
+          <p class="what-see">กราฟแท่ง 5 หมวด: Household 58.03% + Personal Care 21.75% = 79.78%</p>
+          <div class="quote">"ข้อค้นพบที่ 1 คือ กฎ Pareto ครับ สินค้า 2 หมวดคือ Household (฿890/ชิ้น, 58.03%) และ Personal Care (21.75%) ทำรายได้รวมถึง 79.78% ทั้งที่มีบิลแค่ 35% และจาก Pearson Correlation พบว่า ราคาต่อหน่วย สัมพันธ์กับยอดบิลสูงมาก (+0.8123) ขณะที่ทุกหมวดซื้อ ~12.50 ชิ้นเท่ากัน จึงควรจัด Cross-Sell Bundle กับของกินขายดีครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Pareto (พา-เร-โต = กฎ 80/20) · Household (เฮาส์-โฮลด์ = ของใช้ในบ้าน) · Personal Care (เพอร์-ซัน-นัล แคร์ = ของใช้ส่วนตัว) · Correlation (คอร์-ริ-เล-ชัน = ค่าความสัมพันธ์) · Bundle (บัน-เดิล = ขายพ่วงเป็นชุด)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>category_pareto.png</code> จาก <code>merged_cleaned.parquet</code> &amp; <code>summary.json → correlationMatrix</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 6 / 12 · 3:55–4:40</span>
+          <h3>Finding #2: Time Series (Clean vs Raw)</h3>
+          <p class="what-see">กราฟเส้นรายเดือนเทียบเส้นเทา Raw พุ่งหลอก มิ.ย./ส.ค. vs เส้นเขียว Clean</p>
+          <div class="quote">"ข้อค้นพบที่ 2 คือกราฟ Time Series 12 เดือนครับ ถ้าดูข้อมูลดิบเส้นประ จะหลงว่าเดือน มิ.ย. (14.93M) และ ส.ค. (15.52M) ยอดพุ่ง แต่ความจริงหลังคลีน ยอดขายนิ่งอยู่ที่ 10.97–12.53M โดยเดือน Low Season คือ ก.พ., พ.ค. และ พ.ย. ที่ต้องเร่งจัดแคมเปญกระตุ้นล่วงหน้าครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Time Series (ไทม์ ซี-รีส์ = กราฟข้อมูลตามเวลา) · Low Season (โลว์ ซี-ซัน = ช่วงยอดขายซบเซา)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>monthly_trend.png</code> จาก <code>summary.json → monthlySeries</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 7 / 12 · 4:40–5:20</span>
+          <h3>Finding #3: Omnichannel &amp; Digital Payment 70.54%</h3>
+          <p class="what-see">โดนัทคู่ Online 55.53% vs In-Store 44.47% | Card+PromptPay = 70.54%</p>
+          <div class="quote">"ข้อค้นพบที่ 3: ช่องทาง Online ทำรายได้ 55.53% (78.95M) นำหน้าหน้าร้าน In-Store (44.47%) และลูกค้าชำระเงินแบบ Digital Payment (Credit Card 40.51% + PromptPay 30.03%) รวมสูงถึง 70.54% จึงควรเชื่อม O2O เช่น Click &amp; Collect และคืนเงิน PromptPay Cashback ที่หน้าร้านครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Channel Mix (แชน-เนล มิกซ์ = สัดส่วนช่องทาง) · O2O Click &amp; Collect (สั่งออนไลน์รับหน้าร้าน) · PromptPay Cashback (คืนเงินผ่านพร้อมเพย์)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>channel_payment.png</code> จากคอลัมน์ <code>Channel</code> &amp; <code>Payment_Method</code> ใน <code>merged_cleaned.parquet</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 8 / 12 · 5:20–6:00</span>
+          <h3>Finding #4: Regional Gap (Central 3.36x West)</h3>
+          <p class="what-see">กราฟแท่ง 5 ภาค: Central 50.18M (35.30%) vs West 14.94M (10.51%)</p>
+          <div class="quote">"ข้อค้นพบที่ 4 ด้านภูมิภาคครับ ภาคกลางทำยอดขายสูงสุด 50.18M (35.30%) มากกว่าภาคตะวันตกถึง 3.36 เท่า แต่ที่น่าสนใจคือ ภาคตะวันตกมี AOV สูงสุดในประเทศ (฿2,947.38/บิล) เพียงแต่จำนวนบิลยังน้อย จึงควรยิง Localized Promotion และลดเกณฑ์ส่งฟรีเจาะภาคตะวันตกและใต้ครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Regional Gap (รี-เจียน-นัล แกป = ช่องว่างภูมิภาค) · AOV (เอ-โอ-วี = ยอดเฉลี่ยต่อบิล) · Localized Promotion (โปรโมชันเฉพาะพื้นที่)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>region_sales.png</code> จากคอลัมน์ <code>Region</code> &amp; <code>Total_Amount</code> ใน <code>merged_cleaned.parquet</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 9 / 12 · 6:00–6:40</span>
+          <h3>Finding #5: Loyalty Tier Paradox</h3>
+          <p class="what-see">การ์ด 4 Tier: Basic 499 คน, Silver 304, Gold 142, Platinum 55 — ยอด/คน ~142k เท่ากัน</p>
+          <div class="quote">"ข้อค้นพบที่ 5 เราเรียกว่า Loyalty Tier Paradox ครับ Basic 499 คนทำยอดขาย 49.3% แต่ยอดเฉลี่ยต่อคนของทุก Tier ตั้งแต่ Basic (฿140.5k) ถึง Platinum (฿144.2k) แทบไม่ต่างกันเลย (~49 บิล/คน) แปลว่าสิทธิประโยชน์ยังไม่จูงใจ ต้องปรับเป็น Tiered Rewards ที่ให้ส่วนลด Household เฉพาะ Gold/Platinum ครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Tier Paradox (เทียร์ พา-รา-ด็อกซ์ = ความย้อนแย้งของระดับสมาชิก) · CLV (ซี-แอล-วี = มูลค่าซื้อรวมต่อคน) · Tiered Rewards (สิทธิพิเศษแบบขั้นบันได)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>summary.json → tierStats</code> Group By <code>Membership_Tier</code> จาก <code>merged_cleaned.parquet</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 10 / 12 · 6:40–7:55 (เปิดเว็บโชว์!)</span>
+          <h3>Live System: SmartRetail Web Dashboard</h3>
+          <p class="what-see">สลับเปิด https://wine-ai-nrt.vercel.app สาธิต Auto-fill, 🌿 Emerald, Raw Toggle, Customer 360°</p>
+          <div class="quote">"*(เปิดเว็บจริง)* นี่คือเว็บ Next.js จริงที่รันบน Vercel ครับ หน้าแรกโหลดจาก summary.json (38.7 KB) คู่กับข้อมูล 49,200 แถวแบบย่อ ทำให้กรองไวมาก กด Auto-fill เข้าได้ทันที และกดปุ่ม '🌿 Emerald' มุมขวาบนเพื่อซ่อนมีมให้กรรมการอ่านตัวเลขคมชัด หาคำตอบได้ใน 3 คลิก พร้อมสคริปต์รันออฟไลน์ครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Pre-aggregated (คำนวณสรุปไว้ล่วงหน้า) · Drill-down (เจาะจากภาพรวมลงรายบิล) · WCAG (มาตรฐานสีอ่านง่าย)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>summary.json</code> (38.7 KB) + <code>transactions_compact.json</code> (3.44 MB) + <code>VERCEL_DEPLOY.md</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 11 / 12 · 7:55–8:55</span>
+          <h3>Recommendations: แผนปฏิบัติการ 5 ข้อ</h3>
+          <p class="what-see">ตาราง Action Plan พร้อม Owner (Merchandising, Data, E-Com, Regional, CRM) &amp; Timeline</p>
+          <div class="quote">"จากหลักฐานทั้งหมด เราจัดทำ 5 แผนปฏิบัติการพร้อมผู้รับผิดชอบและกรอบเวลา: (1) Cross-Sell Bundle (Merchandising, เดือน 1–2), (2) ตั้ง Guardrails + แคมเปญ Low Season (Data &amp; Ops, สัปดาห์ 1–4), (3) O2O + PromptPay Cashback (E-Com, Q1–Q2), (4) ส่งฟรีภาค West/South (Regional, เดือน 2–3), (5) รื้อ Loyalty Tiered Rewards (CRM, เดือน 1–3) ครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Merchandising (เมอร์-แชน-ได-ซิง = ฝ่ายสินค้า/จัดโปร) · Owner (ทีมรับผิดชอบ) · Timeline (กรอบเวลา)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>summary.json → insights</code> ทั้ง 5 ข้อ</div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Slide 12 / 12 · 8:55–9:30</span>
+          <h3>Appendix &amp; Q&amp;A Defense</h3>
+          <p class="what-see">สรุปหลักฐาน Drop 750 + Units_Sold Outlier (เลี่ยงตัดผิด 5,250 แถว) + 7 Unit Tests</p>
+          <div class="quote">"สรุปหลักฐานทางเทคนิคครับ เราไม่ใช้ IQR บน Total_Amount เพราะจะตัดบิลปกติของ Household (฿890×8–24 ชิ้น) ออกผิดถึง 5,250 แถว และทุกตัวเลขบนสไลด์กับเว็บผ่าน Python 7 Unit Tests ตรงกับ DuckDB Parquet 100% ครับ ขอบคุณคณะกรรมการครับ เชิญซักถามได้เลยครับ"</div>
+          <div class="vocab-mini"><strong>ศัพท์:</strong> Appendix (แอป-เพน-ดิกซ์ = ภาคผนวก) · Unit Tests (ชุดทดสอบโค้ดอัตโนมัติ) · DuckDB Parquet (ดั๊กดีบี พาร์เกต์)</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> <code>test_clean_data.py</code> + <code>test_web_data.py</code> (7/7 tests OK) &amp; <code>cleaning_report.json</code></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TAB 2: WEB 5 PAGES -->
+    <section id="tab-web" class="panel">
+      <div class="grid">
+        <article class="card">
+          <span class="badge">Web หน้า 0 · /login</span>
+          <h3>หน้าเข้าสู่ระบบ + มีม 8 รูป + Theme Toggle</h3>
+          <p class="what-see">การ์ดสรุป 142.16M &amp; 100% FK, ปุ่มกรอกอัตโนมัติ (<code>judge@smartretail.th</code> / <code>SmartRetail2025</code>), ปุ่มสลับ 🌈 Rainbow / 🌿 Emerald, ปุ่มปิดมีมกระจัดกระจาย</p>
+          <div class="quote">"หน้านี้เป็นด่านหน้าแสดงจุดเด่นของโปรเจกต์ กด 'กรอกอัตโนมัติ' ก็เข้าได้ในคลิกเดียว ถ้าอยากเปิด/ปิดมีมหรือสลับโหมดสีเขียวสะอาด กดปุ่มมุมขวาบนได้เลยครับ"</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> ตรวจรหัสผ่านผ่าน <code>POST /api/auth</code> เทียบ <code>auth.ts</code> แล้วออก HMAC Cookie; ตัวเลขสรุปมาจาก <code>cleaning_report.json</code>; รูปมีม 8 รูปมาจาก <code>web/public/memes/</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Web หน้า 1 · Overview Tab</span>
+          <h3>หน้าหลักภาพรวม (Executive Overview)</h3>
+          <p class="what-see">Hero Banner + ปุ่มไตรมาส Q1–Q4, 4 KPI Cards + Sparkline, กราฟรายเดือน (มีปุ่มเทียบเส้น Raw), หมวดหมู่, ภูมิภาค, โดนัท Channel &amp; Payment, Top 10 ลูกค้า, Meme Corner &amp; 4 สติกเกอร์</p>
+          <div class="quote">"หน้าหลักออกแบบให้ตอบโจทย์ภายใน 3 คลิก กดเทียบเส้น Raw ดู Outlier เดือน มิ.ย./ส.ค. หรือคลิกแท่งกราฟใดก็ได้เพื่อ Filter ข้อมูลทั้งหน้าทันทีครับ"</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> คำนวณสดในเบราว์เซอร์จาก <code>transactions_compact.json</code> (49,200 แถว, 3.44 MB) ผ่าน <code>filterCompactRows()</code> &amp; <code>computeDashboardMetrics()</code> ใน <code>analytics.ts</code> — ยกเว้นเส้นประ Raw ที่ดึงจาก <code>summary.json → monthlySeries</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Web หน้า 2 · EDA &amp; Insights Tab</span>
+          <h3>สถิติเชิงลึก, Heatmap &amp; 5 Action Plans</h3>
+          <p class="what-see">ตาราง Descriptive Stats (Raw vs Clean), Units Histogram (1–24 ชิ้น), Pearson Correlation Heatmap, กราฟช่วงอายุ (Age Group), การ์ด Membership Tier, และ 5 Strategic Insights</p>
+          <div class="quote">"หน้านี้แสดงหลักฐานทางสถิติทั้งหมด ทั้งค่า Mean/Std ก่อน-หลังคลีน, Correlation +0.8123 ของราคาต่อหน่วย, ความเท่ากันของ Tier สมาชิก และแผน 5 ข้อพร้อม Owner กับ Timeline ครับ"</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> Stats, Histogram, Correlation Matrix, Tier Stats และ Insights มาจาก <code>summary.json</code> (38.7 KB); ส่วนกราฟ Age Group คำนวณสดตามตัวกรองจาก <code>transactions_compact.json</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Web หน้า 3 · Data Audit Tab</span>
+          <h3>ตรวจสอบคุณภาพ 4 มิติ &amp; 50 Outliers Log</h3>
+          <p class="what-see">Pipeline Funnel 4 ขั้น, การ์ด Missing รายหมวด (750 แถว), ผลกระทบ Outlier (-71.98% Std), คำอธิบายเหตุผลไม่ตัด 5,250 บิล Household, ตาราง 50 Outliers + ปุ่ม Export Audit CSV</p>
+          <div class="quote">"หน้านี้ไว้ให้กรรมการตรวจสอบความโปร่งใสครับ สามารถกรองดู Outlier เฉพาะ 1,500 ชิ้น หรือกด Export Audit CSV ส่งให้ฝ่ายปฏิบัติการตรวจสอบย้อนหลังได้ทันทีครับ"</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> ดึง 100% จาก <code>summary.json → cleaningReport &amp; outliersAudit</code> ซึ่ง <code>export_web_data.py</code> ดึงตรงมาจาก <code>cleaning_report.json</code> และ <code>outliers_audit.csv</code></div>
+        </article>
+
+        <article class="card">
+          <span class="badge">Web หน้า 4 · Explorer &amp; Customer 360°</span>
+          <h3>ค้นหา 49,200 บิล &amp; ประวัติลูกค้ารายบุคคล</h3>
+          <p class="what-see">ช่องค้นหา Transaction/Customer ID, ตารางเรียงลำดับ (หน้าละ 25 แถว), ปุ่ม Export Filtered CSV, การ์ดสถาปัตยกรรม 3 ข้อ + Drawer Customer 360° ด้านขวา</p>
+          <div class="quote">"หน้าสุดท้ายเจาะถึงรายบิลได้เลยครับ แค่คลิก Customer_ID สีเขียวก็จะเปิด Drawer Customer 360° ดูยอดรวม หมวดโปรด และบิลล่าสุด 15 รายการของลูกค้ารายนั้นทันทีครับ"</div>
+          <div class="src-mini"><strong>ที่มาข้อมูล:</strong> ตาราง 49,200 แถวและ Customer Drawer มาจาก <code>transactions_compact.json</code> ผ่าน <code>filteredRows</code> และ <code>getCustomerProfile()</code> ใน <code>analytics.ts</code></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TAB 3: SEARCHABLE GLOSSARY -->
+    <section id="tab-glossary" class="panel">
+      <input
+        id="vocabSearch"
+        class="search-box"
+        type="text"
+        placeholder="🔎 พิมพ์ค้นหาคำศัพท์ (เช่น Outlier, IQR, Parity, Pareto, AOV, Parquet, Bundle)..."
+        oninput="filterVocab()"
+      />
+      <div class="card" style="padding:0; overflow:hidden;">
+        <table id="vocabTable">
+          <thead>
+            <tr>
+              <th>คำศัพท์ภาษาอังกฤษ</th>
+              <th>คำอ่านภาษาไทย</th>
+              <th>ความหมาย / อธิบายง่ายๆ เวลาพูด</th>
+              <th>หมวด</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Primary Key (PK)</strong></td><td class="phonetic">ไพรมารี คีย์</td><td>รหัสหลักที่ไม่ซ้ำกันเลย เช่น <code>Transaction_ID</code>, <code>Customer_ID</code></td><td>Data Quality</td></tr>
+            <tr><td><strong>Foreign Key (FK)</strong></td><td class="phonetic">ฟอเรนจ์ คีย์</td><td>รหัสเชื่อมตาราง เช่นเอา <code>Customer_ID</code> ในบิลไปจับคู่ตารางลูกค้า (เชื่อมได้ 100%)</td><td>Data Quality</td></tr>
+            <tr><td><strong>Missing Values / Null</strong></td><td class="phonetic">มิสซิ่ง แวลูส์ / นัล</td><td>ช่องข้อมูลว่าง/หายไป พบ 750 แถว (1.50%) ที่หายทั้งชิ้นและยอดเงินพร้อมกัน (<strong>Dual-Missing</strong>)</td><td>Data Quality</td></tr>
+            <tr><td><strong>Outlier</strong></td><td class="phonetic">เอาท์ไลเออร์</td><td>ค่าผิดปกติที่โดดออกจากกลุ่มมาก (999 / 1,200 / 1,500 ชิ้น จำนวน 50 บิล)</td><td>สถิติ</td></tr>
+            <tr><td><strong>IQR (Upper Fence)</strong></td><td class="phonetic">ไอคิวอาร์ (อัปเปอร์ เฟนซ์)</td><td>ช่วงกระจายตัวตรงกลาง (<code>Q3 - Q1 = 13</code>) ได้เพดานบน 38.5 ชิ้น เกินนี้ถือเป็น Outlier</td><td>สถิติ</td></tr>
+            <tr><td><strong>Z-Score</strong></td><td class="phonetic">ซี-สกอร์</td><td>คะแนนวัดความห่างจากค่าเฉลี่ย (เกิน 3 เท่า หรือ <code>&gt; 135.45 ชิ้น</code> = ผิดปกติ)</td><td>สถิติ</td></tr>
+            <tr><td><strong>Mean / Average</strong></td><td class="phonetic">มีน / แอฟเวอเรจ</td><td>ค่าเฉลี่ยเลขคณิต (หลังคลีน = <code>฿2,889.36</code>) ไวต่อ Outlier</td><td>สถิติ</td></tr>
+            <tr><td><strong>Median</strong></td><td class="phonetic">มีเดียน</td><td>ค่ามัธยฐาน/ค่าตรงกลาง (<code>฿1,035</code>) ทนทานต่อ Outlier มาก</td><td>สถิติ</td></tr>
+            <tr><td><strong>Std. Dev.</strong></td><td class="phonetic">เอสทีดี เดฟ</td><td>ส่วนเบี่ยงเบนมาตรฐาน ใช้วัดความแกว่งตัว (ลดลง <code>-71.98%</code> หลังคลีน)</td><td>สถิติ</td></tr>
+            <tr><td><strong>Pearson Correlation (r)</strong></td><td class="phonetic">เพียร์สัน คอร์ริเลชัน</td><td>ค่าความสัมพันธ์ระหว่าง 2 ตัวแปร (<code>Price vs Total = +0.8123</code> คือสัมพันธ์สูงมาก)</td><td>สถิติ</td></tr>
+            <tr><td><strong>Histogram</strong></td><td class="phonetic">ฮิสโตแกรม</td><td>กราฟแท่งแสดงความถี่ (โชว์ว่าปกติซื้อ 1–24 ชิ้นกระจายสม่ำเสมอ/Uniform)</td><td>สถิติ</td></tr>
+            <tr><td><strong>Audit Log</strong></td><td class="phonetic">ออดิต ล็อก</td><td>แฟ้มเก็บหลักฐานตรวจสอบย้อนหลัง (<code>outliers_audit.csv</code> เก็บ 50 บิลไว้ไม่ลบทิ้ง)</td><td>Data Quality</td></tr>
+            <tr><td><strong>DuckDB Parity</strong></td><td class="phonetic">ดั๊กดีบี แพรีตี</td><td>ตรวจทวนยอดกับฐานข้อมูล DuckDB บนไฟล์ Parquet แล้วตรงกัน 100%</td><td>วิศวกรรมข้อมูล</td></tr>
+            <tr><td><strong>Omnichannel</strong></td><td class="phonetic">ออมนิแชนเนล</td><td>ระบบขายหลายช่องทางร่วมกัน ทั้งออนไลน์ (<code>Online</code>) และหน้าร้าน (<code>In-Store</code>)</td><td>ธุรกิจ</td></tr>
+            <tr><td><strong>AOV (Average Order Value)</strong></td><td class="phonetic">เอ-โอ-วี</td><td>มูลค่าเฉลี่ยต่อ 1 บิล (<code>฿2,889.36</code>; ภาคตะวันตกสูงสุด <code>฿2,947.38</code>)</td><td>ธุรกิจ</td></tr>
+            <tr><td><strong>CLV (Customer Lifetime Value)</strong></td><td class="phonetic">ซี-แอล-วี</td><td>ยอดซื้อรวมของลูกค้า 1 คนตลอดปี (เฉลี่ยราว <code>฿140.5k–144.5k</code>)</td><td>ธุรกิจ</td></tr>
+            <tr><td><strong>Pareto (80/20)</strong></td><td class="phonetic">พาเรโต</td><td>กฎที่รายได้ส่วนใหญ่ (~79.78%) มาจากสินค้า 2 หมวดหลัก (Household + Personal Care)</td><td>ธุรกิจ</td></tr>
+            <tr><td><strong>Cross-Sell Bundle</strong></td><td class="phonetic">ครอส-เซลล์ บันเดิล</td><td>จับคู่สินค้าขายบ่อย (อาหารแห้ง/เครื่องดื่ม) ขายพ่วงกับของใช้ในบ้าน/ส่วนตัวเพื่อเพิ่มยอดบิล</td><td>กลยุทธ์</td></tr>
+            <tr><td><strong>O2O / Click &amp; Collect</strong></td><td class="phonetic">โอทูโอ / คลิก แอนด์ คอลเลกต์</td><td>เชื่อมออนไลน์กับหน้าร้าน เช่น กดสั่งออนไลน์แล้วมารับของที่สาขา</td><td>กลยุทธ์</td></tr>
+            <tr><td><strong>Time Series</strong></td><td class="phonetic">ไทม์ ซีรีส์</td><td>กราฟแนวโน้มรายเดือน ม.ค.–ธ.ค. เผยให้เห็นว่ายอดขายจริงทรงตัว</td><td>สถิติ</td></tr>
+            <tr><td><strong>Low Season</strong></td><td class="phonetic">โลว์ ซีซัน</td><td>ช่วงเดือนที่ยอดขายตก ได้แก่ ก.พ. (10.97M), พ.ค. (11.18M), พ.ย. (11.39M)</td><td>ธุรกิจ</td></tr>
+            <tr><td><strong>Loyalty Tier Paradox</strong></td><td class="phonetic">ลอยัลตี เทียร์ พาราด็อกซ์</td><td>ความย้อนแย้งที่สมาชิกระดับ Platinum ซื้อต่อหัวพอๆ กับ Basic (+2.6%)</td><td>ธุรกิจ</td></tr>
+            <tr><td><strong>Localized Campaign</strong></td><td class="phonetic">โลคอลไลซ์ แคมเปญ</td><td>โปรโมชันเจาะจงพื้นที่ (เช่น ลดค่าส่งเฉพาะภาคตะวันตกและใต้)</td><td>กลยุทธ์</td></tr>
+            <tr><td><strong>Household / Personal Care</strong></td><td class="phonetic">เฮาส์โฮลด์ / เพอร์ซันนัล แคร์</td><td>ของใช้ในบ้าน (฿890/ชิ้น) / ของใช้ส่วนตัว (฿250/ชิ้น) รวมกันทำเงิน 79.78%</td><td>หมวดสินค้า</td></tr>
+            <tr><td><strong>Dry Food / Beverages / Snacks</strong></td><td class="phonetic">ดราย ฟู้ด / เบฟเวอเรจเจส / สแน็กส์</td><td>อาหารแห้ง / เครื่องดื่ม / ขนม (บิลเยอะ 64.6% แต่ราคาถูก ใช้ดึงลูกค้าเข้าร้าน)</td><td>หมวดสินค้า</td></tr>
+            <tr><td><strong>PromptPay Cashback</strong></td><td class="phonetic">พร้อมเพย์ แคชแบ็ก</td><td>โปรคืนเงินเมื่อสแกนจ่ายผ่านพร้อมเพย์ (Digital Pay ครอง 70.54%)</td><td>กลยุทธ์</td></tr>
+            <tr><td><strong>Data Pipeline / Reproducible</strong></td><td class="phonetic">ดาต้า ไปป์ไลน์ / รีโปรดิวซิเบิล</td><td>ท่อสคริปต์ Python ที่ประมวลผลและรันซ้ำได้ผลลัพธ์ตรงเดิม 100% ทุกครั้ง</td><td>ระบบเว็บ</td></tr>
+            <tr><td><strong>Parquet</strong></td><td class="phonetic">พาร์เกต์</td><td>ไฟล์เก็บตารางแบบบีบอัด (เร็วและเล็กกว่า CSV ใช้ใน <code>merged_cleaned.parquet</code>)</td><td>ระบบเว็บ</td></tr>
+            <tr><td><strong>Next.js</strong></td><td class="phonetic">เน็กซ์-เจ-เอส</td><td>เฟรมเวิร์กสร้างเว็บแอปสมัยใหม่ที่รันอยู่บน Vercel และใช้ไฟล์ JSON ความเร็วสูง</td><td>ระบบเว็บ</td></tr>
+            <tr><td><strong>Pre-aggregated</strong></td><td class="phonetic">พรี-แอกกรีเกต</td><td>คำนวณตารางสรุปไว้ก่อนล่วงหน้า (<code>summary.json</code> 38.7 KB) เพื่อให้หน้าเว็บเปิดไวทันที</td><td>ระบบเว็บ</td></tr>
+            <tr><td><strong>Dictionary-Encoded</strong></td><td class="phonetic">ดิกชันนารี-เอ็นโคด</td><td>แปลงข้อความซ้ำๆ เป็นเลขดัชนีใน <code>transactions_compact.json</code> (3.44 MB) กรอง 49.2k แถวในมิลลิวินาที</td><td>ระบบเว็บ</td></tr>
+            <tr><td><strong>Customer 360° Drawer</strong></td><td class="phonetic">คัสโตเมอร์ 360 ดรอว์เออร์</td><td>หน้าต่างด้านขวาแสดงข้อมูลลูกค้า 1 รายครบทุกมุม (ยอดรวม หมวดโปรด บิลล่าสุด 15 รายการ)</td><td>ระบบเว็บ</td></tr>
+            <tr><td><strong>WCAG High Contrast</strong></td><td class="phonetic">ดับเบิลยูซีเอจี ไฮ-คอนทราสต์</td><td>มาตรฐานสีอ่านง่ายคมชัด (ปุ่ม <code>🌿 Emerald</code> ซ่อนมีมอัตโนมัติให้กรรมการดูตัวเลข)</td><td>ระบบเว็บ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function showTab(id, btn) {
+      document.querySelectorAll('.panel').forEach((p) => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function filterVocab() {
+      const q = document.getElementById('vocabSearch').value.trim().toLowerCase();
+      const rows = document.querySelectorAll('#vocabTable tbody tr');
+      rows.forEach((tr) => {
+        tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -204,8 +204,8 @@ export function OverviewView({
               <Sparkles className="w-3.5 h-3.5" />
               <span>
                 {isRainbow
-                  ? "🌈 SmartRetail Thailand · Rainbow Command Center"
-                  : "SmartRetail Thailand · Executive Command Center"}
+                  ? "🌈 ทีมวิทยาลัยเทคนิคนางรอง · Rainbow Command Center"
+                  : "ทีมวิทยาลัยเทคนิคนางรอง · Executive Command Center"}
               </span>
             </div>
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">

@@ -114,7 +114,7 @@ export default function LoginPage() {
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-4 border border-white/25">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>SmartRetail Thailand · Analytics Suite</span>
+                <span>ทีมวิทยาลัยเทคนิคนางรอง · SmartRetail Analytics</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold leading-tight tracking-tight mb-2">
                 Customer &amp; Sales Intelligence Hub

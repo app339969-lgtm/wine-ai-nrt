@@ -220,12 +220,12 @@ def build_deck() -> Path:
     # Slide 1: Cover
     s1 = prs.slides.add_slide(blank)
     set_slide_bg(s1, C_DARK_GREEN)
-    pill = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.1), Inches(4.8), Inches(0.45))
+    pill = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.1), Inches(6.8), Inches(0.45))
     pill.fill.solid()
     pill.fill.fore_color.rgb = C_MED_GREEN
     pill.line.color.rgb = C_BRIGHT_GREEN
     p = pill.text_frame.paragraphs[0]
-    p.text = "การแข่งขันทักษะการวิเคราะห์ข้อมูล (ปวช.) ระดับจังหวัด"
+    p.text = "ทีมวิทยาลัยเทคนิคนางรอง · ทักษะการวิเคราะห์ข้อมูล (ปวช.) ระดับจังหวัด"
     p.alignment = PP_ALIGN.CENTER
     p.font.name = FONT_TH
     p.font.size = Pt(13)

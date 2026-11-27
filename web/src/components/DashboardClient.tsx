@@ -164,7 +164,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Customer Behavior &amp; Retail Sales Intelligence
+                  ทีมวิทยาลัยเทคนิคนางรอง · Customer Behavior &amp; Retail Sales Intelligence
                 </p>
               </div>
             </div>

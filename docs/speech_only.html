@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>บทพูดล้วนๆ (Speech-Only) | SmartRetail Thailand</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --accent: #047857;
+      --accent-soft: #ecfdf5;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --fs: 19px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans Thai", "Noto Sans Thai", "Leelawadee UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 16px 14px 70px;
+      line-height: 1.75;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; }
+    .toolbar {
+      position: sticky;
+      top: 8px;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px -14px rgba(15, 23, 42, 0.25);
+    }
+    .toolbar-title { font-size: 14px; font-weight: 800; color: var(--accent); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .slide-card {
+      background: var(--card);
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 18px -14px rgba(15, 23, 42, 0.18);
+    }
+    .slide-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px dashed #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .slide-title { font-size: 15px; font-weight: 800; color: var(--accent); }
+    .slide-time {
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 2px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .speech { font-size: var(--fs); }
+    .speech p { margin: 0 0 10px; }
+    .speech p:last-child { margin-bottom: 0; }
+    .stage-note {
+      font-size: 13px;
+      color: #9a3412;
+      background: #fff7ed;
+      border-left: 3px solid #f97316;
+      padding: 5px 10px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .ph {
+      color: var(--accent);
+      font-size: 0.86em;
+      font-weight: 700;
+    }
+    body.hide-ph .ph { display: none; }
+    @media print {
+      .toolbar { display: none; }
+      body { background: #fff; padding: 0; }
+      .slide-card { break-inside: avoid; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="toolbar-title">🎤 บทพูดล้วนๆ · ทีมวิทยาลัยเทคนิคนางรอง (SmartRetail Thailand)</div>
+      <div class="btn-row">
+        <button type="button" class="btn" onclick="setSize('16px', this)">อักษรเล็ก</button>
+        <button type="button" class="btn active" onclick="setSize('19px', this)">อักษรกลาง</button>
+        <button type="button" class="btn" onclick="setSize('23px', this)">อักษรใหญ่</button>
+        <button type="button" class="btn active" id="phBtn" onclick="togglePh()">คำอ่าน: เปิด</button>
+      </div>
+    </div>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 1 · หน้าปก</span>
+        <span class="slide-time">0:00 – 0:30</span>
+      </div>
+      <div class="speech">
+        <p>สวัสดีคณะกรรมการทุกท่านครับ พวกเราทีม<strong>วิทยาลัยเทคนิคนางรอง</strong> วันนี้ขอนำเสนอผลการวิเคราะห์พฤติกรรมลูกค้าและประสิทธิภาพยอดขาย ในธุรกิจค้าปลีกแบบ Omnichannel <span class="ph">[ออม-นิ-แชน-เนล]</span> ของบริษัท SmartRetail Thailand <span class="ph">[สมาร์ท-รีเทล ไทยแลนด์]</span> จากข้อมูลการขายจริงทั้งหมด 50,000 รายการ และฐานลูกค้า 1,000 รายครับ</p>
+        <p>หลังจากเราตรวจสอบและทำความสะอาดข้อมูลแล้ว เหลือรายการขายที่สะอาดพร้อมใช้งาน 49,200 บิล คิดเป็นรายได้สุทธิ 142.16 ล้านบาทครับ เพื่อมาตอบโจทย์สำคัญว่า ทำไมยอดขายปี 2025 ถึงชะลอตัว และเราจะมีแผนปฏิบัติการอย่างไรให้ยอดขายกลับมาเติบโตได้จริงครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 2 · ปัญหาของธุรกิจ</span>
+        <span class="slide-time">0:30 – 1:15</span>
+      </div>
+      <div class="speech">
+        <p>เรามาดูสถานการณ์ของบริษัทกันครับ SmartRetail จำหน่ายสินค้าอุปโภคบริโภคทั้งหน้าร้าน In-Store <span class="ph">[อิน-สโตร์]</span> และ Online <span class="ph">[ออนไลน์]</span> ใน 5 ภูมิภาค แต่ประสบปัญหาการเติบโตลดลงครับ</p>
+        <p>เมื่อเราตรวจสอบยอดขายที่สะอาดตลอด 12 เดือน พบว่ารายได้แกว่งตัวอยู่ในกรอบแคบมาก เพียง 10.97 ถึง 12.53 ล้านบาทต่อเดือนเท่านั้น โดยไตรมาสที่ 4 เทียบกับไตรมาสที่ 1 เติบโตเพียง 0.41 เปอร์เซ็นต์ และยังหดตัวลง 2.49 เปอร์เซ็นต์จากไตรมาสที่ 3 สะท้อนว่ายอดขายกำลังชะลอตัวจริงครับ</p>
+        <p>นอกจากนี้ ในข้อมูลดิบยังมีสิ่งรบกวน คือบิลผิดปกติ 50 รายการ มูลค่ากว่า 14.54 ล้านบาท และข้อมูลสูญหายอีก 750 แถว ซึ่งหากไม่ทำความสะอาดก่อน ผู้บริหารจะประเมินสถานการณ์ผิดพลาดทันทีครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 3 · วิธีเตรียมและทำความสะอาดข้อมูล</span>
+        <span class="slide-time">1:15 – 2:15</span>
+      </div>
+      <div class="speech">
+        <p>เพื่อแก้ปัญหานั้น เราจึงสร้าง Data Pipeline <span class="ph">[ดา-ต้า ไปป์-ไลน์]</span> ด้วย Python ให้รันซ้ำได้ทุกครั้งครับ</p>
+        <p>ขั้นที่ 1 เราตรวจสอบโครงสร้างและจับคู่ Primary Key กับ Foreign Key <span class="ph">[ไพรมารี คีย์ กับ ฟอเรนจ์ คีย์]</span> พบว่า 50,000 บิลเชื่อมกับลูกค้า 1,000 คนได้ 100 เปอร์เซ็นต์เต็ม ผ่านเกณฑ์ 99 เปอร์เซ็นต์ครับ</p>
+        <p>ขั้นที่ 2 เราพบ Missing Values <span class="ph">[มิส-ซิ่ง แวลูส์]</span> หรือข้อมูลหายจำนวน 750 แถว คิดเป็น 1.50 เปอร์เซ็นต์ ซึ่งหายพร้อมกันทั้งจำนวนชิ้นและยอดเงิน จึงคำนวณย้อนกลับไม่ได้ เราจึงตัดออกอย่างปลอดภัยโดยไม่เติมค่าเดาครับ</p>
+        <p>ขั้นที่ 3 เราตรวจจับ Outliers <span class="ph">[เอาท์-ไล-เออร์ส]</span> หรือบิลผิดปกติด้วยวิธีทางสถิติ 2 แบบพร้อมกัน ทั้งวิธี IQR <span class="ph">[ไอ-คิว-อาร์]</span> ที่มีเพดานบน 38.5 ชิ้น และ Z-Score <span class="ph">[ซี-สกอร์]</span> ซึ่งจับได้ตรงกันพอดีที่ 50 แถว คือบิลที่คีย์จำนวนซื้อ 999, 1,200 และ 1,500 ชิ้นครับ</p>
+        <p>ที่สำคัญ เราไม่ได้ลบทิ้งเงียบๆ แต่แยกเก็บไว้ในไฟล์ Audit Log <span class="ph">[ออ-ดิต ล็อก]</span> เพื่อส่งให้ทีมปฏิบัติการตรวจสอบย้อนหลังได้ครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 4 · ผลลัพธ์ก่อนและหลังคลีนข้อมูล</span>
+        <span class="slide-time">2:15 – 3:05</span>
+      </div>
+      <div class="speech">
+        <p>หน้านี้แสดงให้เห็นชัดเจนว่าการแยก Outlier เพียง 50 บิล หรือ 0.10 เปอร์เซ็นต์ ส่งผลมากแค่ไหนครับ</p>
+        <p>ก่อนคลีน ข้อมูลดิบมีรายได้สูงเกินจริงอยู่ที่ 156.70 ล้านบาท และค่าเฉลี่ย Mean <span class="ph">[มีน]</span> อยู่ที่ 3,181.69 บาทต่อบิล พอแยก 50 บิลผิดปกติออก รายได้จริงเหลือ 142.16 ล้านบาท ค่าเฉลี่ยต่อบิลอยู่ที่ 2,889.36 บาท และที่สำคัญคือส่วนเบี่ยงเบนมาตรฐานหรือ Std. Dev. <span class="ph">[เอส-ที-ดี เดฟ]</span> ลดฮวบลงถึง 71.98 เปอร์เซ็นต์ จาก 15,697 บาท เหลือเพียง 4,399 บาทครับ</p>
+        <p>ขณะที่ค่ากลาง Median <span class="ph">[มี-เดียน]</span> ยังอยู่ที่ 1,035 บาทเท่าเดิมเป๊ะ ยืนยันว่าเราไม่ได้ทำลายโครงสร้างข้อมูลปกติของร้านเลยครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 5 · ข้อค้นพบที่ 1 (กฎ 80/20 และราคาต่อหน่วย)</span>
+        <span class="slide-time">3:05 – 3:55</span>
+      </div>
+      <div class="speech">
+        <p>ทีนี้เรามาดูข้อค้นพบสำคัญ 5 ข้อครับ ข้อที่ 1 คือเรื่องโครงสร้างสินค้าแบบ Pareto <span class="ph">[พา-เร-โต]</span> หรือกฎ 80/20 ครับ</p>
+        <p>สินค้าเพียง 2 หมวด คือ Household <span class="ph">[เฮาส์-โฮลด์]</span> ที่ทำรายได้ถึง 58.03 เปอร์เซ็นต์ และ Personal Care <span class="ph">[เพอร์-ซัน-นัล แคร์]</span> 21.75 เปอร์เซ็นต์ รวมกันสร้างรายได้มากถึง 79.78 เปอร์เซ็นต์ หรือ 113.41 ล้านบาท ทั้งที่มีสัดส่วนบิลแค่ 35 เปอร์เซ็นต์เท่านั้น ส่วนอีก 3 หมวดที่คนซื้อบ่อยอย่างอาหารแห้ง เครื่องดื่ม และขนม รวม 64.6 เปอร์เซ็นต์ของบิล แต่ทำเงินแค่ 20.22 เปอร์เซ็นต์ครับ</p>
+        <p>และจากค่า Pearson Correlation <span class="ph">[เพียร์-สัน คอร์-ริ-เล-ชัน]</span> พบว่าราคาต่อหน่วยสัมพันธ์กับยอดเงินต่อบิลสูงถึง +0.8123 ขณะที่ทุกหมวดลูกค้าซื้อเฉลี่ยเท่ากันราว 12.50 ชิ้นต่อบิล แปลว่าราคาสินค้าคือหัวใจของยอดขาย เราจึงควรจัดโปรแบบ Cross-Sell Bundle <span class="ph">[ครอส-เซลล์ บัน-เดิล]</span> จับคู่อาหารเครื่องดื่มขายดีพ่วงกับของใช้ในบ้านครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 6 · ข้อค้นพบที่ 2 (แนวโน้มรายเดือน 12 เดือน)</span>
+        <span class="slide-time">3:55 – 4:40</span>
+      </div>
+      <div class="speech">
+        <p>ข้อค้นพบที่ 2 จากกราฟ Time Series <span class="ph">[ไทม์ ซี-รีส์]</span> ตลอดทั้ง 12 เดือนครับ</p>
+        <p>ถ้าผู้บริหารดูเส้นประสีเทาของข้อมูลดิบ จะหลงเข้าใจผิดว่าเดือนมิถุนายนที่ 14.93 ล้าน และเดือนสิงหาคมที่ 15.52 ล้าน ยอดขายเติบโตพุ่งสูงครับ</p>
+        <p>แต่พอคลีนข้อมูลแล้วเป็นเส้นสีเขียวทึบ จะเห็นความจริงว่ายอดขายทั้งปีไม่ได้โตขึ้นเลย ยังวิ่งนิ่งอยู่ที่ 10.97 ถึง 12.53 ล้านบาทต่อเดือนครับ โดยเฉพาะ 3 เดือนที่เป็นช่วง Low Season <span class="ph">[โลว์ ซี-ซัน]</span> คือ กุมภาพันธ์ พฤษภาคม และพฤศจิกายน ที่ตกลงชัดเจน จึงต้องตั้งระบบเตือนบิลผิดปกติ และเตรียมแคมเปญกระตุ้นล่วงหน้าครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 7 · ข้อค้นพบที่ 3 (ช่องทางขายและวิธีชำระเงิน)</span>
+        <span class="slide-time">4:40 – 5:20</span>
+      </div>
+      <div class="speech">
+        <p>ข้อค้นพบที่ 3 ด้านช่องทาง Omnichannel และวิธีจ่ายเงินครับ ช่องทาง Online ทำรายได้นำหน้าอยู่ที่ 55.53 เปอร์เซ็นต์ หรือ 78.95 ล้านบาท ส่วนหน้าร้าน In-Store อยู่ที่ 44.47 เปอร์เซ็นต์ โดยออนไลน์ชนะด้วยจำนวนออเดอร์ที่มากกว่าครับ</p>
+        <p>และเมื่อดูวิธีการชำระเงิน พบว่าลูกค้าใช้บัตรเครดิตร่วมกับ PromptPay <span class="ph">[พร้อม-เพย์]</span> สูงถึง 70.54 เปอร์เซ็นต์ครับ จึงเป็นโอกาสดีมากในการทำกลยุทธ์ O2O <span class="ph">[โอ-ทู-โอ]</span> เช่น ให้สั่งออนไลน์แล้วมารับที่ร้าน หรือ Click &amp; Collect <span class="ph">[คลิก แอนด์ คอล-เลกต์]</span> พร้อมจัด Cashback <span class="ph">[แคช-แบ็ก]</span> ผ่านพร้อมเพย์เพื่อดึงยอดหน้าร้านครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 8 · ข้อค้นพบที่ 4 (ช่องว่างระหว่างภูมิภาค)</span>
+        <span class="slide-time">5:20 – 6:00</span>
+      </div>
+      <div class="speech">
+        <p>ข้อค้นพบที่ 4 ด้านภูมิภาคครับ รายได้ของบริษัทกระจุกตัวอยู่ที่ภาคกลางมากถึง 35.30 เปอร์เซ็นต์ หรือ 50.18 ล้านบาท ซึ่งสูงกว่าภาคตะวันตกที่ทำได้ 14.94 ล้านบาท ถึง 3.36 เท่าครับ</p>
+        <p>แต่จุดที่น่าทึ่งคือ เมื่อเราคำนวณยอดซื้อเฉลี่ยต่อบิล หรือ AOV <span class="ph">[เอ-โอ-วี]</span> กลับพบว่าภาคตะวันตกมียอดต่อตะกร้าสูงเป็นอันดับ 1 ของประเทศที่ 2,947.38 บาทต่อบิลครับ แปลว่าลูกค้าภาคตะวันตกมีกำลังซื้อสูงมาก แค่เรายังเข้าถึงจำนวนบิลน้อย จึงควรยิงโฆษณาและจัดโปรส่งฟรีเฉพาะพื้นที่ เพื่อขยายฐานลูกค้าในภาคตะวันตกและภาคใต้ครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 9 · ข้อค้นพบที่ 5 (ระดับสมาชิก)</span>
+        <span class="slide-time">6:00 – 6:40</span>
+      </div>
+      <div class="speech">
+        <p>ข้อค้นพบที่ 5 เราเรียกว่า Loyalty Tier Paradox <span class="ph">[ลอย-อัล-ตี เทียร์ พา-รา-ด็อกซ์]</span> ครับ ปัจจุบันลูกค้าส่วนใหญ่เกือบครึ่งบริษัทอยู่ในระดับ Basic <span class="ph">[เบ-สิก]</span> จำนวน 499 คน และทำรายได้เกือบครึ่งหนึ่งที่ 70.13 ล้านบาท</p>
+        <p>แต่พอดูยอดใช้จ่ายเฉลี่ยต่อคน ตั้งแต่ระดับ Basic ประมาณ 140,500 บาท จนถึงระดับ Platinum <span class="ph">[แพล-ทิ-นัม]</span> ประมาณ 144,200 บาท กลับต่างกันแค่ 2.6 เปอร์เซ็นต์ และซื้อเฉลี่ยปีละประมาณ 49 บิลเท่ากันทุกกลุ่มเลยครับ สะท้อนว่าบัตรสมาชิกตอนนี้ยังไม่สร้างแรงจูงใจให้ซื้อซ้ำหรืออัปเกรด ต้องรื้อสิทธิประโยชน์ใหม่ เช่น ให้คูปองส่วนลดหมวด Household เฉพาะสมาชิก Gold และ Platinum ครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 10 · สาธิต Web Dashboard จริง</span>
+        <span class="slide-time">6:40 – 7:55</span>
+      </div>
+      <div class="stage-note">👉 จังหวะนี้สลับหน้าจอไปที่ https://wine-ai-nrt.vercel.app เพื่อสาธิตจริงตามคำพูด</div>
+      <div class="speech">
+        <p>และเพื่อให้ผู้บริหารใช้งานได้จริง ทีมเราได้สร้าง Web Dashboard ด้วย Next.js <span class="ph">[เน็กซ์-เจ-เอส]</span> ที่ใช้งานออนไลน์ได้ทันทีและมีระบบสำรองออฟไลน์ครับ</p>
+        <p>เริ่มจากหน้าล็อกอิน เราออกแบบให้ดึงดูดสายตาด้วยธีมสีรุ้งและมีม Data Analyst กดปุ่ม "กรอกอัตโนมัติ" ก็เข้าสู่ระบบได้เลยครับ</p>
+        <p>เมื่อเข้ามาหน้า Overview หากกรรมการต้องการตรวจตัวเลขแบบจริงจัง สามารถกดปุ่ม "🌿 Emerald <span class="ph">[เอ็ม-เมอ-รัลด์]</span>" ด้านขวาบนเพื่อซ่อนมีมและปรับเป็นโหมดสีเขียว-ขาวอ่านง่ายทันทีครับ</p>
+        <p>ระบบแยกโหลดไฟล์สรุปขนาดเล็ก 38.7 KB คู่กับข้อมูลบิลสะอาด 49,200 แถว ทำให้ตอบสนองเร็วมากครับ เราสามารถกดปุ่ม "เทียบเส้น Raw" เพื่อดูยอดหลอกเดือนมิถุนายนกับสิงหาคม หรือคลิกที่แท่งกราฟ Household ข้อมูลทุกกราฟทั้งหน้าจะกรองตามทันทีครับ</p>
+        <p>ส่วนในแท็บ Data Audit สามารถตรวจดู 50 บิลผิดปกติและกด Export CSV ออกมาตรวจต่อได้ และในแท็บ Explorer เพียงคลิกที่รหัสลูกค้า ก็จะเปิดหน้าต่าง Customer 360° <span class="ph">[คัส-โต-เมอร์ 360]</span> ดูประวัติซื้อรายบุคคลได้ครบจบภายใน 3 คลิกครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 11 · แผนปฏิบัติการเชิงธุรกิจ 5 ข้อ</span>
+        <span class="slide-time">7:55 – 8:55</span>
+      </div>
+      <div class="stage-note">👉 สลับกลับมายังสไลด์ 11</div>
+      <div class="speech">
+        <p>จากข้อค้นพบทั้งหมด เราแปลงออกมาเป็นแผนปฏิบัติการ 5 ข้อ พร้อมผู้รับผิดชอบและกรอบเวลาชัดเจนครับ</p>
+        <p>ข้อ 1 จัดชุด Cross-Sell Bundle จับคู่อาหารเครื่องดื่มกับ Household โดยทีม Merchandising <span class="ph">[เมอร์-แชน-ได-ซิง]</span> ในเดือนที่ 1–2</p>
+        <p>ข้อ 2 ตั้งระบบแจ้งเตือน Outlier เกิน 38.5 ชิ้น และเตรียมโปรโมชันช่วง Low Season โดยทีม Data และ Operations <span class="ph">[โอ-เปอ-เร-ชันส์]</span> ใน 1 เดือนแรก</p>
+        <p>ข้อ 3 ผลักดัน O2O Click &amp; Collect คู่กับ Cashback ผ่านพร้อมเพย์ โดยทีม E-Commerce และหน้าร้านในไตรมาส 1–2</p>
+        <p>ข้อ 4 ทำโปรโมชันเฉพาะพื้นที่และลดเกณฑ์ส่งฟรีเจาะภาคตะวันตกและใต้ โดยทีม Regional Sales ในเดือนที่ 2–3</p>
+        <p>และข้อ 5 ปรับระบบ Tiered Rewards <span class="ph">[เทียร์ด รี-วอร์ดส]</span> เพื่อกระตุ้นลูกค้า Basic 499 คนให้อัปเกรด โดยทีม CRM ในเดือนที่ 1–3 ครับ</p>
+      </div>
+    </article>
+
+    <article class="slide-card">
+      <div class="slide-head">
+        <span class="slide-title">สไลด์ที่ 12 · สรุปและปิดท้าย (Q&amp;A)</span>
+        <span class="slide-time">8:55 – 9:30</span>
+      </div>
+      <div class="speech">
+        <p>โดยสรุปครับ การที่เราสร้างท่อทำความสะอาดข้อมูลอย่างเป็นระบบ และเลือกจับ Outlier ที่จำนวนชิ้นแทนยอดเงิน ทำให้ไม่เผลอตัดบิลปกติของหมวด Household ออกไปถึง 5,250 บิล ทำให้เราเห็นฐานรายได้จริง 142.16 ล้านบาท และรู้จุดปรับกลยุทธ์ที่แม่นยำครับ</p>
+        <p>ทุกตัวเลขทั้งบนสไลด์และบนเว็บผ่านการทดสอบอัตโนมัติ 7 Unit Tests <span class="ph">[ยูนิต เทสต์ส]</span> และตรวจทวนกับ DuckDB <span class="ph">[ดั๊ก-ดี-บี]</span> ตรงกัน 100 เปอร์เซ็นต์ทุกแถวครับ</p>
+        <p>ขอขอบคุณคณะกรรมการทุกท่านครับ เชิญซักถามได้เลยครับ</p>
+      </div>
+    </article>
+  </div>
+
+  <script>
+    function setSize(sz, btn) {
+      document.documentElement.style.setProperty('--fs', sz);
+      document.querySelectorAll('.btn-row .btn:not(#phBtn)').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    function togglePh() {
+      const hidden = document.body.classList.toggle('hide-ph');
+      const btn = document.getElementById('phBtn');
+      btn.textContent = hidden ? 'คำอ่าน: ปิด' : 'คำอ่าน: เปิด';
+      btn.classList.toggle('active', !hidden);
+    }
+  </script>
+</body>
+</html>
