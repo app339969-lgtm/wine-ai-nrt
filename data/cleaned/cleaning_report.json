@@ -1,0 +1,116 @@
+{
+  "validation": {
+    "raw_customers_rows": 1000,
+    "raw_transactions_rows": 50000,
+    "customer_pk_unique": true,
+    "transaction_pk_unique": true,
+    "fk_matched_rows": 50000,
+    "fk_match_rate_pct": 100.0,
+    "customers_missing_cells": 0
+  },
+  "cleaning_summary": {
+    "dropped_dual_missing_rows": 750,
+    "dropped_missing_by_category": {
+      "Beverages": 172,
+      "Dry Food": 199,
+      "Household": 111,
+      "Personal Care": 164,
+      "Snacks": 104
+    },
+    "outliers_iqr_count": 50,
+    "outliers_zscore_count": 50,
+    "outliers_isolated_rows": 50,
+    "outliers_unique_units": {
+      "1500": 19,
+      "999": 16,
+      "1200": 15
+    },
+    "outliers_revenue_sum": 14541495.0,
+    "outlier_bounds": {
+      "q1": 6.0,
+      "q3": 19.0,
+      "iqr": 13.0,
+      "iqr_lower_fence": -13.5,
+      "iqr_upper_fence": 38.5,
+      "z_mean": 13.75,
+      "z_std": 40.57,
+      "z_3sigma_upper": 135.45
+    },
+    "cleaned_transactions_rows": 49200,
+    "before_cleaning_total_amount": {
+      "n": 49250,
+      "sum": 156698000.0,
+      "mean": 3181.69,
+      "std": 15697.61,
+      "min": 35.0,
+      "q1": 500.0,
+      "median": 1035.0,
+      "q3": 2880.0,
+      "iqr": 2380.0,
+      "max": 1335000.0
+    },
+    "after_cleaning_total_amount": {
+      "n": 49200,
+      "sum": 142156505.0,
+      "mean": 2889.36,
+      "std": 4399.19,
+      "min": 35.0,
+      "q1": 500.0,
+      "median": 1035.0,
+      "q3": 2880.0,
+      "iqr": 2380.0,
+      "max": 21360.0
+    },
+    "before_cleaning_units_sold": {
+      "n": 49250,
+      "sum": 677363.0,
+      "mean": 13.75,
+      "std": 40.57,
+      "min": 1.0,
+      "q1": 6.0,
+      "median": 13.0,
+      "q3": 19.0,
+      "iqr": 13.0,
+      "max": 1500.0
+    },
+    "after_cleaning_units_sold": {
+      "n": 49200,
+      "sum": 614879.0,
+      "mean": 12.5,
+      "std": 6.93,
+      "min": 1.0,
+      "q1": 6.0,
+      "median": 13.0,
+      "q3": 19.0,
+      "iqr": 13.0,
+      "max": 24.0
+    }
+  },
+  "merged_rows": 49200,
+  "merged_columns": [
+    "Transaction_ID",
+    "Customer_ID",
+    "Transaction_Date",
+    "Category",
+    "Channel",
+    "Units_Sold",
+    "Price_Per_Unit",
+    "Total_Amount",
+    "Payment_Method",
+    "Region",
+    "Gender",
+    "Age",
+    "Membership_Tier",
+    "Signup_Date",
+    "Year_Month",
+    "Quarter",
+    "Day_Of_Week",
+    "Age_Group",
+    "Tenure_Days_At_Purchase"
+  ],
+  "duckdb_verification": {
+    "parquet_rows": 49200,
+    "parquet_total_revenue": 142156505.0,
+    "matches_pandas": true
+  }
+}
