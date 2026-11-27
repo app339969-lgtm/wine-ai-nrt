@@ -76,10 +76,10 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
                   <td className="py-2.5 px-3 font-semibold text-slate-900">{row.label}</td>
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.n)}</td>
                   <td className="py-2.5 px-3 text-right">
-                    {row.isMoney ? formatTHB(row.data.mean) : row.data.mean.toFixed(2)}
+                    {row.isMoney ? formatTHB(row.data.mean, false, 2) : row.data.mean.toFixed(2)}
                   </td>
                   <td className="py-2.5 px-3 text-right">
-                    {row.isMoney ? formatTHB(row.data.std) : row.data.std.toFixed(2)}
+                    {row.isMoney ? formatTHB(row.data.std, false, 2) : row.data.std.toFixed(2)}
                   </td>
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.min)}</td>
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.q1)}</td>

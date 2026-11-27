@@ -34,14 +34,14 @@ export interface ComputedDashboardMetrics {
   ageGroups: AggregatedBucket[];
 }
 
-export function formatTHB(value: number, compact = false): string {
+export function formatTHB(value: number, compact = false, decimals = 0): string {
   if (compact) {
     if (value >= 1_000_000) return `฿${(value / 1_000_000).toFixed(2)}M`;
     if (value >= 1_000) return `฿${(value / 1_000).toFixed(1)}K`;
   }
   return `฿${value.toLocaleString("en-US", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   })}`;
 }
 

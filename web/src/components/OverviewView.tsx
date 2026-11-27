@@ -127,6 +127,18 @@ export function OverviewView({
   const topRegion = metrics.regions[0];
   const onlineShare =
     metrics.channels.find((c) => c.name === "Online")?.sharePct ?? 0;
+  const digitalPayShare = Number(
+    (
+      (metrics.payments.find((p) => p.name === "Credit Card")?.sharePct ?? 0) +
+      (metrics.payments.find((p) => p.name === "PromptPay")?.sharePct ?? 0)
+    ).toFixed(2),
+  );
+  const monthlyRevs = metrics.monthly.map((m) => m.revenue);
+  const minMonthlyRev = monthlyRevs.length > 0 ? Math.min(...monthlyRevs) : 0;
+  const maxMonthlyRev = monthlyRevs.length > 0 ? Math.max(...monthlyRevs) : 0;
+  const timeInsightWhat = hasActiveFilter
+    ? `ตามเงื่อนไขที่กรองอยู่ ยอดขายรายเดือนแกว่งในช่วง ${formatTHB(minMonthlyRev, true)} – ${formatTHB(maxMonthlyRev, true)} (รวม ${formatNumber(metrics.totalTxns)} บิล)`
+    : "ยอดขายสะอาดแกว่งตัวในกรอบแคบ 10.97M–12.53M บาท/เดือน ตลอดปี 2025 โดย Q4 ใกล้เคียง Q1 (+0.41%) ขณะที่ข้อมูลดิบพุ่งหลอกในเดือน มิ.ย. (14.93M) และ ส.ค. (15.52M) จาก Outlier";
 
   return (
     <div className="space-y-6 animate-fade-up">
@@ -244,7 +256,7 @@ export function OverviewView({
           </div>
 
           <InsightCard
-            what="ยอดขายสะอาดแกว่งตัวในกรอบแคบ 10.97M–12.53M บาท/เดือน ตลอดปี 2025 โดย Q4 ใกล้เคียง Q1 (+0.41%) ขณะที่ข้อมูลดิบพุ่งหลอกในเดือน มิ.ย. (14.93M) และ ส.ค. (15.52M) จาก Outlier"
+            what={timeInsightWhat}
             soWhat="ธุรกิจกำลังเผชิญภาวะยอดขายชะลอตัวจริงตามโจทย์ และหากไม่คลีน Outlier 50 บิลออก จะประเมินผลงานกลางปีคลาดเคลื่อน"
             nowWhat="ใช้ยอดสะอาดเป็นฐาน KPI หลัก และจัดแคมเปญกระตุ้นยอดขายช่วง Low Season (ก.พ., พ.ค., พ.ย.)"
           />
@@ -496,7 +508,7 @@ export function OverviewView({
           </div>
 
           <InsightCard
-            what={`Online ครองสัดส่วน ${onlineShare}% และการชำระเงินดิจิทัล (Credit Card + PromptPay) มีสัดส่วนรวมกันเกิน 70%`}
+            what={`Online ครองสัดส่วน ${onlineShare}% และการชำระเงินดิจิทัล (Credit Card + PromptPay) มีสัดส่วนรวม ${digitalPayShare}%`}
             soWhat="ลูกค้ามีความคุ้นเคยกับดิจิทัลสูง แต่ยอดขายหน้าร้าน In-Store ยังเติบโตช้ากว่า"
             nowWhat="เชื่อมต่อ O2O ด้วยแคมเปญ Click & Collect และคืนเงิน PromptPay เมื่อซื้อที่หน้าร้าน"
           />

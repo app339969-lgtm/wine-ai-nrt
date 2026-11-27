@@ -269,10 +269,10 @@ def export_outputs(
     return report
 
 
-def run_pipeline(base_dir: Path | None = None) -> dict[str, Any]:
+def run_pipeline(base_dir: Path | None = None, output_dir: Path | None = None) -> dict[str, Any]:
     """Execute end-to-end validation, cleaning, feature engineering, and export."""
     root = base_dir or Path(__file__).resolve().parent.parent
-    output_dir = root / "data" / "cleaned"
+    target_output = output_dir or (root / "data" / "cleaned")
 
     cust, txns, validation = load_and_validate_raw(root)
     clean_txns, outliers_audit, audit_summary = clean_and_audit_transactions(txns, cust)
@@ -284,7 +284,7 @@ def run_pipeline(base_dir: Path | None = None) -> dict[str, Any]:
         "merged_rows": int(len(merged)),
         "merged_columns": list(merged.columns),
     }
-    return export_outputs(output_dir, cust, clean_txns, merged, outliers_audit, report)
+    return export_outputs(target_output, cust, clean_txns, merged, outliers_audit, report)
 
 
 if __name__ == "__main__":

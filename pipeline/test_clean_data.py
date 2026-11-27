@@ -2,6 +2,7 @@
 
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -21,8 +22,13 @@ class TestCleanDataPipeline(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.report = run_pipeline(ROOT_DIR)
-        cls.cleaned_dir = ROOT_DIR / "data" / "cleaned"
+        cls._tmp_dir = tempfile.TemporaryDirectory()
+        cls.cleaned_dir = Path(cls._tmp_dir.name)
+        cls.report = run_pipeline(ROOT_DIR, output_dir=cls.cleaned_dir)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls._tmp_dir.cleanup()
 
     def test_expected_output_files_exist(self) -> None:
         expected = [
