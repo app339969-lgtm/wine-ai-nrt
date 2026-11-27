@@ -35,16 +35,16 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
 
   const getCellBg = (val: number) => {
     const abs = Math.abs(val);
-    if (val === 1) return "bg-[#065F46] text-white";
-    if (abs >= 0.7) return "bg-[#047857] text-white";
-    if (abs >= 0.3) return "bg-[#A7F3D0] text-[#064E3B]";
-    return "bg-[#F7FAF8] text-slate-700";
+    if (val === 1) return "bg-emerald-800 text-white";
+    if (abs >= 0.7) return "bg-gradient-to-br from-emerald-600 to-teal-600 text-white";
+    if (abs >= 0.3) return "bg-emerald-200 text-emerald-950";
+    return "bg-[#F5FBF7] text-slate-700";
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Descriptive Statistics Table */}
-      <section className="bg-white border border-[#DCE7E0] rounded-xl p-5">
+      <section className="bento-card p-6">
         <div className="mb-4">
           <h3 className="text-base font-bold text-slate-900">
             สถิติเชิงพรรณนา (Descriptive Statistics: Mean / Median / Std / IQR)
@@ -54,25 +54,25 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
           </p>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-emerald-950/10">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-[#DCE7E0] bg-[#F7FAF8] text-[#065F46]">
-                <th className="py-2.5 px-3 font-semibold">ตัวแปร / สถานะ</th>
-                <th className="py-2.5 px-3 font-semibold text-right">n</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Mean</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Std. Dev.</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Min</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Q1</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Median</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Q3</th>
-                <th className="py-2.5 px-3 font-semibold text-right">IQR</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Max</th>
+              <tr className="border-b border-emerald-950/10 bg-emerald-50/70 text-[#065F46]">
+                <th className="py-3 px-3 font-bold">ตัวแปร / สถานะ</th>
+                <th className="py-3 px-3 font-bold text-right">n</th>
+                <th className="py-3 px-3 font-bold text-right">Mean</th>
+                <th className="py-3 px-3 font-bold text-right">Std. Dev.</th>
+                <th className="py-3 px-3 font-bold text-right">Min</th>
+                <th className="py-3 px-3 font-bold text-right">Q1</th>
+                <th className="py-3 px-3 font-bold text-right">Median</th>
+                <th className="py-3 px-3 font-bold text-right">Q3</th>
+                <th className="py-3 px-3 font-bold text-right">IQR</th>
+                <th className="py-3 px-3 font-bold text-right">Max</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EFF5F1] tabular-nums">
+            <tbody className="divide-y divide-emerald-950/5 tabular-nums bg-white">
               {statsRows.map((row) => (
-                <tr key={row.label} className="hover:bg-[#F7FAF8]">
+                <tr key={row.label} className="hover:bg-emerald-50/40 transition-colors">
                   <td className="py-2.5 px-3 font-semibold text-slate-900">{row.label}</td>
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.n)}</td>
                   <td className="py-2.5 px-3 text-right">
@@ -86,7 +86,7 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.median)}</td>
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.q3)}</td>
                   <td className="py-2.5 px-3 text-right">{formatNumber(row.data.iqr)}</td>
-                  <td className="py-2.5 px-3 text-right font-semibold text-[#047857]">
+                  <td className="py-2.5 px-3 text-right font-bold text-[#047857]">
                     {formatNumber(row.data.max)}
                   </td>
                 </tr>
@@ -98,9 +98,9 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
 
       {/* Distribution + Correlation Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <section className="lg:col-span-6 bg-white border border-[#DCE7E0] rounded-xl p-5">
+        <section className="lg:col-span-6 bento-card p-6">
           <h3 className="text-base font-bold text-slate-900">
-            การกระจายตัวของจำนวนชิ้นต่อบิล (Units_Sold: 1–24 ชิ้น)
+            การกระจายตัวของจำนวนชิ้นต่อบิล (1–24 ชิ้น)
           </h3>
           <p className="text-xs text-slate-500 mb-4">
             หลังตัด Outlier (999/1,200/1,500) ข้อมูลมีการกระจายตัวสม่ำเสมอ
@@ -108,14 +108,21 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={summary.unitsHistogram}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="units" tick={{ fontSize: 11, fill: "#475569" }} />
-                <YAxis tick={{ fontSize: 11, fill: "#475569" }} />
+                <defs>
+                  <linearGradient id="histBarFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#059669" />
+                    <stop offset="100%" stopColor="#14B8A6" />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" vertical={false} />
+                <XAxis dataKey="units" tick={{ fontSize: 11, fill: "#475569" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#475569" }} axisLine={false} tickLine={false} />
                 <Tooltip
                   formatter={(value) => [formatNumber(Number(value ?? 0)), "จำนวนบิล"]}
                   labelFormatter={(label) => `จำนวน ${label} ชิ้น/บิล`}
+                  contentStyle={{ borderRadius: "14px", borderColor: "#A7F3D0", fontSize: "12px" }}
                 />
-                <Bar dataKey="count" fill="#059669" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" fill="url(#histBarFill)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -126,9 +133,9 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
           />
         </section>
 
-        <section className="lg:col-span-6 bg-white border border-[#DCE7E0] rounded-xl p-5">
+        <section className="lg:col-span-6 bento-card p-6">
           <h3 className="text-base font-bold text-slate-900">
-            เมทริกซ์ความสัมพันธ์ของตัวแปร (Pearson Correlation Heatmap)
+            Pearson Correlation Heatmap
           </h3>
           <p className="text-xs text-slate-500 mb-4">
             วัดความสัมพันธ์เชิงเส้นระหว่างตัวแปรเชิงตัวเลขทั้ง 5 ตัว (n = 49,200)
@@ -154,7 +161,7 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
                     {summary.correlationMatrix.matrix[rIdx].map((val, cIdx) => (
                       <td key={`${rIdx}-${cIdx}`} className="p-1">
                         <div
-                          className={`rounded-md py-2 px-1.5 font-mono font-semibold tabular-nums ${getCellBg(val)}`}
+                          className={`rounded-xl py-2.5 px-1.5 font-mono font-bold tabular-nums transition-transform hover:scale-105 ${getCellBg(val)}`}
                         >
                           {val.toFixed(2)}
                         </div>
@@ -174,7 +181,7 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
       </div>
 
       {/* Membership Tier Performance */}
-      <section className="bg-white border border-[#DCE7E0] rounded-xl p-5">
+      <section className="bento-card p-6">
         <h3 className="text-base font-bold text-slate-900 mb-3">
           เปรียบเทียบประสิทธิภาพตามระดับสมาชิก (Membership Tier Analysis)
         </h3>
@@ -182,15 +189,15 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
           {summary.tierStats.map((t) => (
             <div
               key={t.tier}
-              className="rounded-xl border border-[#DCE7E0] bg-[#F7FAF8] p-4 space-y-1.5"
+              className="rounded-2xl border border-emerald-950/10 bg-gradient-to-br from-[#F5FBF7] to-white p-4 space-y-1.5 hover:border-emerald-400 transition-colors"
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold text-[#065F46]">{t.tier}</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-[#D1FAE5] text-[#065F46] font-semibold">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-[#065F46] font-bold">
                   {t.customers} ลูกค้า
                 </span>
               </div>
-              <p className="text-lg font-bold text-slate-900 tabular-nums">
+              <p className="text-xl font-extrabold text-slate-900 tabular-nums">
                 {formatTHB(t.revenue, true)}
               </p>
               <p className="text-xs text-slate-600 tabular-nums">
@@ -202,10 +209,10 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
       </section>
 
       {/* 5 Strategic Insights Cards */}
-      <section className="bg-white border border-[#DCE7E0] rounded-xl p-5">
+      <section className="bento-card p-6">
         <div className="mb-4">
           <h3 className="text-base font-bold text-slate-900">
-            5 Business Insights &amp; Action Plan สำหรับผู้บริหาร (พร้อม Owner และ Timeline)
+            5 Business Insights &amp; Action Plan (พร้อม Owner และ Timeline)
           </h3>
           <p className="text-xs text-slate-500">
             สรุปหลักฐานเชิงตัวเลขเพื่อใช้ต่อยอดในสไลด์นำเสนอและตัดสินใจเชิงกลยุทธ์
@@ -216,14 +223,14 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
           {summary.insights.map((item, idx) => (
             <article
               key={item.id}
-              className="rounded-xl border border-[#DCE7E0] bg-[#F7FAF8] p-4 flex flex-col justify-between space-y-3"
+              className="rounded-2xl border border-emerald-950/10 bg-[#F5FBF7]/80 p-5 flex flex-col justify-between space-y-3 hover:border-emerald-400 transition-colors"
             >
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 <div className="flex items-start justify-between gap-2">
                   <h4 className="text-sm font-bold text-[#065F46]">
                     {idx + 1}. {item.title}
                   </h4>
-                  <span className="shrink-0 px-2.5 py-0.5 rounded-full bg-[#047857] text-white text-[11px] font-semibold">
+                  <span className="shrink-0 px-3 py-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[11px] font-bold">
                     {item.metric}
                   </span>
                 </div>
@@ -233,20 +240,20 @@ export function EdaInsightsView({ summary }: EdaInsightsViewProps) {
                 <p className="text-xs text-slate-700">
                   <strong>So What:</strong> {item.soWhat}
                 </p>
-                <p className="text-xs text-slate-900 bg-white border border-[#DCE7E0] rounded-lg p-2.5">
+                <p className="text-xs text-slate-900 bg-white border border-emerald-200 rounded-xl p-3">
                   <strong className="text-[#047857]">Now What:</strong> {item.nowWhat}
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-[#DCE7E0] text-[11px] text-slate-600">
+              <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-emerald-950/10 text-[11px] text-slate-600">
                 <span className="inline-flex items-center gap-1">
-                  <UserCheck className="w-3.5 h-3.5 text-[#059669]" />
+                  <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
                   {item.owner}
                 </span>
                 <span className="inline-flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#059669]" />
+                  <Clock className="w-3.5 h-3.5 text-emerald-600" />
                   {item.timeline}
                 </span>
-                <span className="inline-flex items-center gap-1 text-[#047857] font-medium">
+                <span className="inline-flex items-center gap-1 text-[#047857] font-semibold">
                   <Target className="w-3.5 h-3.5" />
                   Verified
                 </span>

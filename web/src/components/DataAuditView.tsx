@@ -95,9 +95,9 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Pipeline Funnel */}
-      <section className="bg-white border border-[#DCE7E0] rounded-xl p-5">
+      <section className="bento-card p-6">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900">
@@ -107,8 +107,8 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
               แสดงความเชื่อมโยง PK/FK, การจัดการ Missing Values และเกณฑ์ตรวจ Outlier ทั้ง IQR และ Z-Score
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0] text-xs font-semibold text-[#065F46]">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#059669]" />
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-[#065F46]">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
             FK Match Rate: {validation.fk_match_rate_pct}% (ผ่านเกณฑ์ ≥ 99%)
           </span>
         </div>
@@ -117,15 +117,15 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
           {pipelineSteps.map((s) => (
             <div
               key={s.step}
-              className="rounded-xl border border-[#DCE7E0] bg-[#F7FAF8] p-4 space-y-2"
+              className="rounded-2xl border border-emerald-950/10 bg-[#F5FBF7] p-4 space-y-2 hover:border-emerald-400 transition-colors"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#047857]">{s.step}</span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-white border border-[#DCE7E0] text-slate-700 font-medium">
+                <span className="text-xs font-bold text-[#047857]">{s.step}</span>
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-white border border-emerald-200 text-slate-700 font-semibold">
                   {s.badge}
                 </span>
               </div>
-              <p className="text-2xl font-bold text-[#065F46] tabular-nums">{s.count}</p>
+              <p className="text-2xl font-extrabold text-[#065F46] tabular-nums">{s.count}</p>
               <p className="text-xs text-slate-600 leading-relaxed">{s.desc}</p>
             </div>
           ))}
@@ -134,27 +134,27 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
 
       {/* Impact Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-[#DCE7E0] rounded-xl p-5">
-          <div className="flex items-center gap-2 text-[#065F46] font-semibold text-xs mb-2">
-            <Database className="w-4 h-4" />
+        <div className="bento-card p-5">
+          <div className="flex items-center gap-2 text-[#065F46] font-bold text-xs mb-2.5">
+            <Database className="w-4 h-4 text-emerald-600" />
             <span>Missing Values ตามหมวดหมู่ (750 แถว)</span>
           </div>
           <div className="space-y-1.5 text-xs">
             {Object.entries(cleaning_summary.dropped_missing_by_category).map(([cat, cnt]) => (
               <div key={cat} className="flex justify-between text-slate-700">
                 <span>{cat}</span>
-                <span className="font-semibold tabular-nums">{cnt} แถว</span>
+                <span className="font-bold tabular-nums">{cnt} แถว</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white border border-[#DCE7E0] rounded-xl p-5">
-          <div className="flex items-center gap-2 text-[#065F46] font-semibold text-xs mb-2">
-            <AlertTriangle className="w-4 h-4" />
+        <div className="bento-card p-5">
+          <div className="flex items-center gap-2 text-[#065F46] font-bold text-xs mb-2.5">
+            <AlertTriangle className="w-4 h-4 text-emerald-600" />
             <span>ผลกระทบของ Outliers 50 แถว</span>
           </div>
-          <p className="text-xl font-bold text-[#065F46] tabular-nums">
+          <p className="text-2xl font-extrabold text-[#065F46] tabular-nums">
             {formatTHB(cleaning_summary.outliers_revenue_sum)}
           </p>
           <p className="text-xs text-slate-600 mt-1">
@@ -162,9 +162,9 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
           </p>
         </div>
 
-        <div className="bg-white border border-[#DCE7E0] rounded-xl p-5">
-          <div className="flex items-center gap-2 text-[#065F46] font-semibold text-xs mb-2">
-            <CheckCircle2 className="w-4 h-4" />
+        <div className="bento-card p-5">
+          <div className="flex items-center gap-2 text-[#065F46] font-bold text-xs mb-2.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>ทำไมจึงตรวจ Outlier บน Units_Sold?</span>
           </div>
           <p className="text-xs text-slate-700 leading-relaxed">
@@ -174,7 +174,7 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
       </div>
 
       {/* Outliers Audit Log Table */}
-      <section className="bg-white border border-[#DCE7E0] rounded-xl p-5">
+      <section className="bento-card p-6">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900">
@@ -186,12 +186,12 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-600">
-              <Filter className="w-3.5 h-3.5" />
+              <Filter className="w-3.5 h-3.5 text-emerald-600" />
               <select
                 aria-label="กรองตามจำนวนชิ้น Outlier"
                 value={unitFilter}
                 onChange={(e) => setUnitFilter(e.target.value)}
-                className="px-2.5 py-1.5 rounded-lg border border-[#DCE7E0] bg-white text-xs text-slate-800"
+                className="px-3 py-1.5 rounded-full border border-emerald-950/15 bg-white text-xs text-slate-800"
               >
                 <option value="ALL">ทุกจำนวนชิ้น (999/1200/1500)</option>
                 <option value="1500">1,500 ชิ้น</option>
@@ -202,7 +202,7 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
                 aria-label="กรองตามหมวดหมู่ Outlier"
                 value={catFilter}
                 onChange={(e) => setCatFilter(e.target.value)}
-                className="px-2.5 py-1.5 rounded-lg border border-[#DCE7E0] bg-white text-xs text-slate-800"
+                className="px-3 py-1.5 rounded-full border border-emerald-950/15 bg-white text-xs text-slate-800"
               >
                 <option value="ALL">ทุกหมวดหมู่</option>
                 <option value="Household">Household</option>
@@ -215,7 +215,7 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
             <button
               type="button"
               onClick={exportAuditCsv}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#047857] hover:bg-[#065F46] text-white text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-xs transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               Export Audit CSV
@@ -223,24 +223,24 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
           </div>
         </div>
 
-        <div className="overflow-x-auto max-h-[420px]">
+        <div className="overflow-x-auto max-h-[420px] rounded-xl border border-emerald-950/10">
           <table className="w-full text-left border-collapse text-xs">
-            <thead className="sticky top-0 bg-[#F7FAF8] border-b border-[#DCE7E0] text-[#065F46]">
+            <thead className="sticky top-0 bg-emerald-50/95 backdrop-blur-xs border-b border-emerald-950/10 text-[#065F46]">
               <tr>
-                <th className="py-2.5 px-3 font-semibold">Transaction_ID</th>
-                <th className="py-2.5 px-3 font-semibold">Customer_ID</th>
-                <th className="py-2.5 px-3 font-semibold">Date</th>
-                <th className="py-2.5 px-3 font-semibold">Category</th>
-                <th className="py-2.5 px-3 font-semibold">Channel</th>
-                <th className="py-2.5 px-3 font-semibold">Region</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Units</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Total (THB)</th>
-                <th className="py-2.5 px-3 font-semibold text-center">IQR / Z-Score</th>
+                <th className="py-2.5 px-3 font-bold">Transaction_ID</th>
+                <th className="py-2.5 px-3 font-bold">Customer_ID</th>
+                <th className="py-2.5 px-3 font-bold">Date</th>
+                <th className="py-2.5 px-3 font-bold">Category</th>
+                <th className="py-2.5 px-3 font-bold">Channel</th>
+                <th className="py-2.5 px-3 font-bold">Region</th>
+                <th className="py-2.5 px-3 font-bold text-right">Units</th>
+                <th className="py-2.5 px-3 font-bold text-right">Total (THB)</th>
+                <th className="py-2.5 px-3 font-bold text-center">IQR / Z-Score</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EFF5F1] tabular-nums">
+            <tbody className="divide-y divide-emerald-950/5 tabular-nums bg-white">
               {filteredOutliers.map((r) => (
-                <tr key={r.Transaction_ID} className="hover:bg-[#F7FAF8]">
+                <tr key={r.Transaction_ID} className="hover:bg-emerald-50/40 transition-colors">
                   <td className="py-2 px-3 font-mono font-semibold text-slate-900">
                     {r.Transaction_ID}
                   </td>
@@ -256,7 +256,7 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
                     {formatTHB(r.Total_Amount)}
                   </td>
                   <td className="py-2 px-3 text-center">
-                    <span className="px-2 py-0.5 rounded-full bg-[#D1FAE5] text-[#065F46] font-semibold">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-[#065F46] font-bold">
                       Both Flagged
                     </span>
                   </td>

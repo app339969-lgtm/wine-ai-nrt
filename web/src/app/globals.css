@@ -7,7 +7,12 @@
 }
 
 body {
-  background-color: #f7faf8;
+  background-color: #f5fbf7;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 48%),
+    radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.10) 0px, transparent 45%),
+    radial-gradient(at 50% 100%, rgba(167, 243, 208, 0.18) 0px, transparent 55%);
+  background-attachment: fixed;
   color: #0f172a;
   font-family: "IBM Plex Sans Thai", "Noto Sans Thai", "Segoe UI", system-ui, -apple-system, sans-serif;
   font-size: 14px;
@@ -17,4 +22,27 @@ body {
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.28s ease-out both;
+}
+
+.bento-card {
+  @apply rounded-2xl bg-white/90 backdrop-blur-sm border border-emerald-950/10 shadow-bento transition-all duration-200;
+}
+
+.bento-card-interactive {
+  @apply bento-card hover:-translate-y-0.5 hover:shadow-bento-hover hover:border-emerald-500/30;
 }

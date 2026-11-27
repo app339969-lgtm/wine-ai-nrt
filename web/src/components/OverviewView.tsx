@@ -23,7 +23,7 @@ import {
 import type { DashboardFilters, MonthlyPoint } from "@/types/dashboard";
 import { InsightCard } from "./InsightCard";
 
-const GREEN_PALETTE = ["#065F46", "#047857", "#059669", "#10B981", "#34D399"];
+const MODERN_GREENS = ["#047857", "#059669", "#10B981", "#14B8A6", "#34D399"];
 
 interface OverviewViewProps {
   metrics: ComputedDashboardMetrics;
@@ -31,6 +31,33 @@ interface OverviewViewProps {
   filters: DashboardFilters;
   onSelectFilter: (key: keyof DashboardFilters, value: string) => void;
   onDrillToExplorer: () => void;
+}
+
+function MiniSparkline({ values }: { values: number[] }) {
+  if (values.length < 2) return null;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const pts = values
+    .map((v, i) => {
+      const x = (i / (values.length - 1)) * 76 + 2;
+      const y = 24 - ((v - min) / span) * 20;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+  return (
+    <svg width="80" height="28" viewBox="0 0 80 28" className="overflow-visible" aria-hidden="true">
+      <polyline
+        fill="none"
+        stroke="#10B981"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={pts}
+      />
+    </svg>
+  );
 }
 
 export function OverviewView({
@@ -43,42 +70,56 @@ export function OverviewView({
   const [showRawCompare, setShowRawCompare] = useState(false);
 
   const hasActiveFilter = Object.values(filters).some((v) => v !== "ALL");
-  const chartMonthlyData = showRawCompare && !hasActiveFilter
-    ? monthlyRawComparison.map((m) => ({
-        name: m.month,
-        cleanRevenue: m.cleanRevenue,
-        rawRevenue: m.rawRevenue,
-      }))
-    : metrics.monthly.map((m) => ({
-        name: m.name,
-        cleanRevenue: m.revenue,
-        rawRevenue: m.revenue,
-      }));
+  const chartMonthlyData =
+    showRawCompare && !hasActiveFilter
+      ? monthlyRawComparison.map((m) => ({
+          name: m.month,
+          cleanRevenue: m.cleanRevenue,
+          rawRevenue: m.rawRevenue,
+        }))
+      : metrics.monthly.map((m) => ({
+          name: m.name,
+          cleanRevenue: m.revenue,
+          rawRevenue: m.revenue,
+        }));
+
+  const revSpark = metrics.monthly.map((m) => m.revenue);
+  const txnSpark = metrics.monthly.map((m) => m.txns);
+  const aovSpark = metrics.monthly.map((m) => (m.txns > 0 ? m.revenue / m.txns : 0));
+  const unitSpark = metrics.monthly.map((m) => m.units);
 
   const kpis = [
     {
-      label: "ยอดขายสุทธิ (Clean Revenue)",
+      label: "Clean Revenue",
+      thLabel: "ยอดขายสุทธิ",
       value: formatTHB(metrics.totalRevenue, true),
       sub: `${formatTHB(metrics.totalRevenue)} บาท`,
       icon: Banknote,
+      spark: revSpark,
     },
     {
-      label: "จำนวนบิลที่สะอาด (Clean Orders)",
+      label: "Clean Orders",
+      thLabel: "จำนวนบิลสะอาด",
       value: formatNumber(metrics.totalTxns),
       sub: `รวม ${formatNumber(metrics.totalUnits)} ชิ้น`,
       icon: Receipt,
+      spark: txnSpark,
     },
     {
-      label: "ยอดใช้จ่ายเฉลี่ยต่อบิล (AOV)",
+      label: "Avg Order Value",
+      thLabel: "มูลค่าเฉลี่ยต่อบิล",
       value: formatTHB(Math.round(metrics.avgOrderValue)),
       sub: `เฉลี่ย ${metrics.totalTxns > 0 ? (metrics.totalUnits / metrics.totalTxns).toFixed(2) : "0"} ชิ้น/บิล`,
       icon: ShoppingBag,
+      spark: aovSpark,
     },
     {
-      label: "จำนวนลูกค้าที่ซื้อ (Active Customers)",
+      label: "Active Customers",
+      thLabel: "ลูกค้าที่ซื้อจริง",
       value: formatNumber(metrics.uniqueCustomers),
       sub: `เฉลี่ย ${metrics.uniqueCustomers > 0 ? (metrics.totalTxns / metrics.uniqueCustomers).toFixed(1) : "0"} บิล/คน`,
       icon: Users,
+      spark: unitSpark,
     },
   ];
 
@@ -88,55 +129,62 @@ export function OverviewView({
     metrics.channels.find((c) => c.name === "Online")?.sharePct ?? 0;
 
   return (
-    <div className="space-y-6">
-      {/* KPI Cards */}
+    <div className="space-y-6 animate-fade-up">
+      {/* Bento KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
           return (
-            <div
-              key={kpi.label}
-              className="bg-white border border-[#DCE7E0] rounded-xl p-5 shadow-xs flex items-start justify-between"
-            >
-              <div>
-                <p className="text-xs font-medium text-slate-500">{kpi.label}</p>
-                <p className="text-2xl font-bold text-[#065F46] mt-1.5 tabular-nums">
-                  {kpi.value}
-                </p>
-                <p className="text-xs text-slate-600 mt-1 tabular-nums">{kpi.sub}</p>
+            <div key={kpi.label} className="bento-card-interactive p-5 flex flex-col justify-between">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600">
+                    {kpi.label}
+                  </span>
+                  <p className="text-xs font-medium text-slate-500">{kpi.thLabel}</p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-sm">
+                  <Icon className="w-4 h-4" />
+                </div>
               </div>
-              <div className="p-2.5 rounded-lg bg-[#ECFDF5] text-[#047857]">
-                <Icon className="w-5 h-5" />
+
+              <div className="mt-3 flex items-end justify-between gap-2">
+                <div>
+                  <p className="text-2xl font-extrabold text-slate-900 tabular-nums tracking-tight">
+                    {kpi.value}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5 tabular-nums">{kpi.sub}</p>
+                </div>
+                <MiniSparkline values={kpi.spark} />
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Main Charts Row */}
+      {/* Main Bento Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Monthly Revenue Time Series */}
-        <section className="lg:col-span-7 bg-white border border-[#DCE7E0] rounded-xl p-5">
+        <section className="lg:col-span-7 bento-card p-6">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                แนวโน้มยอดขายรายเดือน ปี 2025 (Time Series)
+                แนวโน้มยอดขายรายเดือน ปี 2025
               </h3>
               <p className="text-xs text-slate-500">
-                คลิกเปรียบเทียบข้อมูลก่อน/หลังตัด Outlier 50 แถว (หน่วย: บาท)
+                เปรียบเทียบเส้น Clean กับ Raw เพื่อเปิดโปงผลกระทบของ Outlier 50 บิล
               </p>
             </div>
             {!hasActiveFilter && (
               <button
                 type="button"
                 onClick={() => setShowRawCompare((prev) => !prev)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                   showRawCompare
-                    ? "bg-[#047857] text-white border-[#047857]"
-                    : "bg-[#F7FAF8] text-[#065F46] border-[#DCE7E0] hover:bg-[#ECFDF5]"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-transparent shadow-sm"
+                    : "bg-emerald-50/70 text-[#065F46] border-emerald-200 hover:bg-emerald-100/70"
                 }`}
               >
-                {showRawCompare ? "กำลังเทียบเส้น Raw (มี Outlier)" : "เทียบเส้น Raw (ก่อน Clean)"}
+                {showRawCompare ? "กำลังเทียบเส้น Raw" : "เทียบเส้น Raw (ก่อน Clean)"}
               </button>
             )}
           </div>
@@ -145,16 +193,18 @@ export function OverviewView({
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartMonthlyData} margin={{ top: 10, right: 16, left: 8, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="cleanFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#059669" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#059669" stopOpacity={0.02} />
+                  <linearGradient id="modernCleanFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.32} />
+                    <stop offset="95%" stopColor="#14B8A6" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#475569" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" vertical={false} />
+                <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#475569" }} axisLine={false} tickLine={false} />
                 <YAxis
                   tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(1)}M`}
                   tick={{ fontSize: 12, fill: "#475569" }}
+                  axisLine={false}
+                  tickLine={false}
                 />
                 <Tooltip
                   formatter={(value, name) => [
@@ -162,8 +212,10 @@ export function OverviewView({
                     name === "rawRevenue" ? "ยอดดิบ (รวม Outlier)" : "ยอดสะอาด (Clean)",
                   ]}
                   contentStyle={{
-                    borderRadius: "10px",
-                    borderColor: "#DCE7E0",
+                    borderRadius: "14px",
+                    borderColor: "#A7F3D0",
+                    backgroundColor: "rgba(255,255,255,0.95)",
+                    boxShadow: "0 10px 25px -10px rgba(5,150,105,0.25)",
                     fontSize: "12px",
                   }}
                 />
@@ -172,9 +224,9 @@ export function OverviewView({
                   type="monotone"
                   dataKey="cleanRevenue"
                   name="ยอดสะอาด (Clean)"
-                  stroke="#047857"
-                  strokeWidth={2.5}
-                  fill="url(#cleanFill)"
+                  stroke="#059669"
+                  strokeWidth={3}
+                  fill="url(#modernCleanFill)"
                 />
                 {showRawCompare && !hasActiveFilter && (
                   <Area
@@ -198,23 +250,23 @@ export function OverviewView({
           />
         </section>
 
-        {/* Category Revenue Pareto */}
-        <section className="lg:col-span-5 bg-white border border-[#DCE7E0] rounded-xl p-5">
+        {/* Category Bento */}
+        <section className="lg:col-span-5 bento-card p-6">
           <div className="flex items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                สัดส่วนรายได้ตามหมวดหมู่สินค้า (คลิกเพื่อ Filter)
+                สัดส่วนรายได้ตามหมวดหมู่
               </h3>
               <p className="text-xs text-slate-500">
-                เรียงตามมูลค่ายอดขายจากมากไปน้อย
+                คลิกที่แท่งกราฟเพื่อ Filter ข้อมูลทั้งหน้า
               </p>
             </div>
             <button
               type="button"
               onClick={onDrillToExplorer}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-[#047857] hover:underline"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-xs font-bold text-[#047857] transition-colors"
             >
-              <span>ดูรายการบิล</span>
+              <span>เจาะลึกบิล</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -226,29 +278,34 @@ export function OverviewView({
                 layout="vertical"
                 margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" horizontal={false} />
                 <XAxis
                   type="number"
                   tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(0)}M`}
                   tick={{ fontSize: 12, fill: "#475569" }}
+                  axisLine={false}
+                  tickLine={false}
                 />
                 <YAxis
                   type="category"
                   dataKey="name"
                   width={95}
-                  tick={{ fontSize: 12, fill: "#0F172A", fontWeight: 500 }}
+                  tick={{ fontSize: 12, fill: "#0F172A", fontWeight: 600 }}
+                  axisLine={false}
+                  tickLine={false}
                 />
                 <Tooltip
                   formatter={(value) => [formatTHB(Number(value ?? 0)), "ยอดขาย"]}
                   contentStyle={{
-                    borderRadius: "10px",
-                    borderColor: "#DCE7E0",
+                    borderRadius: "14px",
+                    borderColor: "#A7F3D0",
+                    backgroundColor: "rgba(255,255,255,0.95)",
                     fontSize: "12px",
                   }}
                 />
                 <Bar
                   dataKey="revenue"
-                  radius={[0, 6, 6, 0]}
+                  radius={[0, 10, 10, 0]}
                   cursor="pointer"
                   onClick={(entry) => {
                     if (entry?.name) {
@@ -265,7 +322,7 @@ export function OverviewView({
                       fill={
                         filters.category === entry.name
                           ? "#064E3B"
-                          : GREEN_PALETTE[idx % GREEN_PALETTE.length]
+                          : MODERN_GREENS[idx % MODERN_GREENS.length]
                       }
                     />
                   ))}
@@ -286,11 +343,11 @@ export function OverviewView({
         </section>
       </div>
 
-      {/* Bottom Row: Region + Channel & Payment */}
+      {/* Bottom Bento Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <section className="lg:col-span-6 bg-white border border-[#DCE7E0] rounded-xl p-5">
+        <section className="lg:col-span-6 bento-card p-6">
           <h3 className="text-base font-bold text-slate-900">
-            ประสิทธิภาพยอดขายแยกตามภูมิภาค (คลิกเพื่อ Filter)
+            ยอดขายแยกตามภูมิภาค (คลิกเพื่อ Filter)
           </h3>
           <p className="text-xs text-slate-500 mb-4">
             เปรียบเทียบยอดขายสะอาดข้าม 5 ภูมิภาคหลักของ SmartRetail Thailand
@@ -299,19 +356,26 @@ export function OverviewView({
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={metrics.regions} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-                <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#0F172A" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" vertical={false} />
+                <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#0F172A" }} axisLine={false} tickLine={false} />
                 <YAxis
                   tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(0)}M`}
                   tick={{ fontSize: 12, fill: "#475569" }}
+                  axisLine={false}
+                  tickLine={false}
                 />
                 <Tooltip
                   formatter={(value) => [formatTHB(Number(value ?? 0)), "ยอดขาย"]}
-                  contentStyle={{ borderRadius: "10px", borderColor: "#DCE7E0", fontSize: "12px" }}
+                  contentStyle={{
+                    borderRadius: "14px",
+                    borderColor: "#A7F3D0",
+                    backgroundColor: "rgba(255,255,255,0.95)",
+                    fontSize: "12px",
+                  }}
                 />
                 <Bar
                   dataKey="revenue"
-                  radius={[6, 6, 0, 0]}
+                  radius={[10, 10, 4, 4]}
                   cursor="pointer"
                   onClick={(entry) => {
                     if (entry?.name) {
@@ -328,7 +392,7 @@ export function OverviewView({
                       fill={
                         filters.region === entry.name
                           ? "#064E3B"
-                          : GREEN_PALETTE[idx % GREEN_PALETTE.length]
+                          : MODERN_GREENS[idx % MODERN_GREENS.length]
                       }
                     />
                   ))}
@@ -348,19 +412,19 @@ export function OverviewView({
           />
         </section>
 
-        <section className="lg:col-span-6 bg-white border border-[#DCE7E0] rounded-xl p-5 flex flex-col justify-between">
+        <section className="lg:col-span-6 bento-card p-6 flex flex-col justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-900">
-              ช่องทางการขายและวิธีการชำระเงิน (Channel &amp; Payment Mix)
+              ช่องทางการขายและวิธีชำระเงิน
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              คลิกที่แท่งหรือรายการเพื่อ Filter ข้อมูลทั้งหน้า Dashboard
+              คลิกที่การ์ดเพื่อ Filter ข้อมูลทั้งหน้า Dashboard ได้ทันที
             </p>
 
             <div className="space-y-4">
               <div>
-                <p className="text-xs font-semibold text-[#065F46] mb-2">
-                  ช่องทางจำหน่าย (Channel)
+                <p className="text-xs font-bold text-[#047857] mb-2">
+                  Channel Mix
                 </p>
                 <div className="space-y-2.5">
                   {metrics.channels.map((ch) => (
@@ -373,21 +437,21 @@ export function OverviewView({
                           filters.channel === ch.name ? "ALL" : ch.name,
                         )
                       }
-                      className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                      className={`w-full text-left p-3.5 rounded-2xl border transition-all ${
                         filters.channel === ch.name
-                          ? "bg-[#ECFDF5] border-[#047857]"
-                          : "bg-[#F7FAF8] border-[#DCE7E0] hover:bg-[#ECFDF5]/60"
+                          ? "bg-emerald-50 border-emerald-500 shadow-xs"
+                          : "bg-[#F5FBF7] border-emerald-950/10 hover:border-emerald-400"
                       }`}
                     >
-                      <div className="flex justify-between text-xs font-semibold text-slate-800 mb-1.5">
+                      <div className="flex justify-between text-xs font-semibold text-slate-800 mb-2">
                         <span>{ch.name}</span>
                         <span className="tabular-nums">
                           {formatTHB(ch.revenue)} ({ch.sharePct}%) · {formatNumber(ch.txns)} บิล
                         </span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                      <div className="w-full h-2.5 rounded-full bg-emerald-950/10 overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-[#047857]"
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-teal-500"
                           style={{ width: `${ch.sharePct}%` }}
                         />
                       </div>
@@ -397,10 +461,10 @@ export function OverviewView({
               </div>
 
               <div>
-                <p className="text-xs font-semibold text-[#065F46] mb-2">
-                  วิธีการชำระเงิน (Payment Method)
+                <p className="text-xs font-bold text-[#047857] mb-2">
+                  Payment Mix
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {metrics.payments.map((pm) => (
                     <button
                       key={pm.name}
@@ -411,14 +475,14 @@ export function OverviewView({
                           filters.payment === pm.name ? "ALL" : pm.name,
                         )
                       }
-                      className={`text-left p-3 rounded-lg border transition-colors ${
+                      className={`text-left p-3.5 rounded-2xl border transition-all ${
                         filters.payment === pm.name
-                          ? "bg-[#ECFDF5] border-[#047857]"
-                          : "bg-white border-[#DCE7E0] hover:bg-[#F7FAF8]"
+                          ? "bg-emerald-50 border-emerald-500 shadow-xs"
+                          : "bg-white border-emerald-950/10 hover:border-emerald-400"
                       }`}
                     >
-                      <p className="text-xs font-semibold text-slate-800">{pm.name}</p>
-                      <p className="text-sm font-bold text-[#065F46] mt-0.5 tabular-nums">
+                      <p className="text-xs font-semibold text-slate-700">{pm.name}</p>
+                      <p className="text-lg font-extrabold text-[#065F46] mt-0.5 tabular-nums">
                         {pm.sharePct}%
                       </p>
                       <p className="text-[11px] text-slate-500 tabular-nums">
