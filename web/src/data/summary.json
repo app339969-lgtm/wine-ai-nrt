@@ -1,0 +1,1206 @@
+{
+  "generatedAt": "2025-12-31 Cleaned Snapshot",
+  "cleaningReport": {
+    "validation": {
+      "raw_customers_rows": 1000,
+      "raw_transactions_rows": 50000,
+      "customer_pk_unique": true,
+      "transaction_pk_unique": true,
+      "fk_matched_rows": 50000,
+      "fk_match_rate_pct": 100.0,
+      "customers_missing_cells": 0
+    },
+    "cleaning_summary": {
+      "dropped_dual_missing_rows": 750,
+      "dropped_missing_by_category": {
+        "Beverages": 172,
+        "Dry Food": 199,
+        "Household": 111,
+        "Personal Care": 164,
+        "Snacks": 104
+      },
+      "outliers_iqr_count": 50,
+      "outliers_zscore_count": 50,
+      "outliers_isolated_rows": 50,
+      "outliers_unique_units": {
+        "1500": 19,
+        "999": 16,
+        "1200": 15
+      },
+      "outliers_revenue_sum": 14541495.0,
+      "outlier_bounds": {
+        "q1": 6.0,
+        "q3": 19.0,
+        "iqr": 13.0,
+        "iqr_lower_fence": -13.5,
+        "iqr_upper_fence": 38.5,
+        "z_mean": 13.75,
+        "z_std": 40.57,
+        "z_3sigma_upper": 135.45
+      },
+      "cleaned_transactions_rows": 49200,
+      "before_cleaning_total_amount": {
+        "n": 49250,
+        "sum": 156698000.0,
+        "mean": 3181.69,
+        "std": 15697.61,
+        "min": 35.0,
+        "q1": 500.0,
+        "median": 1035.0,
+        "q3": 2880.0,
+        "iqr": 2380.0,
+        "max": 1335000.0
+      },
+      "after_cleaning_total_amount": {
+        "n": 49200,
+        "sum": 142156505.0,
+        "mean": 2889.36,
+        "std": 4399.19,
+        "min": 35.0,
+        "q1": 500.0,
+        "median": 1035.0,
+        "q3": 2880.0,
+        "iqr": 2380.0,
+        "max": 21360.0
+      },
+      "before_cleaning_units_sold": {
+        "n": 49250,
+        "sum": 677363.0,
+        "mean": 13.75,
+        "std": 40.57,
+        "min": 1.0,
+        "q1": 6.0,
+        "median": 13.0,
+        "q3": 19.0,
+        "iqr": 13.0,
+        "max": 1500.0
+      },
+      "after_cleaning_units_sold": {
+        "n": 49200,
+        "sum": 614879.0,
+        "mean": 12.5,
+        "std": 6.93,
+        "min": 1.0,
+        "q1": 6.0,
+        "median": 13.0,
+        "q3": 19.0,
+        "iqr": 13.0,
+        "max": 24.0
+      }
+    },
+    "merged_rows": 49200,
+    "merged_columns": [
+      "Transaction_ID",
+      "Customer_ID",
+      "Transaction_Date",
+      "Category",
+      "Channel",
+      "Units_Sold",
+      "Price_Per_Unit",
+      "Total_Amount",
+      "Payment_Method",
+      "Region",
+      "Gender",
+      "Age",
+      "Membership_Tier",
+      "Signup_Date",
+      "Year_Month",
+      "Quarter",
+      "Day_Of_Week",
+      "Age_Group",
+      "Tenure_Days_At_Purchase"
+    ],
+    "duckdb_verification": {
+      "parquet_rows": 49200,
+      "parquet_total_revenue": 142156505.0,
+      "matches_pandas": true
+    }
+  },
+  "monthlySeries": [
+    {
+      "month": "2025-01",
+      "cleanTxns": 4263,
+      "cleanRevenue": 12330985.0,
+      "cleanUnits": 54276,
+      "rawTxns": 4264,
+      "rawRevenue": 12398485.0
+    },
+    {
+      "month": "2025-02",
+      "cleanTxns": 3694,
+      "cleanRevenue": 10971770.0,
+      "cleanUnits": 46277,
+      "rawTxns": 3699,
+      "rawRevenue": 12391985.0
+    },
+    {
+      "month": "2025-03",
+      "cleanTxns": 4222,
+      "cleanRevenue": 11976710.0,
+      "cleanUnits": 52994,
+      "rawTxns": 4225,
+      "rawRevenue": 12539090.0
+    },
+    {
+      "month": "2025-04",
+      "cleanTxns": 4090,
+      "cleanRevenue": 12246560.0,
+      "cleanUnits": 50201,
+      "rawTxns": 4092,
+      "rawRevenue": 12458060.0
+    },
+    {
+      "month": "2025-05",
+      "cleanTxns": 4066,
+      "cleanRevenue": 11180430.0,
+      "cleanUnits": 51027,
+      "rawTxns": 4070,
+      "rawRevenue": 11687265.0
+    },
+    {
+      "month": "2025-06",
+      "cleanTxns": 4019,
+      "cleanRevenue": 11697635.0,
+      "cleanUnits": 49890,
+      "rawTxns": 4024,
+      "rawRevenue": 14931590.0
+    },
+    {
+      "month": "2025-07",
+      "cleanTxns": 4170,
+      "cleanRevenue": 12208395.0,
+      "cleanUnits": 51858,
+      "rawTxns": 4174,
+      "rawRevenue": 13586460.0
+    },
+    {
+      "month": "2025-08",
+      "cleanTxns": 4337,
+      "cleanRevenue": 12533170.0,
+      "cleanUnits": 54038,
+      "rawTxns": 4345,
+      "rawRevenue": 15524005.0
+    },
+    {
+      "month": "2025-09",
+      "cleanTxns": 4061,
+      "cleanRevenue": 11587820.0,
+      "cleanUnits": 50429,
+      "rawTxns": 4065,
+      "rawRevenue": 12240275.0
+    },
+    {
+      "month": "2025-10",
+      "cleanTxns": 4159,
+      "cleanRevenue": 12063115.0,
+      "cleanUnits": 52368,
+      "rawTxns": 4164,
+      "rawRevenue": 13554070.0
+    },
+    {
+      "month": "2025-11",
+      "cleanTxns": 3934,
+      "cleanRevenue": 11385335.0,
+      "cleanUnits": 48894,
+      "rawTxns": 3937,
+      "rawRevenue": 11900300.0
+    },
+    {
+      "month": "2025-12",
+      "cleanTxns": 4185,
+      "cleanRevenue": 11974580.0,
+      "cleanUnits": 52627,
+      "rawTxns": 4191,
+      "rawRevenue": 13486415.0
+    }
+  ],
+  "unitsHistogram": [
+    {
+      "units": 1,
+      "count": 2049
+    },
+    {
+      "units": 2,
+      "count": 2062
+    },
+    {
+      "units": 3,
+      "count": 2025
+    },
+    {
+      "units": 4,
+      "count": 2039
+    },
+    {
+      "units": 5,
+      "count": 2115
+    },
+    {
+      "units": 6,
+      "count": 2056
+    },
+    {
+      "units": 7,
+      "count": 2039
+    },
+    {
+      "units": 8,
+      "count": 2102
+    },
+    {
+      "units": 9,
+      "count": 2027
+    },
+    {
+      "units": 10,
+      "count": 2025
+    },
+    {
+      "units": 11,
+      "count": 2042
+    },
+    {
+      "units": 12,
+      "count": 2005
+    },
+    {
+      "units": 13,
+      "count": 2106
+    },
+    {
+      "units": 14,
+      "count": 2025
+    },
+    {
+      "units": 15,
+      "count": 2020
+    },
+    {
+      "units": 16,
+      "count": 1993
+    },
+    {
+      "units": 17,
+      "count": 2085
+    },
+    {
+      "units": 18,
+      "count": 2007
+    },
+    {
+      "units": 19,
+      "count": 2079
+    },
+    {
+      "units": 20,
+      "count": 2076
+    },
+    {
+      "units": 21,
+      "count": 2114
+    },
+    {
+      "units": 22,
+      "count": 1998
+    },
+    {
+      "units": 23,
+      "count": 2062
+    },
+    {
+      "units": 24,
+      "count": 2049
+    }
+  ],
+  "correlationMatrix": {
+    "labels": [
+      "Units Sold",
+      "Unit Price",
+      "Total Amount",
+      "Customer Age",
+      "Tenure (Days)"
+    ],
+    "keys": [
+      "Units_Sold",
+      "Price_Per_Unit",
+      "Total_Amount",
+      "Age",
+      "Tenure_Days_At_Purchase"
+    ],
+    "matrix": [
+      [
+        1.0,
+        -0.0065,
+        0.3601,
+        0.0036,
+        0.0038
+      ],
+      [
+        -0.0065,
+        1.0,
+        0.8123,
+        -0.0038,
+        0.0035
+      ],
+      [
+        0.3601,
+        0.8123,
+        1.0,
+        -0.0037,
+        0.001
+      ],
+      [
+        0.0036,
+        -0.0038,
+        -0.0037,
+        1.0,
+        -0.0135
+      ],
+      [
+        0.0038,
+        0.0035,
+        0.001,
+        -0.0135,
+        1.0
+      ]
+    ]
+  },
+  "tierStats": [
+    {
+      "tier": "Basic",
+      "customers": 499,
+      "txns": 24431,
+      "revenue": 70133595.0,
+      "avgRevenuePerCustomer": 140548.29,
+      "avgTxnsPerCustomer": 48.96
+    },
+    {
+      "tier": "Silver",
+      "customers": 304,
+      "txns": 14973,
+      "revenue": 43572780.0,
+      "avgRevenuePerCustomer": 143331.51,
+      "avgTxnsPerCustomer": 49.25
+    },
+    {
+      "tier": "Gold",
+      "customers": 142,
+      "txns": 7048,
+      "revenue": 20516905.0,
+      "avgRevenuePerCustomer": 144485.25,
+      "avgTxnsPerCustomer": 49.63
+    },
+    {
+      "tier": "Platinum",
+      "customers": 55,
+      "txns": 2748,
+      "revenue": 7933225.0,
+      "avgRevenuePerCustomer": 144240.45,
+      "avgTxnsPerCustomer": 49.96
+    }
+  ],
+  "outliersAudit": [
+    {
+      "Transaction_ID": "TXN-47997",
+      "Customer_ID": "CUST-134",
+      "Transaction_Date": "2025-06-25",
+      "Category": "Household",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1335000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-55134",
+      "Customer_ID": "CUST-496",
+      "Transaction_Date": "2025-06-07",
+      "Category": "Household",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1335000.0,
+      "Payment_Method": "Cash",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-35484",
+      "Customer_ID": "CUST-455",
+      "Transaction_Date": "2025-10-23",
+      "Category": "Household",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1068000.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-32450",
+      "Customer_ID": "CUST-508",
+      "Transaction_Date": "2025-08-15",
+      "Category": "Household",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1068000.0,
+      "Payment_Method": "Cash",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-18039",
+      "Customer_ID": "CUST-022",
+      "Transaction_Date": "2025-08-11",
+      "Category": "Household",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1068000.0,
+      "Payment_Method": "PromptPay",
+      "Region": "West",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-49042",
+      "Customer_ID": "CUST-141",
+      "Transaction_Date": "2025-12-03",
+      "Category": "Household",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1068000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-22903",
+      "Customer_ID": "CUST-892",
+      "Transaction_Date": "2025-02-04",
+      "Category": "Household",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 1068000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-11937",
+      "Customer_ID": "CUST-524",
+      "Transaction_Date": "2025-07-02",
+      "Category": "Household",
+      "Channel": "Online",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 890.0,
+      "Total_Amount": 889110.0,
+      "Payment_Method": "Cash",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-13801",
+      "Customer_ID": "CUST-481",
+      "Transaction_Date": "2025-06-14",
+      "Category": "Personal Care",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 375000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "West",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-15351",
+      "Customer_ID": "CUST-339",
+      "Transaction_Date": "2025-09-16",
+      "Category": "Personal Care",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 375000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-52790",
+      "Customer_ID": "CUST-887",
+      "Transaction_Date": "2025-08-27",
+      "Category": "Personal Care",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 375000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-32684",
+      "Customer_ID": "CUST-143",
+      "Transaction_Date": "2025-03-12",
+      "Category": "Personal Care",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 375000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-55062",
+      "Customer_ID": "CUST-373",
+      "Transaction_Date": "2025-11-23",
+      "Category": "Personal Care",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 300000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-21275",
+      "Customer_ID": "CUST-114",
+      "Transaction_Date": "2025-07-06",
+      "Category": "Personal Care",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 300000.0,
+      "Payment_Method": "Cash",
+      "Region": "North",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-54131",
+      "Customer_ID": "CUST-603",
+      "Transaction_Date": "2025-05-18",
+      "Category": "Personal Care",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 250.0,
+      "Total_Amount": 300000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "North",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-27231",
+      "Customer_ID": "CUST-240",
+      "Transaction_Date": "2025-08-31",
+      "Category": "Dry Food",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 180000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-52059",
+      "Customer_ID": "CUST-503",
+      "Transaction_Date": "2025-10-22",
+      "Category": "Dry Food",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 180000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-37571",
+      "Customer_ID": "CUST-898",
+      "Transaction_Date": "2025-11-28",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 180000.0,
+      "Payment_Method": "Cash",
+      "Region": "West",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-29712",
+      "Customer_ID": "CUST-336",
+      "Transaction_Date": "2025-09-17",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 180000.0,
+      "Payment_Method": "PromptPay",
+      "Region": "North",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-48983",
+      "Customer_ID": "CUST-671",
+      "Transaction_Date": "2025-10-26",
+      "Category": "Dry Food",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 144000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-22844",
+      "Customer_ID": "CUST-340",
+      "Transaction_Date": "2025-12-09",
+      "Category": "Dry Food",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 144000.0,
+      "Payment_Method": "PromptPay",
+      "Region": "West",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-13429",
+      "Customer_ID": "CUST-395",
+      "Transaction_Date": "2025-04-27",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 144000.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-26698",
+      "Customer_ID": "CUST-976",
+      "Transaction_Date": "2025-07-01",
+      "Category": "Dry Food",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 144000.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-24581",
+      "Customer_ID": "CUST-396",
+      "Transaction_Date": "2025-06-30",
+      "Category": "Dry Food",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 144000.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-58586",
+      "Customer_ID": "CUST-666",
+      "Transaction_Date": "2025-03-29",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 119880.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-57992",
+      "Customer_ID": "CUST-744",
+      "Transaction_Date": "2025-05-04",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 119880.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-19623",
+      "Customer_ID": "CUST-997",
+      "Transaction_Date": "2025-02-28",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 119880.0,
+      "Payment_Method": "Cash",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-22668",
+      "Customer_ID": "CUST-692",
+      "Transaction_Date": "2025-08-18",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 119880.0,
+      "Payment_Method": "PromptPay",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-46462",
+      "Customer_ID": "CUST-011",
+      "Transaction_Date": "2025-02-13",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 119880.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-19664",
+      "Customer_ID": "CUST-912",
+      "Transaction_Date": "2025-12-19",
+      "Category": "Dry Food",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 120.0,
+      "Total_Amount": 119880.0,
+      "Payment_Method": "Cash",
+      "Region": "West",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-33060",
+      "Customer_ID": "CUST-877",
+      "Transaction_Date": "2025-02-09",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-13269",
+      "Customer_ID": "CUST-578",
+      "Transaction_Date": "2025-08-30",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-11200",
+      "Customer_ID": "CUST-831",
+      "Transaction_Date": "2025-01-18",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-41282",
+      "Customer_ID": "CUST-740",
+      "Transaction_Date": "2025-12-02",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "Cash",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-46168",
+      "Customer_ID": "CUST-815",
+      "Transaction_Date": "2025-04-29",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-36411",
+      "Customer_ID": "CUST-423",
+      "Transaction_Date": "2025-03-15",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-25874",
+      "Customer_ID": "CUST-992",
+      "Transaction_Date": "2025-12-15",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "Credit Card",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-24130",
+      "Customer_ID": "CUST-543",
+      "Transaction_Date": "2025-08-23",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 67500.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-34818",
+      "Customer_ID": "CUST-764",
+      "Transaction_Date": "2025-10-15",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 54000.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-36520",
+      "Customer_ID": "CUST-364",
+      "Transaction_Date": "2025-09-13",
+      "Category": "Snacks",
+      "Channel": "Online",
+      "Units_Sold": 1500,
+      "Price_Per_Unit": 35.0,
+      "Total_Amount": 52500.0,
+      "Payment_Method": "Credit Card",
+      "Region": "North",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-11962",
+      "Customer_ID": "CUST-976",
+      "Transaction_Date": "2025-02-25",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-17742",
+      "Customer_ID": "CUST-700",
+      "Transaction_Date": "2025-08-17",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "Cash",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-17820",
+      "Customer_ID": "CUST-965",
+      "Transaction_Date": "2025-06-22",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "Cash",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-12599",
+      "Customer_ID": "CUST-873",
+      "Transaction_Date": "2025-10-31",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-16783",
+      "Customer_ID": "CUST-643",
+      "Transaction_Date": "2025-07-06",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-48251",
+      "Customer_ID": "CUST-536",
+      "Transaction_Date": "2025-12-09",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "Credit Card",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-56660",
+      "Customer_ID": "CUST-944",
+      "Transaction_Date": "2025-09-21",
+      "Category": "Beverages",
+      "Channel": "In-Store",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Northeast",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-45051",
+      "Customer_ID": "CUST-657",
+      "Transaction_Date": "2025-05-28",
+      "Category": "Beverages",
+      "Channel": "Online",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 45.0,
+      "Total_Amount": 44955.0,
+      "Payment_Method": "Credit Card",
+      "Region": "South",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-55273",
+      "Customer_ID": "CUST-524",
+      "Transaction_Date": "2025-05-14",
+      "Category": "Snacks",
+      "Channel": "Online",
+      "Units_Sold": 1200,
+      "Price_Per_Unit": 35.0,
+      "Total_Amount": 42000.0,
+      "Payment_Method": "Cash",
+      "Region": "West",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    },
+    {
+      "Transaction_ID": "TXN-34280",
+      "Customer_ID": "CUST-339",
+      "Transaction_Date": "2025-11-09",
+      "Category": "Snacks",
+      "Channel": "Online",
+      "Units_Sold": 999,
+      "Price_Per_Unit": 35.0,
+      "Total_Amount": 34965.0,
+      "Payment_Method": "PromptPay",
+      "Region": "Central",
+      "IQR_Outlier": true,
+      "ZScore_Outlier": true,
+      "Outlier_Reason": "Units_Sold > IQR upper fence (38.5) and |Z| > 3 (135.45)"
+    }
+  ],
+  "insights": [
+    {
+      "id": "pareto-category",
+      "title": "รายได้ 79.78% กระจุกตัวใน Household และ Personal Care",
+      "metric": "58.03% Household",
+      "what": "หมวด Household และ Personal Care มีสัดส่วนเพียง 35.36% ของบิล แต่สร้างรายได้ถึง 113.41 ล้านบาท จากยอดสะอาด 142.16 ล้านบาท ขณะที่ Dry Food, Beverages และ Snacks รวมกันทำเงิน 20.22%",
+      "soWhat": "ลูกค้าซื้อเฉลี่ย ~12.50 ชิ้น/บิลเท่ากันในทุกหมวด (Corr(Price, Units) = -0.0065) แต่ราคาต่อหน่วยของ Household (890 บาท) ขับเคลื่อนมูลค่าบิลโดยตรง (Corr = +0.8123)",
+      "nowWhat": "จัดแคมเปญ Cross-Selling จับคู่สินค้าขายดีฝั่ง Dry Food/Beverages คู่กับ Household/Personal Care เพื่อเพิ่มมูลค่าต่อบิล",
+      "owner": "ทีม Merchandising & Marketing",
+      "timeline": "เดือนที่ 1–2"
+    },
+    {
+      "id": "stagnant-growth",
+      "title": "ยอดขายปี 2025 ชะลอตัวคงที่ และข้อมูลดิบมีสัญญาณลวงจาก Outlier",
+      "metric": "10.97M–12.53M / เดือน",
+      "what": "ยอดขายสะอาดตลอดปี 2025 แกว่งในกรอบแคบ 10.97–12.53 ล้านบาท/เดือน (Q4 ลดลง -2.49% จาก Q3) ขณะที่ข้อมูลดิบทำให้เดือน มิ.ย. (14.93M) และ ส.ค. (15.52M) ดูสูงผิดปกติจากบิล 999–1,500 ชิ้น",
+      "soWhat": "หากตัดสินใจจากข้อมูลดิบจะเข้าใจผิดว่าแคมเปญกลางปีสำเร็จ ทั้งที่ความจริงยอดขายกำลังชะลอตัวต่อเนื่อง",
+      "nowWhat": "ยึด Cleaned Pipeline เป็นมาตรฐานเดียว แยก 50 บิลผิดปกติให้ฝ่ายปฏิบัติการตรวจสอบ และจัดแคมเปญกระตุ้นช่วง Low Season (ก.พ., พ.ค., พ.ย.)",
+      "owner": "ทีม Data & Operations",
+      "timeline": "สัปดาห์ที่ 1–4"
+    },
+    {
+      "id": "online-digital",
+      "title": "ช่องทาง Online นำหน้า (55.53%) และชำระเงินดิจิทัลครอง 70.54%",
+      "metric": "78.95M Online",
+      "what": "ยอดขาย Online สูงถึง 78.95 ล้านบาท เทียบกับ In-Store 63.21 ล้านบาท และลูกค้าชำระผ่าน Credit Card (40.51%) + PromptPay (30.03%) รวม 70.54%",
+      "soWhat": "พฤติกรรมผู้บริโภคเปลี่ยนสู่ดิจิทัลชัดเจนแล้ว แต่หน้าร้าน In-Store ยังขาดแรงส่งและการเชื่อมโยง O2O",
+      "nowWhat": "ผลักดันระบบ Click & Collect และโปรโมชัน QR PromptPay Cashback สำหรับหน้าร้านเพื่อเชื่อม Traffic ระหว่างสองช่องทาง",
+      "owner": "ทีม E-Commerce & Store Ops",
+      "timeline": "ไตรมาสที่ 1–2"
+    },
+    {
+      "id": "regional-gap",
+      "title": "ช่องว่างภูมิภาค: Central สูงกว่า West ถึง 3.36 เท่า",
+      "metric": "35.30% vs 10.51%",
+      "what": "ภาคกลางสร้างรายได้ 50.18 ล้านบาท (35.30%) ขณะที่ภาคตะวันตกทำได้ 14.94 ล้านบาท (10.51%) และภาคใต้ 21.18 ล้านบาท (14.90%)",
+      "soWhat": "รายได้บริษัทพึ่งพาภาคกลางสูงเกินไป ทำให้ขยายฐานลูกค้าใหม่ได้จำกัดในต่างจังหวัด",
+      "nowWhat": "จัดแคมเปญเฉพาะพื้นที่ (Localized Promotion) และลดเกณฑ์ส่งฟรีสำหรับภาค West และ South",
+      "owner": "ทีม Regional Sales",
+      "timeline": "เดือนที่ 2–3"
+    },
+    {
+      "id": "flat-tier",
+      "title": "ระดับสมาชิกยังไม่สร้างความแตกต่างด้านยอดใช้จ่ายต่อคน",
+      "metric": "~142k บาท/คน ทุกระดับ",
+      "what": "ยอดใช้จ่ายเฉลี่ยต่อลูกค้าตั้งแต่ Basic (140.5k) จนถึง Platinum (144.2k) และความถี่ (~49.2 บิล/คน) แทบไม่ต่างกัน",
+      "soWhat": "โครงสร้าง Loyalty Program ปัจจุบันยังไม่จูงใจให้กลุ่ม Gold/Platinum เพิ่มยอดซื้อ หรือดึงกลุ่ม Basic (499 คน) ให้อัปเกรด",
+      "nowWhat": "ปรับสิทธิประโยชน์แบบ Tiered Rewards เช่น ส่วนลดเฉพาะหมวด Household และส่งฟรีไม่จำกัดสำหรับ Gold/Platinum",
+      "owner": "ทีม CRM & Loyalty",
+      "timeline": "เดือนที่ 1–3"
+    }
+  ]
+}
