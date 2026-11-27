@@ -14,6 +14,34 @@ interface MemeItem {
 
 const MEMES: MemeItem[] = [
   {
+    id: "doakes",
+    src: "/memes/meme-doakes.jpg",
+    tag: "Doakes จับผิด Outlier",
+    topText: "ME LOOKING AT JUN & AUG SPIKES:",
+    caption: "เมื่อรู้ว่า 50 บิล Outlier (฿14.54M) แอบปั่นกราฟให้ดูพุ่ง แต่รัน IQR + Z-Score จับได้คาหนังคาเขา 🕵️‍♂️🚨",
+  },
+  {
+    id: "nice",
+    src: "/memes/meme-nice.jpg",
+    tag: "100% FK Match · NICE",
+    topText: "0 NULLS & 49,200 CLEAN ROWS:",
+    caption: "หน้าตาของ Data Analyst ตอน DuckDB Parity ตรงกับ Pandas 100.00% ทุกทศนิยม: NOICE 👌✨",
+  },
+  {
+    id: "pepe",
+    src: "/memes/meme-pepe.jpg",
+    tag: "Pepe ช็อกราคาต่อชิ้น",
+    topText: "MEAN TOTAL_AMOUNT BEFORE CLEAN:",
+    caption: "จ้องหน้าจอตอนเห็นลูกค้ากด Household 1,500 ชิ้นในบิลเดียวจน Std. Dev. พุ่งไป ฿15,698 👀📉",
+  },
+  {
+    id: "selfie",
+    src: "/memes/meme-selfie.jpg",
+    tag: "Selfie With Top 10 VIP",
+    topText: "ABER ZUERST... SELFIE 🤳",
+    caption: "ก่อนพรีเซนต์ให้กรรมการ ขอเซลฟี่คู่กับ Customer 360° และกราฟสีรุ้งสักรูปนึงครับ 🐒🌈",
+  },
+  {
     id: "outlier",
     src: "/memes/meme-outlier.png",
     tag: "Outlier Shock · 50 Rows",

@@ -36,6 +36,7 @@ import type { DashboardFilters, MonthlyPoint } from "@/types/dashboard";
 import { AnimatedNumber } from "./AnimatedNumber";
 import { InsightCard } from "./InsightCard";
 import { MemeWidget } from "./MemeWidget";
+import { MemeSticker } from "./MemeSticker";
 
 const EMERALD_PALETTE = ["#047857", "#059669", "#10B981", "#14B8A6", "#34D399"];
 const RAINBOW_PALETTE = ["#F43F5E", "#F59E0B", "#10B981", "#06B6D4", "#6366F1", "#EC4899"];
@@ -46,6 +47,7 @@ interface OverviewViewProps {
   filters: DashboardFilters;
   presentationMode: boolean;
   isRainbow: boolean;
+  showMemes: boolean;
   onTogglePresentation: () => void;
   onSelectFilter: (key: keyof DashboardFilters, value: string) => void;
   onDrillToExplorer: () => void;
@@ -85,6 +87,7 @@ export function OverviewView({
   filters,
   presentationMode,
   isRainbow,
+  showMemes,
   onTogglePresentation,
   onSelectFilter,
   onDrillToExplorer,
@@ -175,13 +178,23 @@ export function OverviewView({
   return (
     <div className="space-y-6 animate-fade-up">
       {/* Grand Executive Hero Command Banner */}
-      <section
-        className={`rounded-3xl text-white p-6 sm:p-8 shadow-xl relative overflow-hidden ${
-          isRainbow
-            ? "rainbow-hero"
-            : "bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600"
-        }`}
-      >
+      <div className="relative">
+        <MemeSticker
+          src="/memes/meme-selfie.jpg"
+          alt="Monkey taking selfie with KPIs"
+          tag="ขอเซลฟี่ 142.16M 🤳"
+          roast="ยอดขายสะอาด 49,200 บิลครบเป๊ะทุกบาท ถ่ายรูปอวดกรรมการสักหน่อย!"
+          visible={showMemes}
+          placement="corner-tr"
+          tiltDeg={6}
+        />
+        <section
+          className={`rounded-3xl text-white p-6 sm:p-8 shadow-xl relative overflow-hidden ${
+            isRainbow
+              ? "rainbow-hero"
+              : "bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600"
+          }`}
+        >
         <div className="pointer-events-none absolute -right-16 -top-16 w-72 h-72 rounded-full bg-white/15 blur-3xl" />
         <div className="pointer-events-none absolute left-1/3 -bottom-20 w-64 h-64 rounded-full bg-white/15 blur-3xl" />
 
@@ -285,6 +298,7 @@ export function OverviewView({
           </div>
         </div>
       </section>
+      </div>
 
       {/* Bento KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -327,7 +341,16 @@ export function OverviewView({
 
       {/* Main Bento Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <section className="lg:col-span-7 bento-card p-6">
+        <section className="lg:col-span-7 bento-card p-6 relative">
+          <MemeSticker
+            src="/memes/meme-doakes.jpg"
+            alt="Doakes watching monthly outlier spike"
+            tag="Doakes จับพิรุธ 🕵️‍♂️"
+            roast="ลองกดปุ่ม 'เทียบเส้น Raw' ดูสิ จะเห็นเดือน มิ.ย. กับ ส.ค. พุ่งหลอกเพราะ Outlier 50 บิล!"
+            visible={showMemes}
+            placement="corner-tr"
+            tiltDeg={-5}
+          />
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div>
               <h3 className="text-base font-bold text-slate-900">
@@ -423,7 +446,16 @@ export function OverviewView({
         </section>
 
         {/* Category Bento */}
-        <section className="lg:col-span-5 bento-card p-6">
+        <section className="lg:col-span-5 bento-card p-6 relative">
+          <MemeSticker
+            src="/memes/meme-pepe.jpg"
+            alt="Pepe impressed by Household 58.03%"
+            tag="Household แบก 58% 👀"
+            roast="หมวดเดียวฟาดไป ฿82.49M — อีก 4 หมวดที่เหลือมองตาปริบๆ!"
+            visible={showMemes}
+            placement="corner-br"
+            tiltDeg={4}
+          />
           <div className="flex items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-base font-bold text-slate-900">
@@ -733,7 +765,16 @@ export function OverviewView({
 
       {/* Bottom Row: Top Customers Leaderboard + Funny Meme Corner */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <section className="lg:col-span-7 bento-card p-6">
+        <section className="lg:col-span-7 bento-card p-6 relative">
+          <MemeSticker
+            src="/memes/meme-nice.jpg"
+            alt="Nice VIP Customers"
+            tag="VIP Customer · NOICE 👌"
+            roast="คลิกการ์ดลูกค้าด้านล่างเพื่อเปิดประวัติช้อป 360° ได้เลย!"
+            visible={showMemes}
+            placement="corner-tr"
+            tiltDeg={5}
+          />
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div>
               <h3 className="text-base font-bold text-slate-900 inline-flex items-center gap-2">
@@ -779,6 +820,29 @@ export function OverviewView({
               </button>
             ))}
           </div>
+
+          {showMemes && (
+            <div className="mt-4 pt-3 border-t border-slate-200/70 flex flex-wrap gap-3">
+              <MemeSticker
+                src="/memes/meme-doakes.jpg"
+                alt="Doakes watching VIP spend"
+                tag="Doakes เช็ก VIP"
+                roast="คลิกรายชื่อด้านบนดูได้เลยว่าซื้อ Household เยอะขนาดไหน 👀"
+                visible={showMemes}
+                placement="inline"
+                tiltDeg={-2}
+              />
+              <MemeSticker
+                src="/memes/meme-selfie.jpg"
+                alt="Selfie monkey"
+                tag="Selfie Time 🤳"
+                roast="มีมกระจายครบทุกแท็บ! สลับแท็บ EDA / Audit / Explorer ดูต่อได้เลย"
+                visible={showMemes}
+                placement="inline"
+                tiltDeg={3}
+              />
+            </div>
+          )}
         </section>
 
         <div className="lg:col-span-5">

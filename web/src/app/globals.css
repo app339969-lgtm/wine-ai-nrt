@@ -139,3 +139,16 @@ body {
   background-size: 350% 350%;
   animation: rainbowFlow 5s linear infinite;
 }
+
+@keyframes memeBob {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--meme-rot, -3deg));
+  }
+  50% {
+    transform: translateY(-5px) rotate(calc(var(--meme-rot, -3deg) + 2.5deg));
+  }
+}
+
+.meme-sticker-bob {
+  animation: memeBob 3.6s ease-in-out infinite;
+}

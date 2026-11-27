@@ -65,8 +65,10 @@ export function DashboardClient({ summary }: DashboardClientProps) {
   const [presentationMode, setPresentationMode] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [themeMode, setThemeMode] = useState<"rainbow" | "emerald">("rainbow");
+  const [showMemes, setShowMemes] = useState(true);
 
   const isRainbow = themeMode === "rainbow";
+  const memesVisible = isRainbow && showMemes;
 
   const loadCompactData = async () => {
     setLoading(true);
@@ -194,6 +196,15 @@ export function DashboardClient({ summary }: DashboardClientProps) {
             </nav>
 
             <div className="order-2 xl:order-3 flex flex-wrap items-center gap-2">
+              {isRainbow && (
+                <button
+                  type="button"
+                  onClick={() => setShowMemes((prev) => !prev)}
+                  className="inline-flex items-center gap-1 px-3 py-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold shadow-xs transition-colors"
+                >
+                  <span>{showMemes ? "🤣 มีม: เปิด" : "🙈 มีม: ปิด"}</span>
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() =>
@@ -420,6 +431,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 filters={filters}
                 presentationMode={presentationMode}
                 isRainbow={isRainbow}
+                showMemes={memesVisible}
                 onTogglePresentation={() => setPresentationMode((prev) => !prev)}
                 onSelectFilter={handleFilterChange}
                 onDrillToExplorer={() => setActiveTab("explorer")}
@@ -427,13 +439,20 @@ export function DashboardClient({ summary }: DashboardClientProps) {
               />
             )}
             {activeTab === "eda" && (
-              <EdaInsightsView summary={summary} ageGroups={metrics.ageGroups} />
+              <EdaInsightsView
+                summary={summary}
+                ageGroups={metrics.ageGroups}
+                showMemes={memesVisible}
+              />
             )}
-            {activeTab === "audit" && <DataAuditView summary={summary} />}
+            {activeTab === "audit" && (
+              <DataAuditView summary={summary} showMemes={memesVisible} />
+            )}
             {activeTab === "explorer" && (
               <ExplorerArchView
                 dataset={dataset}
                 filteredRows={filteredRows}
+                showMemes={memesVisible}
                 onResetFilters={handleResetFilters}
                 onSelectCustomer={setSelectedCustomerId}
               />

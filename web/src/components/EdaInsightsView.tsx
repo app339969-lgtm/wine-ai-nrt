@@ -13,13 +13,15 @@ import { Target, UserCheck, Clock } from "lucide-react";
 import { formatNumber, formatTHB, type AggregatedBucket } from "@/lib/analytics";
 import type { SummaryPayload } from "@/types/dashboard";
 import { InsightCard } from "./InsightCard";
+import { MemeSticker } from "./MemeSticker";
 
 interface EdaInsightsViewProps {
   summary: SummaryPayload;
   ageGroups: AggregatedBucket[];
+  showMemes: boolean;
 }
 
-export function EdaInsightsView({ summary, ageGroups }: EdaInsightsViewProps) {
+export function EdaInsightsView({ summary, ageGroups, showMemes }: EdaInsightsViewProps) {
   const {
     before_cleaning_total_amount,
     after_cleaning_total_amount,
@@ -47,7 +49,16 @@ export function EdaInsightsView({ summary, ageGroups }: EdaInsightsViewProps) {
   return (
     <div className="space-y-6 animate-fade-up">
       {/* Descriptive Statistics Table */}
-      <section className="bento-card p-6">
+      <section className="bento-card p-6 relative">
+        <MemeSticker
+          src="/memes/meme-pepe.jpg"
+          alt="Pepe staring at Std Dev"
+          tag="Pepe อึ้ง Std. Dev."
+          roast="ก่อนตัด Outlier Std. Dev. สูงถึง ฿15,698 — พอคัด 50 บิลออกปุ๊บ ลดฮวบเหลือ ฿4,399 (-71.98%) 👀"
+          visible={showMemes}
+          placement="corner-tr"
+          tiltDeg={5}
+        />
         <div className="mb-4">
           <h3 className="text-base font-bold text-slate-900">
             สถิติเชิงพรรณนา (Descriptive Statistics: Mean / Median / Std / IQR)
@@ -219,7 +230,16 @@ export function EdaInsightsView({ summary, ageGroups }: EdaInsightsViewProps) {
           />
         </section>
 
-        <section className="lg:col-span-7 bento-card p-6 flex flex-col justify-between">
+        <section className="lg:col-span-7 bento-card p-6 flex flex-col justify-between relative">
+          <MemeSticker
+            src="/memes/meme-doakes.jpg"
+            alt="Doakes suspecting tier parity"
+            tag="Doakes สงสัย Tier 🤨"
+            roast="ทำไม Platinum กับ Basic ใช้จ่ายเฉลี่ย/คนเท่ากันเป๊ะ (~140k-144k) แบบนี้ต้องอัปเกรด Tier Rewards แล้ว!"
+            visible={showMemes}
+            placement="corner-tr"
+            tiltDeg={-5}
+          />
           <div>
             <h3 className="text-base font-bold text-slate-900 mb-3">
               เปรียบเทียบประสิทธิภาพตามระดับสมาชิก (Membership Tier Analysis)
@@ -256,13 +276,24 @@ export function EdaInsightsView({ summary, ageGroups }: EdaInsightsViewProps) {
 
       {/* 5 Strategic Insights Cards */}
       <section className="bento-card p-6">
-        <div className="mb-4">
-          <h3 className="text-base font-bold text-slate-900">
-            5 Business Insights &amp; Action Plan (พร้อม Owner และ Timeline)
-          </h3>
-          <p className="text-xs text-slate-500">
-            สรุปหลักฐานเชิงตัวเลขเพื่อใช้ต่อยอดในสไลด์นำเสนอและตัดสินใจเชิงกลยุทธ์
-          </p>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-base font-bold text-slate-900">
+              5 Business Insights &amp; Action Plan (พร้อม Owner และ Timeline)
+            </h3>
+            <p className="text-xs text-slate-500">
+              สรุปหลักฐานเชิงตัวเลขเพื่อใช้ต่อยอดในสไลด์นำเสนอและตัดสินใจเชิงกลยุทธ์
+            </p>
+          </div>
+          <MemeSticker
+            src="/memes/meme-nice.jpg"
+            alt="Nice correlation matrix"
+            tag="Price Corr +0.8123 👌"
+            roast="Verified ครบทุก KPI พร้อม Owner และ Timeline สำหรับนำเสนอกรรมการ!"
+            visible={showMemes}
+            placement="inline"
+            tiltDeg={2}
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

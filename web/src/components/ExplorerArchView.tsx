@@ -14,10 +14,12 @@ import {
 } from "lucide-react";
 import { exportRowsToCsv, formatNumber, formatTHB } from "@/lib/analytics";
 import type { CompactDataset, CompactTuple } from "@/types/dashboard";
+import { MemeSticker } from "./MemeSticker";
 
 interface ExplorerArchViewProps {
   dataset: CompactDataset;
   filteredRows: CompactTuple[];
+  showMemes: boolean;
   onResetFilters: () => void;
   onSelectCustomer: (cid: string) => void;
 }
@@ -27,6 +29,7 @@ type SortKey = "date" | "total" | "units";
 export function ExplorerArchView({
   dataset,
   filteredRows,
+  showMemes,
   onResetFilters,
   onSelectCustomer,
 }: ExplorerArchViewProps) {
@@ -70,7 +73,16 @@ export function ExplorerArchView({
   return (
     <div className="space-y-6 animate-fade-up">
       {/* Explorer Card */}
-      <section className="bento-card p-6">
+      <section className="bento-card p-6 relative">
+        <MemeSticker
+          src="/memes/meme-selfie.jpg"
+          alt="Monkey taking selfie with Explorer"
+          tag="เซลฟี่ Customer 360° 🤳"
+          roast="ลองคลิกปุ่ม Customer_ID สีเขียวสักคนสิ ดูประวัติช้อปได้ยันหมวดที่ชอบ!"
+          visible={showMemes}
+          placement="corner-tr"
+          tiltDeg={6}
+        />
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900">
@@ -243,10 +255,21 @@ export function ExplorerArchView({
       </section>
 
       {/* Performance & Architecture Evidence */}
-      <section className="bento-card p-6">
-        <div className="flex items-center gap-2 text-[#065F46] font-bold text-base mb-2">
-          <Cpu className="w-5 h-5 text-emerald-600" />
-          <span>สถาปัตยกรรมระบบและหลักฐานการออกแบบด้านประสิทธิภาพ</span>
+      <section className="bento-card p-6 relative">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+          <div className="flex items-center gap-2 text-[#065F46] font-bold text-base">
+            <Cpu className="w-5 h-5 text-emerald-600" />
+            <span>สถาปัตยกรรมระบบและหลักฐานการออกแบบด้านประสิทธิภาพ</span>
+          </div>
+          <MemeSticker
+            src="/memes/meme-pepe.jpg"
+            alt="Pepe impressed by latency"
+            tag="Zero-Latency 49.2k"
+            roast="ฟิลเตอร์ทั้ง 49,200 แถวทำงานในเบราว์เซอร์เร็วระดับมิลลิวินาที 👀⚡"
+            visible={showMemes}
+            placement="inline"
+            tiltDeg={2}
+          />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700 mt-3">
           <div className="p-4 rounded-2xl bg-[#F5FBF7] border border-emerald-950/10">

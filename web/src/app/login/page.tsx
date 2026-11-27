@@ -14,6 +14,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { MemeWidget } from "@/components/MemeWidget";
+import { MemeSticker } from "@/components/MemeSticker";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,8 +23,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [themeMode, setThemeMode] = useState<"rainbow" | "emerald">("rainbow");
+  const [showMemes, setShowMemes] = useState(true);
 
   const isRainbow = themeMode === "rainbow";
+  const memesVisible = isRainbow && showMemes;
 
   const handleQuickFill = () => {
     setEmail("judge@smartretail.th");
@@ -62,8 +65,17 @@ export default function LoginPage() {
       }`}
     >
       <div className="w-full max-w-5xl space-y-4 relative z-10 animate-fade-up">
-        {/* Theme Switcher Pill */}
-        <div className="flex justify-end">
+        {/* Theme & Scattered Meme Switcher Pills */}
+        <div className="flex flex-wrap justify-end gap-2">
+          {isRainbow && (
+            <button
+              type="button"
+              onClick={() => setShowMemes((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-xs font-bold text-slate-800 shadow-sm hover:scale-105 transition-transform"
+            >
+              <span>{showMemes ? "🤣 มีมกระจัดกระจาย: เปิด" : "🙈 มีมกระจัดกระจาย: ปิด"}</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={() =>
@@ -82,13 +94,23 @@ export default function LoginPage() {
 
         <div className="grid md:grid-cols-12 gap-6 items-stretch">
           {/* Left Hero + Meme Corner */}
-          <section
-            className={`md:col-span-6 rounded-3xl text-white p-7 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden ${
-              isRainbow
-                ? "rainbow-hero"
-                : "bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-600"
-            }`}
-          >
+          <div className="md:col-span-6 relative flex">
+            <MemeSticker
+              src="/memes/meme-pepe.jpg"
+              alt="Pepe looking surprised"
+              tag="Pepe เช็กตัวเลข"
+              roast="142.16 ล้านบาท จาก 49,200 บิลสะอาด — ตัด 50 Outliers ทิ้งไปแล้วนะจ๊ะ 👀"
+              visible={memesVisible}
+              placement="corner-tl"
+              tiltDeg={-7}
+            />
+            <section
+              className={`w-full rounded-3xl text-white p-7 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden ${
+                isRainbow
+                  ? "rainbow-hero"
+                  : "bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-600"
+              }`}
+            >
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-4 border border-white/25">
                 <Sparkles className="w-3.5 h-3.5" />
@@ -122,10 +144,29 @@ export default function LoginPage() {
             <div className="relative z-10 mt-5">
               <MemeWidget compact isRainbow={isRainbow} />
             </div>
-          </section>
+            </section>
+          </div>
 
           {/* Right Sign-In Card */}
-          <section className="md:col-span-6 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-center">
+          <section className="md:col-span-6 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-center relative">
+            <MemeSticker
+              src="/memes/meme-selfie.jpg"
+              alt="Monkey taking a selfie"
+              tag="ขอเซลฟี่ก่อน 🤳"
+              roast="ล็อกอินเข้าไปเจอแดชบอร์ดสีรุ้ง + 49,200 บิลพร้อมฟิลเตอร์ 7 มิติ!"
+              visible={memesVisible}
+              placement="corner-tr"
+              tiltDeg={6}
+            />
+            <MemeSticker
+              src="/memes/meme-nice.jpg"
+              alt="Nice meme"
+              tag="NOICE 👌"
+              roast="ข้อมูลครบทุกตาราง 0 Nulls, FK 100.0% — พร้อมให้คะแนนเต็มแล้วครับ!"
+              visible={memesVisible}
+              placement="corner-br"
+              tiltDeg={-4}
+            />
             <div className="mb-6">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#047857] text-xs font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5" />
@@ -239,6 +280,20 @@ export default function LoginPage() {
                 Instant CSV Export
               </span>
             </div>
+
+            {memesVisible && (
+              <div className="mt-5 pt-4 border-t border-slate-200/70 flex flex-wrap items-center gap-3">
+                <MemeSticker
+                  src="/memes/meme-doakes.jpg"
+                  alt="Doakes suspicious meme"
+                  tag="Doakes จับตาดู 👀"
+                  roast="รู้ทันนะว่ากำลังจะกดปุ่ม 'กรอกอัตโนมัติ' แทนการพิมพ์รหัสเอง 😎"
+                  visible={memesVisible}
+                  placement="inline"
+                  tiltDeg={-2}
+                />
+              </div>
+            )}
           </section>
         </div>
       </div>

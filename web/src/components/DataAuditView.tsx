@@ -4,12 +4,14 @@ import { useMemo, useState } from "react";
 import { CheckCircle2, Download, Filter, AlertTriangle, Database } from "lucide-react";
 import { formatNumber, formatTHB } from "@/lib/analytics";
 import type { SummaryPayload } from "@/types/dashboard";
+import { MemeSticker } from "./MemeSticker";
 
 interface DataAuditViewProps {
   summary: SummaryPayload;
+  showMemes: boolean;
 }
 
-export function DataAuditView({ summary }: DataAuditViewProps) {
+export function DataAuditView({ summary, showMemes }: DataAuditViewProps) {
   const [unitFilter, setUnitFilter] = useState<string>("ALL");
   const [catFilter, setCatFilter] = useState<string>("ALL");
 
@@ -97,7 +99,16 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
   return (
     <div className="space-y-6 animate-fade-up">
       {/* Pipeline Funnel */}
-      <section className="bento-card p-6">
+      <section className="bento-card p-6 relative">
+        <MemeSticker
+          src="/memes/meme-nice.jpg"
+          alt="Nice FK match 100%"
+          tag="NOICE 100% FK 👌"
+          roast="49,200 แถวสะอาด 0 Nulls และตัวเลข DuckDB Parity ตรงเป๊ะทุกบาท!"
+          visible={showMemes}
+          placement="corner-tr"
+          tiltDeg={5}
+        />
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900">
@@ -174,7 +185,16 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
       </div>
 
       {/* Outliers Audit Log Table */}
-      <section className="bento-card p-6">
+      <section className="bento-card p-6 relative">
+        <MemeSticker
+          src="/memes/meme-doakes.jpg"
+          alt="Doakes catching 50 outliers"
+          tag="Doakes จับได้ 50 บิล 🚨"
+          roast="แอบสั่ง 999 / 1,200 / 1,500 ชิ้นต่อบิลจนกินยอด 14.54M — แยกมาส่องตรงนี้ให้หมดแล้ว!"
+          visible={showMemes}
+          placement="corner-tr"
+          tiltDeg={-4}
+        />
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h3 className="text-base font-bold text-slate-900">
@@ -183,6 +203,17 @@ export function DataAuditView({ summary }: DataAuditViewProps) {
             <p className="text-xs text-slate-500">
               รายการที่ถูกแยกออกจากชุดวิเคราะห์หลักเพื่อให้ฝ่ายปฏิบัติการ/B2B ตรวจสอบย้อนกลับ
             </p>
+            <div className="mt-2">
+              <MemeSticker
+                src="/memes/meme-pepe.jpg"
+                alt="Pepe checking unit filter"
+                tag="IQR > 38.5 ชิ้น"
+                roast="ถ้าใช้ Total_Amount จะตัดบิล Household ปกติทิ้ง 5,250 แถว ดีนะที่ใช้ Units_Sold!"
+                visible={showMemes}
+                placement="inline"
+                tiltDeg={-2}
+              />
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-600">
