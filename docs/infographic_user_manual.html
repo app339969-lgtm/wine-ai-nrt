@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infographic User Manual — SmartRetail Thailand</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1400px;
+      background: #f5fbf7;
+      background-image:
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.14) 0px, transparent 48%),
+        radial-gradient(at 100% 20%, rgba(20, 184, 166, 0.12) 0px, transparent 45%),
+        radial-gradient(at 50% 100%, rgba(167, 243, 208, 0.22) 0px, transparent 55%);
+      font-family: "Leelawadee UI", "Tahoma", "Segoe UI", sans-serif;
+      color: #0f172a;
+      padding: 26px 36px;
+    }
+    .poster {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #065f46 0%, #047857 52%, #0d9488 100%);
+      color: #ffffff;
+      border-radius: 24px;
+      padding: 28px 34px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 20px 40px -18px rgba(6, 95, 70, 0.45);
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #d1fae5;
+      max-width: 780px;
+      line-height: 1.5;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      min-width: 340px;
+    }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 18px;
+      padding: 14px 18px;
+      text-align: center;
+    }
+    .stat-pill .num {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .stat-pill .lbl {
+      font-size: 13px;
+      color: #d1fae5;
+      margin-top: 2px;
+    }
+    .section {
+      background: #ffffff;
+      border: 1px solid #d1e7da;
+      border-radius: 22px;
+      padding: 20px 26px;
+      box-shadow: 0 12px 30px -16px rgba(5, 150, 105, 0.16);
+    }
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .sec-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #059669, #0d9488);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sec-title h2 {
+      font-size: 23px;
+      font-weight: 800;
+      color: #065f46;
+    }
+    .sec-title p {
+      font-size: 14px;
+      color: #475569;
+      margin-top: 2px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: #f5fbf7;
+      border: 1px solid #cce7d7;
+      border-radius: 16px;
+      padding: 14px 16px;
+      position: relative;
+    }
+    .card-step {
+      display: inline-block;
+      background: #047857;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #065f46;
+      margin-bottom: 8px;
+    }
+    .card p, .card li {
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.55;
+    }
+    .card ul {
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+    .metric-big {
+      font-size: 26px;
+      font-weight: 800;
+      color: #047857;
+      margin: 6px 0;
+    }
+    .formula-box {
+      background: #ffffff;
+      border: 1px dashed #34d399;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #065f46;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    .login-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, #ecfdf5, #f0fdfa);
+      border: 1px solid #a7f3d0;
+      border-radius: 16px;
+      padding: 16px 24px;
+      margin-bottom: 18px;
+    }
+    .login-box strong { color: #065f46; font-size: 16px; }
+    .login-code {
+      font-family: Consolas, monospace;
+      background: #ffffff;
+      border: 1px solid #a7f3d0;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #047857;
+      margin-left: 6px;
+    }
+    .footer {
+      background: #064e3b;
+      color: #d1fae5;
+      border-radius: 16px;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <!-- Header -->
+    <header class="hero">
+      <div>
+        <div class="badge">INFOGRAPHIC USER MANUAL · คู่มือการใช้งานและแนวคิดการวิเคราะห์ข้อมูล</div>
+        <h1>SmartRetail Thailand Analytics Dashboard</h1>
+        <p>
+          ระบบวิเคราะห์พฤติกรรมลูกค้าและประสิทธิภาพยอดขายค้าปลีก (หน้าร้าน &amp; ออนไลน์)
+          ออกแบบตามเกณฑ์มาตรฐาน อศท. ครบวงจรตั้งแต่ Data Pipeline จนถึง Executive Command Center
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <div class="num">49,200</div>
+          <div class="lbl">Clean Transactions</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">100.0%</div>
+          <div class="lbl">FK Match Rate</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">฿142.16M</div>
+          <div class="lbl">Clean Revenue</div>
+        </div>
+        <div class="stat-pill">
+          <div class="num">≤ 3 คลิก</div>
+          <div class="lbl">Overview → Detail</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Section 1: Data Analysis Methodology -->
+    <section class="section">
+      <div class="sec-head">
+        <div class="sec-num">1</div>
+        <div class="sec-title">
+          <h2>แนวคิดและกระบวนการวิเคราะห์ข้อมูล (End-to-End Analytical Workflow)</h2>
+          <p>เปลี่ยนข้อมูลดิบ 50,000 รายการให้สะอาด ถูกต้องทางสถิติ และพร้อมตัดสินใจเชิงธุรกิจ</p>
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="card">
+          <span class="card-step">STEP 1 · INGEST &amp; VALIDATE</span>
+          <h3>ตรวจสอบข้อมูลดิบ</h3>
+          <div class="metric-big">50,000 บิล</div>
+          <p>เชื่อมตารางธุรกรรมกับข้อมูลลูกค้า <strong>1,000 ราย</strong> ด้วย Primary / Foreign Key (<code>Customer_ID</code>)</p>
+          <div class="formula-box">FK Match Rate = 100.0% (เกณฑ์ ≥ 99%)</div>
+        </div>
+        <div class="card">
+          <span class="card-step">STEP 2 · DATA CLEANING</span>
+          <h3>ทำความสะอาดเชิงสถิติ</h3>
+          <div class="metric-big">-750 / -50</div>
+          <p>ตัด Dual-Missing <strong>750 แถว</strong> (1.5%) และแยก Extreme Outliers <strong>50 แถว</strong> (999/1,200/1,500 ชิ้น) ลง Audit Log</p>
+          <div class="formula-box">IQR &gt; 38.5 และ |Z| &gt; 3 (&gt; 135.45) ตรงกัน</div>
+        </div>
+        <div class="card">
+          <span class="card-step">STEP 3 · EDA &amp; CORRELATION</span>
+          <h3>ค้นหา Insight เชิงลึก</h3>
+          <div class="metric-big">r = +0.8123</div>
+          <p>วิเคราะห์ Mean/Median/Std/IQR, แนวโน้มรายเดือน/ไตรมาส และ Pearson Correlation</p>
+          <div class="formula-box">Household 58.03% · Online 55.53%</div>
+        </div>
+        <div class="card">
+          <span class="card-step">STEP 4 · ACTIONABLE BI</span>
+          <h3>What → So What → Now What</h3>
+          <div class="metric-big">5 กลยุทธ์หลัก</div>
+          <p>สรุปคำแนะนำใต้ทุกกราฟ พร้อมผู้รับผิดชอบและกรอบเวลาที่นำไปปฏิบัติจริงได้</p>
+          <div class="formula-box">ลด Std ความแปรปรวนเทียม -71.98%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: System User Manual -->
+    <section class="section">
+      <div class="sec-head">
+        <div class="sec-num">2</div>
+        <div class="sec-title">
+          <h2>คู่มือการใช้งานระบบ Dashboard (หาคำตอบได้ภายใน 3–4 คลิก)</h2>
+          <p>รองรับทั้งการใช้งานออนไลน์ผ่าน Vercel Cloud และโหมดสำรองออฟไลน์ผ่าน run_dashboard.bat</p>
+        </div>
+      </div>
+
+      <div class="login-box">
+        <div>
+          <strong>การเข้าสู่ระบบทดสอบ (Test Login)</strong> — เปิดหน้าเว็บแล้วกดปุ่ม <em>"กรอกอัตโนมัติ"</em> หรือกรอกข้อมูล:
+        </div>
+        <div>
+          User:<span class="login-code">judge@smartretail.th</span>
+          &nbsp;&nbsp;Password:<span class="login-code">SmartRetail2025</span>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="card">
+          <span class="card-step">TAB 1 · OVERVIEW</span>
+          <h3>ภาพรวมผู้บริหาร</h3>
+          <ul>
+            <li>ดู 4 KPIs พร้อม Sparkline และ Quarterly Strip</li>
+            <li>กดปุ่ม <strong>"เทียบเส้น Raw"</strong> เพื่อดูผลกระทบ Outlier</li>
+            <li>คลิกแท่งกราฟหรือ Donut เพื่อ Filter ทันที</li>
+            <li>คลิกชื่อลูกค้าใน <strong>Leaderboard</strong> ดูประวัติ 360°</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="card-step">TAB 2 · EDA &amp; INSIGHTS</span>
+          <h3>สถิติและความสัมพันธ์</h3>
+          <ul>
+            <li>เทียบตาราง Mean, Median, Std, IQR ก่อน/หลัง Clean</li>
+            <li>ดู Histogram จำนวนชิ้น (1–24 ชิ้น)</li>
+            <li>อ่าน Correlation Heatmap และกราฟช่วงอายุ</li>
+            <li>ดู 5 Action Cards พร้อม Owner &amp; Timeline</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="card-step">TAB 3 · DATA AUDIT</span>
+          <h3>ตรวจสอบคุณภาพข้อมูล</h3>
+          <ul>
+            <li>ติดตาม Pipeline Funnel 50,000 → 49,200 แถว</li>
+            <li>ตรวจสอบ Missing 750 แถวแยกตามหมวดหมู่</li>
+            <li>ค้นหาและกรอง Outliers Audit Log 50 บิล</li>
+            <li>กดปุ่ม <strong>Export Audit CSV</strong> แยกตรวจสอบได้</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="card-step">TAB 4 · EXPLORER &amp; EXPORT</span>
+          <h3>เจาะลึกและส่งออก</h3>
+          <ul>
+            <li>ค้นหาบิลด้วยรหัส <code>TXN-</code> หรือ <code>CUST-</code></li>
+            <li>คลิก <code>Customer_ID</code> เปิด Customer 360° Drawer</li>
+            <li>กด <strong>Export Filtered CSV</strong> โหลดข้อมูลตามตัวกรอง</li>
+            <li>กด <strong>"โหมดนำเสนอ"</strong> ขยายเต็มจอโปรเจกเตอร์</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Filters, System States & Offline Fallback -->
+    <section class="section">
+      <div class="sec-head">
+        <div class="sec-num">3</div>
+        <div class="sec-title">
+          <h2>ตัวกรองอัจฉริยะ 7 มิติ, การแจ้งสถานะระบบ และระบบสำรองออฟไลน์</h2>
+          <p>ออกแบบตามหลัก Accessibility (Contrast ≥ 4.5:1) และความเร็วระดับมิลลิวินาทีด้วย Pre-Aggregated + Compact Engine</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Interactive Filters &amp; Chips</h3>
+          <p>กรองพร้อมกันได้ 7 มิติ (Quarter, Category, Channel, Region, Membership Tier, Payment, Age Group) พร้อมแถบ Chip ให้คลิก <code>×</code> ล้างทีละเงื่อนไข</p>
+        </div>
+        <div class="card">
+          <h3>System States ครบ 3 สถานะ</h3>
+          <p>แสดง <strong>Loading Skeleton</strong> ระหว่างโหลด, <strong>Empty State</strong> พร้อมปุ่มล้างตัวกรองเมื่อไม่พบข้อมูล, และ <strong>Error Handling</strong> พร้อมปุ่มโหลดซ้ำ</p>
+        </div>
+        <div class="card">
+          <h3>Online &amp; Offline Backup</h3>
+          <p>ใช้งานผ่าน Cloud URL (Vercel) หรือดับเบิลคลิก <code>run_dashboard.bat</code> บน Windows เพื่อเปิดระบบออฟไลน์ที่ <code>http://localhost:3000</code></p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>SmartRetail Thailand · Data Analytics Competition (ปวช. ระดับจังหวัด)</span>
+      <span>Verified Dataset: 49,200 Clean Rows · ฿142,156,505 Clean Revenue · 0 Nulls</span>
+    </footer>
+  </div>
+</body>
+</html>
