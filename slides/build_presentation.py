@@ -543,7 +543,7 @@ def build_deck() -> Path:
         [
             ("สถาปัตยกรรมความเร็วสูง", "Next.js + Pre-aggregated summary.json (38.7 KB) + Compact 49,200 rows กรองหลายมิติระดับมิลลิวินาที"),
             ("Overview → Detail ≤ 3 คลิก", "คลิกกราฟเพื่อ Filter, กดแถวลูกค้าเปิด Customer 360° Drawer, พร้อม Loading / Empty / Error States"),
-            ("การใช้งานจริง & สำรองออฟไลน์", "Deploy บน Vercel Cloud พร้อม Test Login (judge@smartretail.th / SmartRetail2025) และ run_dashboard.bat ออฟไลน์"),
+            ("การใช้งานจริง & สำรองออฟไลน์", "URL จริง: https://wine-ai-nrt.vercel.app (Login: judge@smartretail.th / SmartRetail2025) และมี run_dashboard.bat ออฟไลน์"),
             ("การส่งออกและคู่มือ", "กด Export Filtered CSV ได้ทันที พร้อม Infographic User Manual และ Presentation Mode เต็มจอ"),
         ],
         font_size=14,
@@ -607,7 +607,7 @@ def build_deck() -> Path:
             ("เหตุผลที่ Drop Missing 750 แถว", "ขาดทั้ง Units_Sold และ Total_Amount พร้อมกัน (1.50%) — ไม่มีค่าอ้างอิงให้ Impute ได้แม่นยำ"),
             ("เหตุผลที่ตรวจ Outlier บน Units_Sold แทน Total_Amount", "IQR บน Total_Amount (฿6,450) จะตัดบิลปกติของ Household ออกผิดพลาด 5,250 แถว ส่วน Units_Sold ตรงกันทั้ง IQR (>38.5) และ |Z|>3 ที่ 50 แถวพอดี"),
             ("การตรวจสอบย้อนกลับอัตโนมัติ", "test_clean_data.py และ test_web_data.py ผ่าน 7/7 tests (0 mismatches across 49,200 rows) + DuckDB Parquet parity 100%"),
-            ("ขอบคุณคณะกรรมการ", "พร้อมตอบคำถามเชิงเทคนิคและสาธิตระบบจริงครับ (Demo Login: judge@smartretail.th / SmartRetail2025)"),
+            ("ขอบคุณคณะกรรมการ", "พร้อมตอบคำถามเชิงเทคนิคและสาธิตระบบจริงครับ (https://wine-ai-nrt.vercel.app | judge@smartretail.th / SmartRetail2025)"),
         ],
         font_size=14,
     )

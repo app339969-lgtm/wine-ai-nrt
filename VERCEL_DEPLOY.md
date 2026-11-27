@@ -1,5 +1,7 @@
 # คู่มือเชื่อมต่อ GitHub กับ Vercel (https://vercel.com/app339969-8085)
 
+> **Live Production URL (Verified)**: [https://wine-ai-nrt.vercel.app](https://wine-ai-nrt.vercel.app)
+
 โปรเจกต์ Next.js Dashboard ถูกสร้างและทดสอบเรียบร้อยแล้วในโฟลเดอร์ `web/` และซิงค์อยู่บน GitHub repository `https://github.com/app339969-lgtm/wine-ai-nrt` (branch `main`)
 
 ---
