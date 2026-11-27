@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   LogOut,
   Minimize2,
+  Palette,
   Presentation,
   RotateCcw,
   ShieldAlert,
@@ -63,6 +64,9 @@ export function DashboardClient({ summary }: DashboardClientProps) {
   const [error, setError] = useState<string | null>(null);
   const [presentationMode, setPresentationMode] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
+  const [themeMode, setThemeMode] = useState<"rainbow" | "emerald">("rainbow");
+
+  const isRainbow = themeMode === "rainbow";
 
   const loadCompactData = async () => {
     setLoading(true);
@@ -130,13 +134,21 @@ export function DashboardClient({ summary }: DashboardClientProps) {
   ];
 
   return (
-    <div className="min-h-screen text-slate-900 pb-20">
-      {/* Floating Glassmorphic Header (hidden in Presentation Mode for full projector clarity) */}
+    <div
+      className={`min-h-screen text-slate-900 pb-20 ${
+        isRainbow ? "theme-rainbow" : "theme-emerald"
+      }`}
+    >
+      {/* Floating Glassmorphic Header */}
       {!presentationMode && (
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-emerald-950/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-slate-200/80">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-600 text-white flex items-center justify-center font-extrabold text-base shadow-md shadow-emerald-600/20">
+              <div
+                className={`w-10 h-10 rounded-2xl text-white flex items-center justify-center font-extrabold text-base shadow-md ${
+                  isRainbow ? "rainbow-btn" : "bg-gradient-to-br from-emerald-600 to-teal-600"
+                }`}
+              >
                 SR
               </div>
               <div>
@@ -144,7 +156,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                   <h1 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
                     SmartRetail <span className="text-emerald-700">Analytics</span>
                   </h1>
-                  <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-[#047857]">
+                  <span className="hidden xl:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-[#047857]">
                     <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                     {loading ? "Syncing..." : "49,200 Verified"}
                   </span>
@@ -158,7 +170,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
             {/* Segmented Pill Tabs */}
             <nav
               aria-label="Dashboard sections"
-              className="order-3 lg:order-2 w-full lg:w-auto flex items-center gap-1 p-1 rounded-full bg-emerald-950/5 overflow-x-auto"
+              className="order-3 xl:order-2 w-full xl:w-auto flex items-center gap-1 p-1 rounded-full bg-slate-900/5 overflow-x-auto"
             >
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -168,10 +180,10 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                       active
-                        ? "bg-white text-[#065F46] shadow-xs"
-                        : "text-slate-600 hover:text-emerald-800"
+                        ? "bg-white text-slate-900 shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -181,21 +193,35 @@ export function DashboardClient({ summary }: DashboardClientProps) {
               })}
             </nav>
 
-            <div className="order-2 lg:order-3 flex items-center gap-2">
+            <div className="order-2 xl:order-3 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setThemeMode((prev) => (prev === "rainbow" ? "emerald" : "rainbow"))
+                }
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold shadow-xs transition-colors"
+              >
+                <Palette className="w-3.5 h-3.5 text-pink-500" />
+                <span>{isRainbow ? "🌈 Rainbow" : "🌿 Emerald"}</span>
+              </button>
               <button
                 type="button"
                 onClick={() => setPresentationMode(true)}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-[#065F46] text-xs font-bold transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold transition-colors"
               >
                 <Presentation className="w-3.5 h-3.5" />
-                <span>โหมดนำเสนอ</span>
+                <span>นำเสนอ</span>
               </button>
               {dataset && (
                 <button
                   type="button"
                   onClick={() => exportRowsToCsv(dataset, filteredRows)}
                   disabled={filteredRows.length === 0}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50"
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50 ${
+                    isRainbow
+                      ? "rainbow-btn"
+                      : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                  }`}
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Export ({formatNumber(filteredRows.length)})</span>
@@ -204,10 +230,9 @@ export function DashboardClient({ summary }: DashboardClientProps) {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-emerald-950/15 bg-white hover:bg-emerald-50/50 text-slate-700 text-xs font-semibold transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">ออก</span>
               </button>
             </div>
           </div>
@@ -215,11 +240,10 @@ export function DashboardClient({ summary }: DashboardClientProps) {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
-        {/* Modern Floating Bento Filter Bar (collapsed in Presentation Mode) */}
         {!presentationMode && dataset && (
           <section className="bento-card p-4 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-[#065F46]">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
                 <SlidersHorizontal className="w-4 h-4 text-emerald-600" />
                 <span>ตัวกรองอัจฉริยะ (Interactive Filters)</span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold">
@@ -243,7 +267,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="ไตรมาส"
                 value={filters.quarter}
                 onChange={(e) => handleFilterChange("quarter", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกไตรมาส (2025)</option>
                 {dataset.lookups.Quarter.map((q) => (
@@ -257,7 +281,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="หมวดหมู่สินค้า"
                 value={filters.category}
                 onChange={(e) => handleFilterChange("category", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกหมวดหมู่</option>
                 {dataset.lookups.Category.map((c) => (
@@ -271,7 +295,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="ช่องทางการขาย"
                 value={filters.channel}
                 onChange={(e) => handleFilterChange("channel", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกช่องทาง</option>
                 {dataset.lookups.Channel.map((c) => (
@@ -285,7 +309,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="ภูมิภาค"
                 value={filters.region}
                 onChange={(e) => handleFilterChange("region", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกภูมิภาค</option>
                 {dataset.lookups.Region.map((r) => (
@@ -299,7 +323,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="ระดับสมาชิก"
                 value={filters.tier}
                 onChange={(e) => handleFilterChange("tier", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกระดับสมาชิก</option>
                 {dataset.lookups.Membership_Tier.map((t) => (
@@ -313,7 +337,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="วิธีชำระเงิน"
                 value={filters.payment}
                 onChange={(e) => handleFilterChange("payment", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกวิธีชำระเงิน</option>
                 {dataset.lookups.Payment_Method.map((p) => (
@@ -327,7 +351,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 aria-label="ช่วงอายุ"
                 value={filters.ageGroup}
                 onChange={(e) => handleFilterChange("ageGroup", e.target.value)}
-                className="px-3 py-2 rounded-xl border border-emerald-950/15 bg-[#F5FBF7] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="ALL">ทุกช่วงอายุ</option>
                 {dataset.lookups.Age_Group.map((a) => (
@@ -345,7 +369,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                     key={key}
                     type="button"
                     onClick={() => handleFilterChange(key, "ALL")}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 hover:bg-emerald-200/80 text-[#065F46] text-xs font-semibold transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold transition-colors"
                   >
                     <span>
                       {FILTER_LABELS[key]}: <strong>{val}</strong>
@@ -358,20 +382,18 @@ export function DashboardClient({ summary }: DashboardClientProps) {
           </section>
         )}
 
-        {/* Loading Skeleton State */}
         {loading && (
           <div className="space-y-4 animate-pulse" aria-label="Loading dashboard">
-            <div className="h-44 rounded-3xl bg-emerald-900/10" />
+            <div className="h-44 rounded-3xl bg-white/70" />
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-32 rounded-2xl bg-white/80 border border-emerald-950/10" />
+                <div key={i} className="h-32 rounded-2xl bg-white/80" />
               ))}
             </div>
-            <div className="h-80 rounded-2xl bg-white/80 border border-emerald-950/10" />
+            <div className="h-80 rounded-2xl bg-white/80" />
           </div>
         )}
 
-        {/* Error State */}
         {error && !loading && (
           <div
             role="alert"
@@ -389,7 +411,6 @@ export function DashboardClient({ summary }: DashboardClientProps) {
           </div>
         )}
 
-        {/* Active View Content */}
         {!loading && !error && dataset && metrics && (
           <>
             {activeTab === "overview" && (
@@ -398,6 +419,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 monthlyRawComparison={summary.monthlySeries}
                 filters={filters}
                 presentationMode={presentationMode}
+                isRainbow={isRainbow}
                 onTogglePresentation={() => setPresentationMode((prev) => !prev)}
                 onSelectFilter={handleFilterChange}
                 onDrillToExplorer={() => setActiveTab("explorer")}
@@ -420,9 +442,8 @@ export function DashboardClient({ summary }: DashboardClientProps) {
         )}
       </main>
 
-      {/* Floating Bottom Quick-Dock in Presentation Mode */}
       {presentationMode && (
-        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full bg-emerald-950/90 backdrop-blur-xl text-white shadow-2xl border border-white/15">
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-900/90 backdrop-blur-xl text-white shadow-2xl border border-white/15">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -432,7 +453,7 @@ export function DashboardClient({ summary }: DashboardClientProps) {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  active ? "bg-emerald-500 text-white" : "text-emerald-100 hover:bg-white/10"
+                  active ? `${isRainbow ? "rainbow-btn" : "bg-emerald-500"} text-white` : "text-slate-200 hover:bg-white/10"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -440,6 +461,13 @@ export function DashboardClient({ summary }: DashboardClientProps) {
               </button>
             );
           })}
+          <button
+            type="button"
+            onClick={() => setThemeMode((prev) => (prev === "rainbow" ? "emerald" : "rainbow"))}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-xs font-bold"
+          >
+            <span>{isRainbow ? "🌿" : "🌈"}</span>
+          </button>
           <button
             type="button"
             onClick={() => setPresentationMode(false)}
@@ -451,7 +479,6 @@ export function DashboardClient({ summary }: DashboardClientProps) {
         </div>
       )}
 
-      {/* Customer 360 Slide-Over Drawer */}
       <CustomerDrawer
         profile={selectedCustomerProfile}
         onClose={() => setSelectedCustomerId(null)}

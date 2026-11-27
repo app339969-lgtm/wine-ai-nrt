@@ -35,21 +35,24 @@ import {
 import type { DashboardFilters, MonthlyPoint } from "@/types/dashboard";
 import { AnimatedNumber } from "./AnimatedNumber";
 import { InsightCard } from "./InsightCard";
+import { MemeWidget } from "./MemeWidget";
 
-const MODERN_GREENS = ["#047857", "#059669", "#10B981", "#14B8A6", "#34D399"];
+const EMERALD_PALETTE = ["#047857", "#059669", "#10B981", "#14B8A6", "#34D399"];
+const RAINBOW_PALETTE = ["#F43F5E", "#F59E0B", "#10B981", "#06B6D4", "#6366F1", "#EC4899"];
 
 interface OverviewViewProps {
   metrics: ComputedDashboardMetrics;
   monthlyRawComparison: MonthlyPoint[];
   filters: DashboardFilters;
   presentationMode: boolean;
+  isRainbow: boolean;
   onTogglePresentation: () => void;
   onSelectFilter: (key: keyof DashboardFilters, value: string) => void;
   onDrillToExplorer: () => void;
   onSelectCustomer: (cid: string) => void;
 }
 
-function MiniSparkline({ values }: { values: number[] }) {
+function MiniSparkline({ values, stroke }: { values: number[]; stroke: string }) {
   if (values.length < 2) return null;
   const min = Math.min(...values);
   const max = Math.max(...values);
@@ -66,7 +69,7 @@ function MiniSparkline({ values }: { values: number[] }) {
     <svg width="80" height="28" viewBox="0 0 80 28" className="overflow-visible" aria-hidden="true">
       <polyline
         fill="none"
-        stroke="#10B981"
+        stroke={stroke}
         strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -81,6 +84,7 @@ export function OverviewView({
   monthlyRawComparison,
   filters,
   presentationMode,
+  isRainbow,
   onTogglePresentation,
   onSelectFilter,
   onDrillToExplorer,
@@ -88,6 +92,7 @@ export function OverviewView({
 }: OverviewViewProps) {
   const [showRawCompare, setShowRawCompare] = useState(false);
 
+  const palette = isRainbow ? RAINBOW_PALETTE : EMERALD_PALETTE;
   const hasActiveFilter = Object.values(filters).some((v) => v !== "ALL");
   const chartMonthlyData =
     showRawCompare && !hasActiveFilter
@@ -116,6 +121,7 @@ export function OverviewView({
       sub: `${formatTHB(metrics.totalRevenue)} บาท`,
       icon: Banknote,
       spark: revSpark,
+      color: isRainbow ? "#F43F5E" : "#10B981",
     },
     {
       label: "Clean Orders",
@@ -125,6 +131,7 @@ export function OverviewView({
       sub: `รวม ${formatNumber(metrics.totalUnits)} ชิ้น`,
       icon: Receipt,
       spark: txnSpark,
+      color: isRainbow ? "#F59E0B" : "#10B981",
     },
     {
       label: "Avg Order Value",
@@ -134,6 +141,7 @@ export function OverviewView({
       sub: `เฉลี่ย ${metrics.totalTxns > 0 ? (metrics.totalUnits / metrics.totalTxns).toFixed(2) : "0"} ชิ้น/บิล`,
       icon: ShoppingBag,
       spark: aovSpark,
+      color: isRainbow ? "#06B6D4" : "#10B981",
     },
     {
       label: "Active Customers",
@@ -143,6 +151,7 @@ export function OverviewView({
       sub: `เฉลี่ย ${metrics.uniqueCustomers > 0 ? (metrics.totalTxns / metrics.uniqueCustomers).toFixed(1) : "0"} บิล/คน`,
       icon: Users,
       spark: unitSpark,
+      color: isRainbow ? "#8B5CF6" : "#10B981",
     },
   ];
 
@@ -166,32 +175,42 @@ export function OverviewView({
   return (
     <div className="space-y-6 animate-fade-up">
       {/* Grand Executive Hero Command Banner */}
-      <section className="rounded-3xl bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600 text-white p-6 sm:p-8 shadow-xl shadow-emerald-900/15 relative overflow-hidden">
-        <div className="pointer-events-none absolute -right-16 -top-16 w-72 h-72 rounded-full bg-emerald-400/20 blur-3xl" />
-        <div className="pointer-events-none absolute left-1/3 -bottom-20 w-64 h-64 rounded-full bg-teal-300/20 blur-3xl" />
+      <section
+        className={`rounded-3xl text-white p-6 sm:p-8 shadow-xl relative overflow-hidden ${
+          isRainbow
+            ? "rainbow-hero"
+            : "bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-600"
+        }`}
+      >
+        <div className="pointer-events-none absolute -right-16 -top-16 w-72 h-72 rounded-full bg-white/15 blur-3xl" />
+        <div className="pointer-events-none absolute left-1/3 -bottom-20 w-64 h-64 rounded-full bg-white/15 blur-3xl" />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
           <div className="lg:col-span-7 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold text-emerald-50">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
-              <span>SmartRetail Thailand · Executive Command Center</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-xs font-semibold text-white">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>
+                {isRainbow
+                  ? "🌈 SmartRetail Thailand · Rainbow Command Center"
+                  : "SmartRetail Thailand · Executive Command Center"}
+              </span>
             </div>
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums">
                 <AnimatedNumber value={metrics.totalRevenue} formatter={(v) => formatTHB(v, true)} />
               </h2>
-              <span className="text-sm text-emerald-100/90 font-medium tabular-nums">
+              <span className="text-sm text-white/90 font-medium tabular-nums">
                 ({formatTHB(metrics.totalRevenue)} บาท · {formatNumber(metrics.totalTxns)} บิลสะอาด)
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-emerald-50/90 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/90 max-w-2xl leading-relaxed">
               สรุปภาพรวมประสิทธิภาพยอดขายค้าปลีกออนไลน์และหน้าร้านปี 2025 พร้อมตัวกรองอัจฉริยะ 7 มิติ การเจาะลึก Customer 360° และการส่งออกข้อมูลทันที
             </p>
             <div className="flex flex-wrap items-center gap-2.5 pt-1">
               <button
                 type="button"
                 onClick={onDrillToExplorer}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#065F46] hover:bg-emerald-50 text-xs font-bold shadow-sm transition-all"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-slate-900 hover:bg-slate-50 text-xs font-bold shadow-sm transition-all"
               >
                 <span>เจาะลึกรายการบิล</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -199,7 +218,7 @@ export function OverviewView({
               <button
                 type="button"
                 onClick={onTogglePresentation}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs font-bold backdrop-blur-md transition-all"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 border border-white/30 text-white text-xs font-bold backdrop-blur-md transition-all"
               >
                 <Presentation className="w-3.5 h-3.5" />
                 <span>{presentationMode ? "ออกจากโหมดนำเสนอ" : "โหมดนำเสนอกรรมการ"}</span>
@@ -207,17 +226,16 @@ export function OverviewView({
             </div>
           </div>
 
-          {/* Right Quality Score Ring & Quarterly Strip */}
           <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-5 gap-3 items-center">
-            <div className="sm:col-span-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 p-4 flex flex-col items-center text-center">
+            <div className="sm:col-span-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 p-4 flex flex-col items-center text-center">
               <div className="relative w-20 h-20 flex items-center justify-center">
                 <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-                  <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.2)" strokeWidth="7" fill="none" />
+                  <circle cx="40" cy="40" r="32" stroke="rgba(255,255,255,0.25)" strokeWidth="7" fill="none" />
                   <circle
                     cx="40"
                     cy="40"
                     r="32"
-                    stroke="#A7F3D0"
+                    stroke="#FFFFFF"
                     strokeWidth="7"
                     strokeLinecap="round"
                     strokeDasharray="201"
@@ -227,11 +245,11 @@ export function OverviewView({
                 </svg>
                 <span className="absolute text-sm font-extrabold tabular-nums">100%</span>
               </div>
-              <p className="text-[11px] font-bold text-emerald-50 mt-1 inline-flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-200" />
+              <p className="text-[11px] font-bold text-white mt-1 inline-flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5" />
                 FK Integrity
               </p>
-              <p className="text-[10px] text-emerald-100/80">0 Nulls · 50 Audited</p>
+              <p className="text-[10px] text-white/85">0 Nulls · 50 Audited</p>
             </div>
 
             <div className="sm:col-span-3 grid grid-cols-2 gap-2">
@@ -247,11 +265,11 @@ export function OverviewView({
                     }
                     className={`text-left rounded-xl p-2.5 border transition-all ${
                       filters.quarter === q.name
-                        ? "bg-white text-[#065F46] border-white shadow-sm"
-                        : "bg-white/10 hover:bg-white/20 text-white border-white/15"
+                        ? "bg-white text-slate-900 border-white shadow-sm"
+                        : "bg-white/15 hover:bg-white/25 text-white border-white/20"
                     }`}
                   >
-                    <div className="flex items-center justify-between text-[10px] font-bold opacity-85">
+                    <div className="flex items-center justify-between text-[10px] font-bold opacity-90">
                       <span>{q.name}</span>
                       {qoq !== null && (
                         <span>{`${qoq >= 0 ? "+" : ""}${qoq.toFixed(1)}%`}</span>
@@ -276,12 +294,19 @@ export function OverviewView({
             <div key={kpi.label} className="bento-card-interactive p-5 flex flex-col justify-between">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600">
+                  <span
+                    className="text-[11px] font-bold uppercase tracking-wider"
+                    style={{ color: kpi.color }}
+                  >
                     {kpi.label}
                   </span>
                   <p className="text-xs font-medium text-slate-500">{kpi.thLabel}</p>
                 </div>
-                <div className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-sm">
+                <div
+                  className={`p-2.5 rounded-xl text-white shadow-sm ${
+                    isRainbow ? "rainbow-btn" : "bg-gradient-to-br from-emerald-500 to-teal-500"
+                  }`}
+                >
                   <Icon className="w-4 h-4" />
                 </div>
               </div>
@@ -293,7 +318,7 @@ export function OverviewView({
                   </p>
                   <p className="text-xs text-slate-500 mt-0.5 tabular-nums">{kpi.sub}</p>
                 </div>
-                <MiniSparkline values={kpi.spark} />
+                <MiniSparkline values={kpi.spark} stroke={kpi.color} />
               </div>
             </div>
           );
@@ -318,8 +343,8 @@ export function OverviewView({
                 onClick={() => setShowRawCompare((prev) => !prev)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                   showRawCompare
-                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-transparent shadow-sm"
-                    : "bg-emerald-50/70 text-[#065F46] border-emerald-200 hover:bg-emerald-100/70"
+                    ? `${isRainbow ? "rainbow-btn" : "bg-emerald-600"} text-white border-transparent shadow-sm`
+                    : "bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100"
                 }`}
               >
                 {showRawCompare ? "กำลังเทียบเส้น Raw" : "เทียบเส้น Raw (ก่อน Clean)"}
@@ -331,12 +356,22 @@ export function OverviewView({
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartMonthlyData} margin={{ top: 10, right: 16, left: 8, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="modernCleanFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.32} />
-                    <stop offset="95%" stopColor="#14B8A6" stopOpacity={0.02} />
+                  <linearGradient id="modernCleanFill" x1="0" y1="0" x2="1" y2="1">
+                    {isRainbow ? (
+                      <>
+                        <stop offset="0%" stopColor="#F43F5E" stopOpacity={0.32} />
+                        <stop offset="50%" stopColor="#10B981" stopOpacity={0.28} />
+                        <stop offset="100%" stopColor="#6366F1" stopOpacity={0.25} />
+                      </>
+                    ) : (
+                      <>
+                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.32} />
+                        <stop offset="95%" stopColor="#14B8A6" stopOpacity={0.02} />
+                      </>
+                    )}
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                 <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#475569" }} axisLine={false} tickLine={false} />
                 <YAxis
                   tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(1)}M`}
@@ -351,9 +386,8 @@ export function OverviewView({
                   ]}
                   contentStyle={{
                     borderRadius: "14px",
-                    borderColor: "#A7F3D0",
+                    borderColor: "#E2E8F0",
                     backgroundColor: "rgba(255,255,255,0.95)",
-                    boxShadow: "0 10px 25px -10px rgba(5,150,105,0.25)",
                     fontSize: "12px",
                   }}
                 />
@@ -362,7 +396,7 @@ export function OverviewView({
                   type="monotone"
                   dataKey="cleanRevenue"
                   name="ยอดสะอาด (Clean)"
-                  stroke="#059669"
+                  stroke={isRainbow ? "#6366F1" : "#059669"}
                   strokeWidth={3}
                   fill="url(#modernCleanFill)"
                 />
@@ -402,7 +436,7 @@ export function OverviewView({
             <button
               type="button"
               onClick={onDrillToExplorer}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-xs font-bold text-[#047857] transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 transition-colors"
             >
               <span>เจาะลึกบิล</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -416,7 +450,7 @@ export function OverviewView({
                 layout="vertical"
                 margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" horizontal={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
                 <XAxis
                   type="number"
                   tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(0)}M`}
@@ -436,7 +470,7 @@ export function OverviewView({
                   formatter={(value) => [formatTHB(Number(value ?? 0)), "ยอดขาย"]}
                   contentStyle={{
                     borderRadius: "14px",
-                    borderColor: "#A7F3D0",
+                    borderColor: "#E2E8F0",
                     backgroundColor: "rgba(255,255,255,0.95)",
                     fontSize: "12px",
                   }}
@@ -459,8 +493,8 @@ export function OverviewView({
                       key={entry.name}
                       fill={
                         filters.category === entry.name
-                          ? "#064E3B"
-                          : MODERN_GREENS[idx % MODERN_GREENS.length]
+                          ? "#0F172A"
+                          : palette[idx % palette.length]
                       }
                     />
                   ))}
@@ -494,7 +528,7 @@ export function OverviewView({
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={metrics.regions} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2EFE7" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                 <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#0F172A" }} axisLine={false} tickLine={false} />
                 <YAxis
                   tickFormatter={(v) => `${(Number(v) / 1_000_000).toFixed(0)}M`}
@@ -506,7 +540,7 @@ export function OverviewView({
                   formatter={(value) => [formatTHB(Number(value ?? 0)), "ยอดขาย"]}
                   contentStyle={{
                     borderRadius: "14px",
-                    borderColor: "#A7F3D0",
+                    borderColor: "#E2E8F0",
                     backgroundColor: "rgba(255,255,255,0.95)",
                     fontSize: "12px",
                   }}
@@ -529,8 +563,8 @@ export function OverviewView({
                       key={entry.name}
                       fill={
                         filters.region === entry.name
-                          ? "#064E3B"
-                          : MODERN_GREENS[idx % MODERN_GREENS.length]
+                          ? "#0F172A"
+                          : palette[idx % palette.length]
                       }
                     />
                   ))}
@@ -561,9 +595,8 @@ export function OverviewView({
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Channel Donut */}
-              <div className="rounded-2xl bg-[#F5FBF7] border border-emerald-950/10 p-3">
-                <p className="text-xs font-bold text-[#065F46] text-center mb-1">Channel Mix</p>
+              <div className="rounded-2xl bg-slate-50/80 border border-slate-200 p-3">
+                <p className="text-xs font-bold text-slate-800 text-center mb-1">Channel Mix</p>
                 <div className="h-44 relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -589,8 +622,8 @@ export function OverviewView({
                             key={c.name}
                             fill={
                               filters.channel === c.name
-                                ? "#064E3B"
-                                : MODERN_GREENS[idx % MODERN_GREENS.length]
+                                ? "#0F172A"
+                                : palette[idx % palette.length]
                             }
                           />
                         ))}
@@ -600,7 +633,7 @@ export function OverviewView({
                   </ResponsiveContainer>
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-[10px] text-slate-500 font-semibold">Online</span>
-                    <span className="text-sm font-extrabold text-[#065F46] tabular-nums">
+                    <span className="text-sm font-extrabold text-slate-900 tabular-nums">
                       {onlineShare}%
                     </span>
                   </div>
@@ -615,8 +648,8 @@ export function OverviewView({
                       }
                       className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
                         filters.channel === ch.name
-                          ? "bg-emerald-700 text-white border-emerald-700"
-                          : "bg-white text-slate-700 border-emerald-200"
+                          ? "bg-slate-900 text-white border-slate-900"
+                          : "bg-white text-slate-700 border-slate-200"
                       }`}
                     >
                       {ch.name} ({ch.sharePct}%)
@@ -625,9 +658,8 @@ export function OverviewView({
                 </div>
               </div>
 
-              {/* Payment Donut */}
-              <div className="rounded-2xl bg-[#F5FBF7] border border-emerald-950/10 p-3">
-                <p className="text-xs font-bold text-[#065F46] text-center mb-1">Payment Mix</p>
+              <div className="rounded-2xl bg-slate-50/80 border border-slate-200 p-3">
+                <p className="text-xs font-bold text-slate-800 text-center mb-1">Payment Mix</p>
                 <div className="h-44 relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -653,8 +685,8 @@ export function OverviewView({
                             key={p.name}
                             fill={
                               filters.payment === p.name
-                                ? "#064E3B"
-                                : MODERN_GREENS[idx % MODERN_GREENS.length]
+                                ? "#0F172A"
+                                : palette[(idx + 2) % palette.length]
                             }
                           />
                         ))}
@@ -664,7 +696,7 @@ export function OverviewView({
                   </ResponsiveContainer>
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-[10px] text-slate-500 font-semibold">Digital</span>
-                    <span className="text-sm font-extrabold text-[#065F46] tabular-nums">
+                    <span className="text-sm font-extrabold text-slate-900 tabular-nums">
                       {digitalPayShare}%
                     </span>
                   </div>
@@ -679,8 +711,8 @@ export function OverviewView({
                       }
                       className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${
                         filters.payment === pm.name
-                          ? "bg-emerald-700 text-white border-emerald-700"
-                          : "bg-white text-slate-700 border-emerald-200"
+                          ? "bg-slate-900 text-white border-slate-900"
+                          : "bg-white text-slate-700 border-slate-200"
                       }`}
                     >
                       {pm.name} ({pm.sharePct}%)
@@ -699,54 +731,60 @@ export function OverviewView({
         </section>
       </div>
 
-      {/* Top Customers Leaderboard Bento (Click to open Customer 360 Drawer) */}
-      <section className="bento-card p-6">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div>
-            <h3 className="text-base font-bold text-slate-900 inline-flex items-center gap-2">
-              <Crown className="w-4 h-4 text-emerald-600" />
-              <span>Top Customers Leaderboard (คลิกที่รหัสลูกค้าเพื่อดู Customer 360°)</span>
-            </h3>
-            <p className="text-xs text-slate-500">
-              อันดับลูกค้าที่สร้างยอดขายสูงสุดภายใต้ตัวกรองปัจจุบัน ({metrics.topCustomers.length} อันดับแรก)
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onDrillToExplorer}
-            className="text-xs font-bold text-[#047857] hover:underline inline-flex items-center gap-1"
-          >
-            <span>ดูตารางบิลทั้งหมด</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {metrics.topCustomers.map((c, idx) => (
+      {/* Bottom Row: Top Customers Leaderboard + Funny Meme Corner */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <section className="lg:col-span-7 bento-card p-6">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 className="text-base font-bold text-slate-900 inline-flex items-center gap-2">
+                <Crown className="w-4 h-4 text-amber-500" />
+                <span>Top Customers Leaderboard (คลิกดู Customer 360°)</span>
+              </h3>
+              <p className="text-xs text-slate-500">
+                อันดับลูกค้าที่สร้างยอดขายสูงสุดภายใต้ตัวกรองปัจจุบัน
+              </p>
+            </div>
             <button
-              key={c.cid}
               type="button"
-              onClick={() => onSelectCustomer(c.cid)}
-              className="text-left rounded-2xl border border-emerald-950/10 bg-[#F5FBF7] hover:bg-emerald-50 hover:border-emerald-400 p-4 transition-all group"
+              onClick={onDrillToExplorer}
+              className="text-xs font-bold text-[#047857] hover:underline inline-flex items-center gap-1"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-extrabold text-[#065F46] group-hover:underline">
-                  #{idx + 1} · {c.cid}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-white border border-emerald-200 text-[10px] font-bold text-emerald-800">
-                  {c.tier}
-                </span>
-              </div>
-              <p className="text-lg font-extrabold text-slate-900 mt-1.5 tabular-nums">
-                {formatTHB(c.revenue)}
-              </p>
-              <p className="text-[11px] text-slate-500 mt-0.5 tabular-nums">
-                {c.txns} บิล · {formatNumber(c.units)} ชิ้น · {c.gender} ({c.age} ปี)
-              </p>
+              <span>ดูบิลทั้งหมด</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
-          ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {metrics.topCustomers.map((c, idx) => (
+              <button
+                key={c.cid}
+                type="button"
+                onClick={() => onSelectCustomer(c.cid)}
+                className="text-left rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-white hover:border-emerald-400 p-3.5 transition-all group"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-extrabold text-slate-900 group-hover:underline">
+                    #{idx + 1} · {c.cid}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-white border border-slate-200 text-[10px] font-bold text-slate-700">
+                    {c.tier}
+                  </span>
+                </div>
+                <p className="text-lg font-extrabold text-slate-900 mt-1 tabular-nums">
+                  {formatTHB(c.revenue)}
+                </p>
+                <p className="text-[11px] text-slate-500 mt-0.5 tabular-nums">
+                  {c.txns} บิล · {formatNumber(c.units)} ชิ้น · {c.gender} ({c.age} ปี)
+                </p>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <div className="lg:col-span-5">
+          <MemeWidget isRainbow={isRainbow} />
         </div>
-      </section>
+      </div>
     </div>
   );
 }
